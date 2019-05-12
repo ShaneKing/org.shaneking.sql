@@ -24,7 +24,9 @@ import org.shaneking.sql.Keyword0;
 import org.shaneking.sql.OperationContent;
 
 import javax.persistence.Column;
+import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Version;
 import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.List;
@@ -33,8 +35,10 @@ import java.util.stream.Collectors;
 
 @Accessors(chain = true)
 @Slf4j
-@ToString(includeFieldNames = true)
+@ToString
 public class SKEntity<J> {
+  public static final String APPEND_AND = " and ";
+  public static final String APPEND_WHERE = " where ";
   @JsonIgnore
   @Getter
   private final Map<String, Column> columnMap = Maps.newHashMap();
@@ -44,6 +48,12 @@ public class SKEntity<J> {
   @JsonIgnore
   @Getter
   private final List<String> fieldNameList = Lists.newArrayList();
+  @JsonIgnore
+  @Getter
+  private final List<String> idFieldNameList = Lists.newLinkedList();
+  @JsonIgnore
+  @Getter
+  private final List<String> versionFieldNameList = Lists.newLinkedList();
 
   @JsonIgnore
   @Getter
@@ -55,23 +65,7 @@ public class SKEntity<J> {
   private Table table;
 
   /**
-   * @see org.shaneking.skava.ling.util.Date0#DATE_TIME
-   */
-  @Getter
-  @Setter
-  @Column(length = 20, updatable = false)
-  private String createDatetime;
-
-  @Getter
-  @Setter
-  @Column(length = 40, updatable = false)
-  private String createUserId;
-
-  /**
    * J maybe fastjson,gson,jackson...
-   * <p> extJson:
-   * when result:The json object of extJsonStr
-   * when table operation(insert/delete/update/select):
    * <blockquote><pre>
    *     {
    *         createDatetime:{
@@ -91,56 +85,7 @@ public class SKEntity<J> {
    */
   @Getter
   @Setter
-  private J extJson;
-
-  /**
-   * !important, can't be criteria for query, no index
-   */
-  @Getter
-  @Setter
-  @Column
-  private String extJsonStr;
-
-  @Getter
-  @Setter
-  @Column(length = 40, updatable = false)
-  private String id;
-
-  @Getter
-  @Setter
-  @Column(length = 10)
-  private String invalid;//Y|N(default)
-
-  /**
-   * @see org.shaneking.skava.ling.util.Date0#DATE_TIME
-   */
-  @Getter
-  @Setter
-  @Column(length = 20)
-  private String invalidDatetime;
-
-  @Getter
-  @Setter
-  @Column(length = 40)
-  private String invalidUserId;
-
-  /**
-   * @see org.shaneking.skava.ling.util.Date0#DATE_TIME
-   */
-  @Getter
-  @Setter
-  @Column(length = 20)
-  private String lastModifyDatetime;
-
-  @Getter
-  @Setter
-  @Column(length = 40)
-  private String lastModifyUserId;
-
-  @Getter
-  @Setter
-  @Column(length = 20)
-  private Integer version = 1;
+  private J whereJson;
 
   public SKEntity() {
     initTableInfo();
@@ -160,6 +105,12 @@ public class SKEntity<J> {
         this.getColumnMap().put(field.getName(), column);
         this.getDbColumnMap().put(field.getName(), Strings.isNullOrEmpty(column.name()) ? String0.upper2lower(field.getName()) : column.name());
         this.getFieldNameList().add(field.getName());
+      }
+      if (field.getAnnotation(Id.class) != null && this.getIdFieldNameList().indexOf(field.getName()) == -1) {
+        this.getIdFieldNameList().add(field.getName());
+      }
+      if (field.getAnnotation(Version.class) != null && this.getVersionFieldNameList().indexOf(field.getName()) == -1) {
+        this.getVersionFieldNameList().add(field.getName());
       }
     }
     if (SKEntity.class.isAssignableFrom(skEntityClass.getSuperclass())) {
@@ -276,7 +227,7 @@ public class SKEntity<J> {
     sqlList.add(Joiner.on(String0.COMMA).join(fromList));
     if (whereList.size() > 0) {
       sqlList.add("where");
-      sqlList.add(Joiner.on(" and ").join(whereList));
+      sqlList.add(Joiner.on(APPEND_AND).join(whereList));
     }
     if (groupByList.size() > 0) {
       sqlList.add("group by");
@@ -284,7 +235,7 @@ public class SKEntity<J> {
     }
     if (havingList.size() > 0) {
       sqlList.add("having");
-      sqlList.add(Joiner.on(" and ").join(havingList));
+      sqlList.add(Joiner.on(APPEND_AND).join(havingList));
     }
     if (orderByList.size() > 0) {
       sqlList.add("order by");
@@ -315,31 +266,45 @@ public class SKEntity<J> {
     updateStatement(updateList, rtnObjectList);
     updateStatementExt(updateList, rtnObjectList);
 
+    List<String> whereIdList = Lists.newArrayList();
+    whereStatement(whereIdList, rtnObjectList, this.getIdFieldNameList());
+    whereStatementExt(whereIdList, rtnObjectList, this.getIdFieldNameList());
+
     List<String> sqlList = Lists.newArrayList();
     sqlList.add("update");
     sqlList.add(this.getFullTableName());
     sqlList.add("set");
     sqlList.add(Joiner.on(String0.COMMA).join(updateList));
-    sqlList.add("where");
-    sqlList.add("id=?");
-    rtnObjectList.add(this.getId());
+    if (whereIdList.size() > 0) {
+      sqlList.add("where");
+      sqlList.add(Joiner.on(APPEND_AND).join(whereIdList));
+    }
 
     return Tuple.of(Joiner.on(String0.BLACK).join(sqlList), rtnObjectList);
   }
 
   public Tuple.Pair<String, List<Object>> updateByIdAndVersionSql() {
     Tuple.Pair<String, List<Object>> rtn = this.updateByIdSql();
-    if (this.getVersion() != null) {
-      List<Object> rtnObjectList = Tuple.getSecond(rtn);
-      rtnObjectList.add(this.getVersion());
-      rtn = Tuple.of(Joiner.on(String0.BLACK).join(Tuple.getFirst(rtn), "and version=?"), rtnObjectList);
+    StringBuffer rtnSql = new StringBuffer(Tuple.getFirst(rtn));
+    List<Object> rtnObjectList = Tuple.getSecond(rtn);
+
+    List<String> whereVersionList = Lists.newArrayList();
+    whereStatement(whereVersionList, rtnObjectList, this.getVersionFieldNameList());
+    whereStatementExt(whereVersionList, rtnObjectList, this.getVersionFieldNameList());
+    if (whereVersionList.size() > 0) {
+      if (rtnSql.indexOf(APPEND_WHERE) == -1) {
+        rtnSql.append(APPEND_WHERE);
+      } else {
+        rtnSql.append(APPEND_AND);
+      }
+      rtnSql.append(Joiner.on(APPEND_AND).join(whereVersionList));
     }
-    return rtn;
+    return Tuple.of(rtnSql.toString(), rtnObjectList);
   }
 
   public void updateStatement(@NonNull List<String> updateList, @NonNull List<Object> objectList) {
     Object o = null;
-    for (String fieldName : this.getFieldNameList().stream().filter(fieldName -> !"id".equals(fieldName) && this.getColumnMap().get(fieldName).updatable()).collect(Collectors.toList())) {
+    for (String fieldName : this.getFieldNameList().stream().filter(fieldName -> this.getIdFieldNameList().indexOf(fieldName) == -1 && this.getColumnMap().get(fieldName).updatable()).collect(Collectors.toList())) {
       try {
         o = this.getClass().getMethod("get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1)).invoke(this);
       } catch (Exception e) {
@@ -348,10 +313,10 @@ public class SKEntity<J> {
       }
       if (o != null && !Strings.isNullOrEmpty(o.toString())) {
         updateList.add(this.getDbColumnMap().get(fieldName) + String20.EQUAL_QUESTION);
-        if ("version".equals(fieldName)) {
-          objectList.add((Integer) o + 1);
-        } else {
+        if (this.getVersionFieldNameList().indexOf(fieldName) == -1) {
           objectList.add(o);
+        } else {
+          objectList.add((Integer) o + 1);
         }
       }
     }
@@ -394,8 +359,12 @@ public class SKEntity<J> {
   }
 
   public void whereStatement(@NonNull List<String> whereList, @NonNull List<Object> objectList) {
+    this.whereStatement(whereList, objectList, this.getFieldNameList());
+  }
+
+  public void whereStatement(@NonNull List<String> whereList, @NonNull List<Object> objectList, @NonNull List<String> fieldNameList) {
     Object o = null;
-    for (String fieldName : this.getFieldNameList()) {
+    for (String fieldName : fieldNameList) {
       try {
         o = this.getClass().getMethod("get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1)).invoke(this);
       } catch (Exception e) {
@@ -426,6 +395,10 @@ public class SKEntity<J> {
   }
 
   public void whereStatementExt(@NonNull List<String> whereList, @NonNull List<Object> objectList) {
+    //implements by sub entity
+  }
+
+  public void whereStatementExt(@NonNull List<String> whereList, @NonNull List<Object> objectList, @NonNull List<String> fieldNameList) {
     //implements by sub entity
   }
 }

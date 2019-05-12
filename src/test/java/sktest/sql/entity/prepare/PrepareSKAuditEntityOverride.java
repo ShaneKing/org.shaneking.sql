@@ -7,17 +7,18 @@ import lombok.experimental.Accessors;
 import org.shaneking.skava.ling.lang.String0;
 import org.shaneking.sql.Keyword0;
 import org.shaneking.sql.OperationContent;
-import org.shaneking.sql.entity.SKEntity;
 
 import javax.persistence.Table;
 import java.util.List;
 
 @Accessors(chain = true)
-@ToString(callSuper = true, includeFieldNames = true)
+@ToString(callSuper = true)
 @Table
-public class PrepareSKEntityOverride extends SKEntity {
+public class PrepareSKAuditEntityOverride extends PrepareSKAuditEntityIdVersion {
+
+
   @Override
-  public void groupByStatementExt(@NonNull List groupByList, @NonNull List list) {
+  public void groupByStatementExt(@NonNull List groupByList, @NonNull List objectList) {
     groupByList.add("version");
   }
 

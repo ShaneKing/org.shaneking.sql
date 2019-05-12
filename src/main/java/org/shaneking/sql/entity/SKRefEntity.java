@@ -14,8 +14,8 @@ import lombok.experimental.Accessors;
 import javax.persistence.Column;
 
 @Accessors(chain = true)
-@ToString(callSuper = true, includeFieldNames = true)
-public class SKRefEntity<J> extends SKEntity<J> {
+@ToString(callSuper = true)
+public class SKRefEntity<J> extends SKAuditEntity<J> {
 
   @Getter
   @Setter

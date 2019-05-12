@@ -4,15 +4,14 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import org.shaneking.sql.entity.SKEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
 
 @Accessors(chain = true)
-@ToString(callSuper = true, includeFieldNames = true)
+@ToString(callSuper = true)
 @Table
-public class PrepareSKEntityColumns extends SKEntity {
+public class PrepareSKAuditEntityColumns extends PrepareSKAuditEntityIdVersion {
   @Getter
   @Setter
   private String withoutAnnotation;

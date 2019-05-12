@@ -14,8 +14,8 @@ import lombok.experimental.Accessors;
 import javax.persistence.Column;
 
 @Accessors(chain = true)
-@ToString(callSuper = true, includeFieldNames = true)
-public class SKL10nEntity<J> extends SKEntity<J> {
+@ToString(callSuper = true)
+public class SKL10nEntity<J> extends SKAuditEntity<J> {
   /**
    * @see org.shaneking.skava.ling.util.Date0#H_MI_S
    */

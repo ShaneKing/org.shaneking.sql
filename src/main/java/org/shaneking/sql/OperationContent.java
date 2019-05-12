@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
 import java.util.List;
 
 @Accessors(chain = true)
-@ToString(includeFieldNames = true)
+@ToString
 public class OperationContent {
   //will trans in request and response, so abbreviation
   @Getter

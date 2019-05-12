@@ -10,6 +10,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({SKEntityTest.class, SKL10nEntityTest.class, SKRefEntityTest.class})
+@Suite.SuiteClasses({SKAuditEntityTest.class, SKEntityTest.class, SKL10nEntityTest.class, SKRefEntityTest.class})
 public class EntitySuites {
 }

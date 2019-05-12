@@ -10,7 +10,7 @@ import sktest.sql.entity.prepare.PrepareSKAuditEntityColumns;
 import sktest.sql.entity.prepare.PrepareSKAuditEntityOverride;
 import sktest.sql.entity.prepare.prepareSKAuditEntityTableName;
 
-public class SKEntityTest extends SKUnit {
+public class SKAuditEntityTest extends SKUnit {
   private PrepareSKAuditEntityColumnNoGetMethod prepareSKAuditEntityColumnNoGetMethod = new PrepareSKAuditEntityColumnNoGetMethod();
   private PrepareSKAuditEntityColumns prepareSKAuditEntityColumns = new PrepareSKAuditEntityColumns();
   private PrepareSKAuditEntityOverride prepareSKAuditEntityOverride = new PrepareSKAuditEntityOverride();
@@ -24,6 +24,12 @@ public class SKEntityTest extends SKUnit {
     prepareSKAuditEntityOverride = new PrepareSKAuditEntityOverride();
     prepareSKAuditEntityTableName = new prepareSKAuditEntityTableName();
   }
+
+  @Test
+  public void setter() {
+    prepareSKAuditEntityColumnNoGetMethod.setNoGetMethod("").setCreateDatetime("").setCreateUserId("").setInvalid("").setInvalidDatetime("").setInvalidUserId("").setLastModifyDatetime("").setLastModifyUserId("").setWhereJson("");
+  }
+
 
   @Test
   public void initColumnInfo() {
@@ -152,7 +158,7 @@ public class SKEntityTest extends SKUnit {
   public void updateByIdAndVersionSql() {
     Assert.assertEquals(prepareSKAuditEntityColumns.updateByIdAndVersionSql().toString(), "(update t_prepare_s_k_audit_entity_columns set version=? where version=?,[2, 1])");
     prepareSKAuditEntityColumns.setVersion(null);
-    Assert.assertEquals(prepareSKAuditEntityColumns.updateByIdAndVersionSql().toString(), "(update t_prepare_s_k_audit_entity_columns set ,[])");//TODO maybe control by user
+    Assert.assertEquals(prepareSKAuditEntityColumns.updateByIdAndVersionSql().toString(), "(update t_prepare_s_k_audit_entity_columns set ,[])");//TODO, maybe control by user
   }
 
   @Test

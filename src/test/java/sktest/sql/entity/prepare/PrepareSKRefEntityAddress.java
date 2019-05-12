@@ -13,12 +13,26 @@ import lombok.experimental.Accessors;
 import org.shaneking.sql.entity.SKRefEntity;
 
 import javax.persistence.Column;
+import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 @Accessors(chain = true)
-@ToString(callSuper = true, includeFieldNames = true)
+@ToString(callSuper = true)
 @Table(name = "t_address", schema = "testSchema")
 public class PrepareSKRefEntityAddress extends SKRefEntity {
+
+  @Getter
+  @Setter
+  @Column(length = 40, updatable = false)
+  @Id
+  private String id;
+
+  @Getter
+  @Setter
+  @Column(length = 20)
+  @Version
+  private Integer version = 1;
   /**
    * InnoDB prefix index max 767 bytes(utf8:767/3=255char;gbk:767/2=383char)
    */

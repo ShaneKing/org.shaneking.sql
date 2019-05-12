@@ -1,26 +1,18 @@
-/*
- * @(#)PrepareSKL10nEntityZone.java		Created at 2018/7/4
- *
- * Copyright (c) ShaneKing All rights reserved.
- * ShaneKing PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- */
 package sktest.sql.entity.prepare;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import org.shaneking.sql.entity.SKL10nEntity;
+import org.shaneking.sql.entity.SKAuditEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
-import javax.persistence.Table;
 import javax.persistence.Version;
 
 @Accessors(chain = true)
 @ToString(callSuper = true)
-@Table
-public class PrepareSKL10nEntityZone extends SKL10nEntity {
+public class PrepareSKAuditEntityIdVersion extends SKAuditEntity {
 
   @Getter
   @Setter
