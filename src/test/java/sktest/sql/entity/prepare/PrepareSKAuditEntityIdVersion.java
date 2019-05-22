@@ -14,15 +14,15 @@ import javax.persistence.Version;
 @ToString(callSuper = true)
 public class PrepareSKAuditEntityIdVersion extends SKAuditEntity {
 
-  @Getter
-  @Setter
   @Column(length = 40, updatable = false)
+  @Getter
   @Id
+  @Setter
   private String id;
 
+  @Column(length = 20)
   @Getter
   @Setter
-  @Column(length = 20)
   @Version
   private Integer version = 1;
 }

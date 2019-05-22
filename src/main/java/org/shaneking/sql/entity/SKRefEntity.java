@@ -17,13 +17,13 @@ import javax.persistence.Column;
 @ToString(callSuper = true)
 public class SKRefEntity<J> extends SKAuditEntity<J> {
 
+  @Column(length = 40)
   @Getter
   @Setter
-  @Column(length = 40)
   private String refId;
 
+  @Column(length = 40)
   @Getter
   @Setter
-  @Column(length = 40)
   private String refType;
 }

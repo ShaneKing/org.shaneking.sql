@@ -12,8 +12,8 @@ import javax.persistence.Table;
 import java.util.List;
 
 @Accessors(chain = true)
-@ToString(callSuper = true)
 @Table
+@ToString(callSuper = true)
 public class PrepareSKAuditEntityOverride extends PrepareSKAuditEntityIdVersion {
 
 

@@ -9,7 +9,7 @@ package sktest.sql.entity;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import sktest.skava.SKUnit;
+import sktest.sql.SKUnit;
 import sktest.sql.entity.prepare.PrepareSKRefEntityAddress;
 
 import java.util.UUID;

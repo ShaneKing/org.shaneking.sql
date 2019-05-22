@@ -4,7 +4,7 @@
  * Copyright (c) ShaneKing All rights reserved.
  * ShaneKing PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
-package sktest.skava;
+package sktest.sql;
 
 import com.google.common.base.Stopwatch;
 import org.junit.After;

@@ -1,4 +1,5 @@
-package sktest.sql;/*
+package sktest.sql;
+/*
  * @(#)SqlSuites.java		Created at 2017/9/10
  *
  * Copyright (c) ShaneKing All rights reserved.

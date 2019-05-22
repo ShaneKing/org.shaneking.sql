@@ -2,7 +2,7 @@ package sktest.sql.entity;
 
 import org.junit.Assert;
 import org.junit.Test;
-import sktest.skava.SKUnit;
+import sktest.sql.SKUnit;
 import sktest.sql.entity.prepare.PrepareSKL10nEntityZone;
 
 public class SKL10nEntityTest extends SKUnit {

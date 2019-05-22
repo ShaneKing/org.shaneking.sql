@@ -18,19 +18,19 @@ import javax.persistence.Table;
 import javax.persistence.Version;
 
 @Accessors(chain = true)
-@ToString(callSuper = true)
 @Table
+@ToString(callSuper = true)
 public class PrepareSKL10nEntityZone extends SKL10nEntity {
 
-  @Getter
-  @Setter
   @Column(length = 40, updatable = false)
+  @Getter
   @Id
+  @Setter
   private String id;
 
+  @Column(length = 20)
   @Getter
   @Setter
-  @Column(length = 20)
   @Version
   private Integer version = 1;
 }

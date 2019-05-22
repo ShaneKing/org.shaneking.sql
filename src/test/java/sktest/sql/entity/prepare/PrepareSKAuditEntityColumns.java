@@ -9,20 +9,20 @@ import javax.persistence.Column;
 import javax.persistence.Table;
 
 @Accessors(chain = true)
-@ToString(callSuper = true)
 @Table
+@ToString(callSuper = true)
 public class PrepareSKAuditEntityColumns extends PrepareSKAuditEntityIdVersion {
   @Getter
   @Setter
   private String withoutAnnotation;
 
+  @Column(length = 10)
   @Getter
   @Setter
-  @Column(length = 10)
   private String hasLength;
 
+  @Column(name = "re_name")
   @Getter
   @Setter
-  @Column(name = "re_name")
   private String reName;
 }

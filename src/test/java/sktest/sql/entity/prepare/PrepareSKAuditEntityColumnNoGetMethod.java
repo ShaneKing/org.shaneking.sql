@@ -8,10 +8,10 @@ import javax.persistence.Column;
 import javax.persistence.Table;
 
 @Accessors(chain = true)
-@ToString(callSuper = true)
 @Table
+@ToString(callSuper = true)
 public class PrepareSKAuditEntityColumnNoGetMethod extends PrepareSKAuditEntityIdVersion {
-  @Setter
   @Column(length = 10)
+  @Setter
   private String noGetMethod;
 }

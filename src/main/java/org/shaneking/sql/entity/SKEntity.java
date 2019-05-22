@@ -39,28 +39,28 @@ import java.util.stream.Collectors;
 public class SKEntity<J> {
   public static final String APPEND_AND = " and ";
   public static final String APPEND_WHERE = " where ";
-  @JsonIgnore
   @Getter
+  @JsonIgnore
   private final Map<String, Column> columnMap = Maps.newHashMap();
-  @JsonIgnore
   @Getter
+  @JsonIgnore
   private final Map<String, String> dbColumnMap = Maps.newHashMap();
-  @JsonIgnore
   @Getter
+  @JsonIgnore
   private final List<String> fieldNameList = Lists.newArrayList();
-  @JsonIgnore
   @Getter
+  @JsonIgnore
   private final List<String> idFieldNameList = Lists.newLinkedList();
-  @JsonIgnore
   @Getter
+  @JsonIgnore
   private final List<String> versionFieldNameList = Lists.newLinkedList();
 
-  @JsonIgnore
   @Getter
+  @JsonIgnore
   @Setter
   private String fullTableName;
-  @JsonIgnore
   @Getter
+  @JsonIgnore
   @Setter
   private Table table;
 

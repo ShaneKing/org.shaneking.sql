@@ -6,8 +6,8 @@ import lombok.experimental.Accessors;
 import javax.persistence.Table;
 
 @Accessors(chain = true)
-@ToString(callSuper = true)
 @Table
+@ToString(callSuper = true)
 public class prepareSKAuditEntityTableName extends PrepareSKAuditEntityIdVersion {
 
 }

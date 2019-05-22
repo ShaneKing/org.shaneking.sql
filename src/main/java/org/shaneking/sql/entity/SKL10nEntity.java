@@ -19,24 +19,24 @@ public class SKL10nEntity<J> extends SKAuditEntity<J> {
   /**
    * @see org.shaneking.skava.ling.util.Date0#H_MI_S
    */
+  @Column(length = 10)
   @Getter
   @Setter
-  @Column(length = 10)
   private String createTimezone;
 
   /**
    * @see org.shaneking.skava.ling.util.Date0#H_MI_S
    */
+  @Column(length = 10)
   @Getter
   @Setter
-  @Column(length = 10)
   private String invalidTimezone;
 
   /**
    * @see org.shaneking.skava.ling.util.Date0#H_MI_S
    */
+  @Column(length = 10)
   @Getter
   @Setter
-  @Column(length = 10)
   private String lastModifyTimezone;
 }

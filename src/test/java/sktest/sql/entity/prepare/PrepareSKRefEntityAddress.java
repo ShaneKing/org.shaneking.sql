@@ -18,36 +18,36 @@ import javax.persistence.Table;
 import javax.persistence.Version;
 
 @Accessors(chain = true)
-@ToString(callSuper = true)
 @Table(name = "t_address", schema = "testSchema")
+@ToString(callSuper = true)
 public class PrepareSKRefEntityAddress extends SKRefEntity {
 
-  @Getter
-  @Setter
   @Column(length = 40, updatable = false)
+  @Getter
   @Id
+  @Setter
   private String id;
 
+  @Column(length = 20)
   @Getter
   @Setter
-  @Column(length = 20)
   @Version
   private Integer version = 1;
   /**
    * InnoDB prefix index max 767 bytes(utf8:767/3=255char;gbk:767/2=383char)
    */
+  @Column(length = 255)
   @Getter
   @Setter
-  @Column(length = 255)
   private String address;
 
+  @Column(length = 6)
   @Getter
   @Setter
-  @Column(length = 6)
   private String postcode;
 
+  @Column(length = 1)
   @Getter
   @Setter
-  @Column(length = 1)
   private String primary;//0|1\
 }

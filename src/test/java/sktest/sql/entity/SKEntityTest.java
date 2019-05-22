@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import sktest.skava.SKUnit;
+import sktest.sql.SKUnit;
 import sktest.sql.entity.prepare.PrepareSKAuditEntityColumnNoGetMethod;
 import sktest.sql.entity.prepare.PrepareSKAuditEntityColumns;
 import sktest.sql.entity.prepare.PrepareSKAuditEntityOverride;
