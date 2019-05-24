@@ -23,11 +23,9 @@ import org.shaneking.skava.ling.lang.String20;
 import org.shaneking.sql.Keyword0;
 import org.shaneking.sql.OperationContent;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Version;
+import javax.persistence.*;
 import java.lang.reflect.Field;
+import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +43,9 @@ public class SKEntity<J> {
   @Getter
   @JsonIgnore
   private final Map<String, String> dbColumnMap = Maps.newHashMap();
+  @Getter
+  @JsonIgnore
+  private final Map<String, Field> fieldMap = Maps.newHashMap();
   @Getter
   @JsonIgnore
   private final List<String> fieldNameList = Lists.newArrayList();
@@ -92,6 +93,46 @@ public class SKEntity<J> {
     initColumnInfo(this.getClass());
   }
 
+  private String createColumnStatement(String columnName, boolean idOrVersion) {
+    String rtn = null;
+    Field columnField = this.getFieldMap().get(columnName);
+    String columnFieldTypeString = columnField.getType().getCanonicalName();
+    String columnDbTypeString = null;
+    if (String.class.getCanonicalName().equals(columnFieldTypeString)) {
+      columnDbTypeString = Keyword0.TYPE_VARCHAR;
+    } else if (Integer.class.getCanonicalName().equals(columnFieldTypeString)) {
+      columnDbTypeString = Keyword0.TYPE_INT;
+    } else if (columnField.getAnnotation(Lob.class) != null) {
+      columnDbTypeString = Keyword0.TYPE_TEXT;
+    }
+    rtn = MessageFormat.format("\t`{0}` {1}({2}) {3},\r\n", this.getDbColumnMap().get(columnName), columnDbTypeString, this.getColumnMap().get(columnName).length(), idOrVersion ? "NOT NULL" : String0.EMPTY);
+    return rtn;
+  }
+
+  public String createTableSql(String engine, String charset) {
+    List<String> sqlList = Lists.newArrayList();
+    sqlList.add("CREATE");
+    sqlList.add("TABLE");
+    sqlList.add(MessageFormat.format("`{0}`", this.getFullTableName()));
+    sqlList.add(String0.OPEN_PARENTHESIS);
+    sqlList.add("\r\n");
+    for (String idColumn : this.getIdFieldNameList()) {
+      sqlList.add(this.createColumnStatement(idColumn, true));
+    }
+    for (String columnName : this.getFieldNameList()) {
+      if (this.getIdFieldNameList().indexOf(columnName) == -1 && this.getVersionFieldNameList().indexOf(columnName) == -1) {
+        sqlList.add(this.createColumnStatement(columnName, false));
+      }
+    }
+    for (String versionColumn : this.getVersionFieldNameList()) {
+      sqlList.add(this.createColumnStatement(versionColumn, true));
+    }
+    sqlList.add(MessageFormat.format("\tPRIMARY KEY (`{0}`)\r\n", Joiner.on("`,`").join(this.getIdFieldNameList().stream().map(idFieldName -> this.getDbColumnMap().get(idFieldName)).collect(Collectors.toList()))));
+    sqlList.add(String0.CLOSE_PARENTHESIS);
+    sqlList.add(MessageFormat.format("ENGINE={0} DEFAULT CHARSET={1};", engine, charset));
+    return Joiner.on(String0.BLACK).join(sqlList);
+  }
+
   public List<OperationContent> findOperationContentList(String fieldName) {
     List<OperationContent> rtnList = Lists.newArrayList();
     //implements by sub entity
@@ -103,6 +144,7 @@ public class SKEntity<J> {
       Column column = field.getAnnotation(Column.class);
       if (column != null && this.getFieldNameList().indexOf(field.getName()) == -1) {
         this.getColumnMap().put(field.getName(), column);
+        this.getFieldMap().put(field.getName(), field);
         this.getDbColumnMap().put(field.getName(), Strings.isNullOrEmpty(column.name()) ? String0.upper2lower(field.getName()) : column.name());
         this.getFieldNameList().add(field.getName());
       }
