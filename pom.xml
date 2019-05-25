@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.shaneking</groupId>
     <artifactId>org.shaneking</artifactId>
-    <version>0.3.0</version>
+    <version>0.4.0</version>
     <relativePath>../org.shaneking</relativePath>
   </parent>
 
@@ -114,13 +114,13 @@
       <artifactId>lombok</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.shaneking</groupId>
       <artifactId>org.shaneking.skava</artifactId>
       <version>${project.parent.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
     </dependency>
   </dependencies>
   <build>
