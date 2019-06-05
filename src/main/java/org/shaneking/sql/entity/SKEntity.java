@@ -98,24 +98,25 @@ public class SKEntity<J> {
     Field columnField = this.getFieldMap().get(columnName);
     String columnFieldTypeString = columnField.getType().getCanonicalName();
     String columnDbTypeString = null;
-    if (String.class.getCanonicalName().equals(columnFieldTypeString)) {
-      columnDbTypeString = Keyword0.TYPE_VARCHAR;
+    String partNotNull = (idOrVersion || !this.getColumnMap().get(columnName).nullable()) ? " not null" : String0.EMPTY;
+    if (columnField.getAnnotation(Lob.class) != null) {
+      columnDbTypeString = Keyword0.TYPE_LONGTEXT;
     } else if (Integer.class.getCanonicalName().equals(columnFieldTypeString)) {
       columnDbTypeString = Keyword0.TYPE_INT;
-    } else if (columnField.getAnnotation(Lob.class) != null) {
-      columnDbTypeString = Keyword0.TYPE_TEXT;
+    } else if (String.class.getCanonicalName().equals(columnFieldTypeString)) {
+      columnDbTypeString = Keyword0.TYPE_VARCHAR;
     }
-    rtn = MessageFormat.format("\t`{0}` {1}({2}) {3},\r\n", this.getDbColumnMap().get(columnName), columnDbTypeString, this.getColumnMap().get(columnName).length(), idOrVersion ? "NOT NULL" : String0.EMPTY);
+    if (columnField.getAnnotation(Lob.class) != null || Integer.class.getCanonicalName().equals(columnFieldTypeString)) {
+      rtn = MessageFormat.format("\t`{0}` {1}{2},", this.getDbColumnMap().get(columnName), columnDbTypeString, partNotNull);
+    } else {
+      rtn = MessageFormat.format("\t`{0}` {1}({2}){3},", this.getDbColumnMap().get(columnName), columnDbTypeString, this.getColumnMap().get(columnName).length(), partNotNull);
+    }
     return rtn;
   }
 
-  public String createTableSql(String engine, String charset) {
+  public String createTableSql() {
     List<String> sqlList = Lists.newArrayList();
-    sqlList.add("CREATE");
-    sqlList.add("TABLE");
-    sqlList.add(MessageFormat.format("`{0}`", this.getFullTableName()));
-    sqlList.add(String0.OPEN_PARENTHESIS);
-    sqlList.add("\r\n");
+    sqlList.add(MessageFormat.format("create table `{0}` (", this.getFullTableName()));
     for (String versionColumn : this.getVersionFieldNameList()) {
       sqlList.add(this.createColumnStatement(versionColumn, true));
     }
@@ -127,10 +128,9 @@ public class SKEntity<J> {
         sqlList.add(this.createColumnStatement(columnName, false));
       }
     }
-    sqlList.add(MessageFormat.format("\tPRIMARY KEY (`{0}`)\r\n", Joiner.on("`,`").join(this.getIdFieldNameList().stream().map(idFieldName -> this.getDbColumnMap().get(idFieldName)).collect(Collectors.toList()))));
-    sqlList.add(String0.CLOSE_PARENTHESIS);
-    sqlList.add(MessageFormat.format("ENGINE={0} DEFAULT CHARSET={1};", engine, charset));
-    return Joiner.on(String0.BLACK).join(sqlList);
+    sqlList.add(MessageFormat.format("\tprimary key (`{0}`)", Joiner.on("`,`").join(this.getIdFieldNameList().stream().map(idFieldName -> this.getDbColumnMap().get(idFieldName)).collect(Collectors.toList()))));
+    sqlList.add(String0.CLOSE_PARENTHESIS + String0.SEMICOLON);
+    return Joiner.on("\n").join(sqlList);
   }
 
   public List<OperationContent> findOperationContentList(String fieldName) {

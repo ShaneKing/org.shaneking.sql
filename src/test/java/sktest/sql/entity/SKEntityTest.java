@@ -1,6 +1,7 @@
 package sktest.sql.entity;
 
 import com.google.common.collect.Lists;
+import com.google.common.io.Files;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,6 +10,8 @@ import sktest.sql.entity.prepare.PrepareSKAuditEntityColumnNoGetMethod;
 import sktest.sql.entity.prepare.PrepareSKAuditEntityColumns;
 import sktest.sql.entity.prepare.PrepareSKAuditEntityOverride;
 import sktest.sql.entity.prepare.prepareSKAuditEntityTableName;
+
+import java.io.File;
 
 public class SKEntityTest extends SKUnit {
   private PrepareSKAuditEntityColumnNoGetMethod prepareSKAuditEntityColumnNoGetMethod = new PrepareSKAuditEntityColumnNoGetMethod();
@@ -26,34 +29,9 @@ public class SKEntityTest extends SKUnit {
   }
 
   @Test
-  public void createTableSql() {
-    Assert.assertEquals("CREATE TABLE `t_prepare_s_k_audit_entity_columns` ( \r\n" +
-      " \t`version` int(20) NOT NULL,\r\n" +
-      " \t`id` varchar(40) NOT NULL,\r\n" +
-      " \t`has_length` varchar(10) ,\r\n" +
-      " \t`re_name` varchar(255) ,\r\n" +
-      " \t`create_datetime` varchar(20) ,\r\n" +
-      " \t`create_user_id` varchar(40) ,\r\n" +
-      " \t`invalid` varchar(1) ,\r\n" +
-      " \t`invalid_datetime` varchar(20) ,\r\n" +
-      " \t`invalid_user_id` varchar(40) ,\r\n" +
-      " \t`last_modify_datetime` varchar(20) ,\r\n" +
-      " \t`last_modify_user_id` varchar(40) ,\r\n" +
-      " \tPRIMARY KEY (`id`)\r\n" +
-      " ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;", prepareSKAuditEntityColumns.createTableSql("InnoDB", "UTF8MB4"));
-
-    Assert.assertEquals("CREATE TABLE `t_prepare_s_k_audit_entity_table_name` ( \r\n" +
-      " \t`version` int(20) NOT NULL,\r\n" +
-      " \t`id` varchar(40) NOT NULL,\r\n" +
-      " \t`create_datetime` varchar(20) ,\r\n" +
-      " \t`create_user_id` varchar(40) ,\r\n" +
-      " \t`invalid` varchar(1) ,\r\n" +
-      " \t`invalid_datetime` varchar(20) ,\r\n" +
-      " \t`invalid_user_id` varchar(40) ,\r\n" +
-      " \t`last_modify_datetime` varchar(20) ,\r\n" +
-      " \t`last_modify_user_id` varchar(40) ,\r\n" +
-      " \tPRIMARY KEY (`id`)\r\n" +
-      " ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;", prepareSKAuditEntityTableName.createTableSql("InnoDB", "UTF8MB4"));
+  public void createTableSql() throws Exception {
+    Assert.assertEquals(new String(Files.toByteArray(new File("src/test/java/sktest/sql/entity/prepare/PrepareSKAuditEntityColumns.sql"))).trim(), prepareSKAuditEntityColumns.createTableSql().trim());
+    Assert.assertEquals(new String(Files.toByteArray(new File("src/test/java/sktest/sql/entity/prepare/PrepareSKAuditEntityTableName.sql"))).trim(), prepareSKAuditEntityTableName.createTableSql().trim());
   }
 
   @Test
