@@ -38,7 +38,7 @@ public class SKRefEntityTest extends SKUnit {
 
   @Test
   public void testRefSelectSql() {
-    Assert.assertEquals(prepareSKRefEntityAddress.selectSql().toString(), "[select id,version,address,postcode,primary,ref_id,ref_type,create_datetime,create_user_id,invalid,invalid_datetime,invalid_user_id,last_modify_datetime,last_modify_user_id from testSchema.t_address where version=?,[1]]");
+    Assert.assertEquals(prepareSKRefEntityAddress.selectSql().toString(), "[select create_datetime,create_user_id,invalid,invalid_datetime,invalid_user_id,last_modify_datetime,last_modify_user_id,ref_id,ref_type,id,version,address,postcode,primary from testSchema.t_address where version=?,[1]]");
   }
 
   @Test
@@ -46,7 +46,7 @@ public class SKRefEntityTest extends SKUnit {
     String uuid = UUID.randomUUID().toString();
     prepareSKRefEntityAddress.setId(uuid).setAddress("Junjin Load No.500").setRefId("").setRefType("");
     skPrint(prepareSKRefEntityAddress);
-    Assert.assertEquals(prepareSKRefEntityAddress.selectSql().toString(), "[select id,version,address,postcode,primary,ref_id,ref_type,create_datetime,create_user_id,invalid,invalid_datetime,invalid_user_id,last_modify_datetime,last_modify_user_id from testSchema.t_address where id=? and version=? and address=?,[" + uuid + ", 1, Junjin Load No.500]]");
+    Assert.assertEquals(prepareSKRefEntityAddress.selectSql().toString(), "[select create_datetime,create_user_id,invalid,invalid_datetime,invalid_user_id,last_modify_datetime,last_modify_user_id,ref_id,ref_type,id,version,address,postcode,primary from testSchema.t_address where id=? and version=? and address=?,[" + uuid + ", 1, Junjin Load No.500]]");
   }
 
   @Test

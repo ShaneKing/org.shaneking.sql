@@ -105,18 +105,18 @@ public class SKAuditEntityTest extends SKUnit {
 
   @Test
   public void selectSql() {
-    Assert.assertEquals(prepareSKAuditEntityColumns.selectSql().toString(), "[select has_length,re_name,id,version,create_datetime,create_user_id,invalid,invalid_datetime,invalid_user_id,last_modify_datetime,last_modify_user_id from t_prepare_s_k_audit_entity_columns where version=?,[1]]");
+    Assert.assertEquals(prepareSKAuditEntityColumns.selectSql().toString(), "[select create_datetime,create_user_id,invalid,invalid_datetime,invalid_user_id,last_modify_datetime,last_modify_user_id,id,version,has_length,re_name from t_prepare_s_k_audit_entity_columns where version=?,[1]]");
   }
 
   @Test
   public void selectSqlColumnNull() {
     prepareSKAuditEntityColumns.setVersion(null);
-    Assert.assertEquals(prepareSKAuditEntityColumns.selectSql().toString(), "[select has_length,re_name,id,version,create_datetime,create_user_id,invalid,invalid_datetime,invalid_user_id,last_modify_datetime,last_modify_user_id from t_prepare_s_k_audit_entity_columns,[]]");
+    Assert.assertEquals(prepareSKAuditEntityColumns.selectSql().toString(), "[select create_datetime,create_user_id,invalid,invalid_datetime,invalid_user_id,last_modify_datetime,last_modify_user_id,id,version,has_length,re_name from t_prepare_s_k_audit_entity_columns,[]]");
   }
 
   @Test
   public void selectSqlOverride() {
-    Assert.assertEquals(prepareSKAuditEntityOverride.selectSql().toString(), "[select id,version,create_datetime,create_user_id,invalid,invalid_datetime,invalid_user_id,last_modify_datetime,last_modify_user_id from t_prepare_s_k_audit_entity_override where version=? and create_user_id in (?,?,?) and invalid_datetime between ? and ? and last_modify_datetime like ? group by version having version > ? order by version,[1, 1, a, ,, 1949-10-01, 1996-07, %1949-10-01%, 1]]");
+    Assert.assertEquals(prepareSKAuditEntityOverride.selectSql().toString(), "[select create_datetime,create_user_id,invalid,invalid_datetime,invalid_user_id,last_modify_datetime,last_modify_user_id,id,version from t_prepare_s_k_audit_entity_override where create_user_id in (?,?,?) and invalid_datetime between ? and ? and last_modify_datetime like ? and version=? group by version having version > ? order by version,[1, a, ,, 1949-10-01, 1996-07, %1949-10-01%, 1, 1]]");
   }
 
   @Test

@@ -140,13 +140,18 @@ public class SKEntity<J> {
   }
 
   public void initColumnInfo(Class<? extends Object> skEntityClass) {
+    if (SKEntity.class.isAssignableFrom(skEntityClass.getSuperclass())) {
+      initColumnInfo(skEntityClass.getSuperclass());
+    }
     for (Field field : skEntityClass.getDeclaredFields()) {
       Column column = field.getAnnotation(Column.class);
-      if (column != null && this.getFieldNameList().indexOf(field.getName()) == -1) {
+      if (column != null) {
         this.getColumnMap().put(field.getName(), column);
         this.getFieldMap().put(field.getName(), field);
         this.getDbColumnMap().put(field.getName(), Strings.isNullOrEmpty(column.name()) ? String0.upper2lower(field.getName()) : column.name());
-        this.getFieldNameList().add(field.getName());
+        if (this.getFieldNameList().indexOf(field.getName()) == -1) {
+          this.getFieldNameList().add(field.getName());
+        }
       }
       if (field.getAnnotation(Id.class) != null && this.getIdFieldNameList().indexOf(field.getName()) == -1) {
         this.getIdFieldNameList().add(field.getName());
@@ -154,9 +159,6 @@ public class SKEntity<J> {
       if (field.getAnnotation(Version.class) != null && this.getVersionFieldNameList().indexOf(field.getName()) == -1) {
         this.getVersionFieldNameList().add(field.getName());
       }
-    }
-    if (SKEntity.class.isAssignableFrom(skEntityClass.getSuperclass())) {
-      initColumnInfo(skEntityClass.getSuperclass());
     }
   }
 
