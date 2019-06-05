@@ -103,13 +103,13 @@ public class SKEntity<J> {
       columnDbTypeString = Keyword0.TYPE_LONGTEXT;
     } else if (Integer.class.getCanonicalName().equals(columnFieldTypeString)) {
       columnDbTypeString = Keyword0.TYPE_INT;
-    } else if (String.class.getCanonicalName().equals(columnFieldTypeString)) {
+    } else {
       columnDbTypeString = Keyword0.TYPE_VARCHAR;
     }
-    if (columnField.getAnnotation(Lob.class) != null || Integer.class.getCanonicalName().equals(columnFieldTypeString)) {
-      rtn = MessageFormat.format("\t`{0}` {1}{2},", this.getDbColumnMap().get(columnName), columnDbTypeString, partNotNull);
+    if (Keyword0.TYPE_LONGTEXT.equals(columnDbTypeString) || Keyword0.TYPE_INT.equals(columnDbTypeString)) {
+      rtn = MessageFormat.format("  `{0}` {1}{2},", this.getDbColumnMap().get(columnName), columnDbTypeString, partNotNull);
     } else {
-      rtn = MessageFormat.format("\t`{0}` {1}({2}){3},", this.getDbColumnMap().get(columnName), columnDbTypeString, this.getColumnMap().get(columnName).length(), partNotNull);
+      rtn = MessageFormat.format("  `{0}` {1}({2}){3},", this.getDbColumnMap().get(columnName), columnDbTypeString, String.valueOf(this.getColumnMap().get(columnName).length()), partNotNull);
     }
     return rtn;
   }
@@ -128,7 +128,7 @@ public class SKEntity<J> {
         sqlList.add(this.createColumnStatement(columnName, false));
       }
     }
-    sqlList.add(MessageFormat.format("\tprimary key (`{0}`)", Joiner.on("`,`").join(this.getIdFieldNameList().stream().map(idFieldName -> this.getDbColumnMap().get(idFieldName)).collect(Collectors.toList()))));
+    sqlList.add(MessageFormat.format("  primary key (`{0}`)", Joiner.on("`,`").join(this.getIdFieldNameList().stream().map(idFieldName -> this.getDbColumnMap().get(idFieldName)).collect(Collectors.toList()))));
     sqlList.add(String0.CLOSE_PARENTHESIS + String0.SEMICOLON);
     return Joiner.on("\n").join(sqlList);
   }

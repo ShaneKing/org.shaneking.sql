@@ -21,7 +21,7 @@ public class PrepareSKAuditEntityColumns extends PrepareSKAuditEntityIdVersion {
   @Setter
   private String hasLength;
 
-  @Column(name = "re_name")
+  @Column(name = "re_name", length = 4000)
   @Getter
   @Setter
   private String reName;
