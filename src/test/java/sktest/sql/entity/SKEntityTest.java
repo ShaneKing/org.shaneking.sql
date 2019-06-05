@@ -28,6 +28,7 @@ public class SKEntityTest extends SKUnit {
   @Test
   public void createTableSql() {
     Assert.assertEquals("CREATE TABLE `t_prepare_s_k_audit_entity_columns` ( \r\n" +
+      " \t`version` int(20) NOT NULL,\r\n" +
       " \t`id` varchar(40) NOT NULL,\r\n" +
       " \t`has_length` varchar(10) ,\r\n" +
       " \t`re_name` varchar(255) ,\r\n" +
@@ -38,10 +39,11 @@ public class SKEntityTest extends SKUnit {
       " \t`invalid_user_id` varchar(40) ,\r\n" +
       " \t`last_modify_datetime` varchar(20) ,\r\n" +
       " \t`last_modify_user_id` varchar(40) ,\r\n" +
-      " \t`version` int(20) NOT NULL,\r\n" +
       " \tPRIMARY KEY (`id`)\r\n" +
       " ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;", prepareSKAuditEntityColumns.createTableSql("InnoDB", "UTF8MB4"));
+
     Assert.assertEquals("CREATE TABLE `t_prepare_s_k_audit_entity_table_name` ( \r\n" +
+      " \t`version` int(20) NOT NULL,\r\n" +
       " \t`id` varchar(40) NOT NULL,\r\n" +
       " \t`create_datetime` varchar(20) ,\r\n" +
       " \t`create_user_id` varchar(40) ,\r\n" +
@@ -50,7 +52,6 @@ public class SKEntityTest extends SKUnit {
       " \t`invalid_user_id` varchar(40) ,\r\n" +
       " \t`last_modify_datetime` varchar(20) ,\r\n" +
       " \t`last_modify_user_id` varchar(40) ,\r\n" +
-      " \t`version` int(20) NOT NULL,\r\n" +
       " \tPRIMARY KEY (`id`)\r\n" +
       " ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;", prepareSKAuditEntityTableName.createTableSql("InnoDB", "UTF8MB4"));
   }

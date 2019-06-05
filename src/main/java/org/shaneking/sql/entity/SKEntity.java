@@ -116,6 +116,9 @@ public class SKEntity<J> {
     sqlList.add(MessageFormat.format("`{0}`", this.getFullTableName()));
     sqlList.add(String0.OPEN_PARENTHESIS);
     sqlList.add("\r\n");
+    for (String versionColumn : this.getVersionFieldNameList()) {
+      sqlList.add(this.createColumnStatement(versionColumn, true));
+    }
     for (String idColumn : this.getIdFieldNameList()) {
       sqlList.add(this.createColumnStatement(idColumn, true));
     }
@@ -123,9 +126,6 @@ public class SKEntity<J> {
       if (this.getIdFieldNameList().indexOf(columnName) == -1 && this.getVersionFieldNameList().indexOf(columnName) == -1) {
         sqlList.add(this.createColumnStatement(columnName, false));
       }
-    }
-    for (String versionColumn : this.getVersionFieldNameList()) {
-      sqlList.add(this.createColumnStatement(versionColumn, true));
     }
     sqlList.add(MessageFormat.format("\tPRIMARY KEY (`{0}`)\r\n", Joiner.on("`,`").join(this.getIdFieldNameList().stream().map(idFieldName -> this.getDbColumnMap().get(idFieldName)).collect(Collectors.toList()))));
     sqlList.add(String0.CLOSE_PARENTHESIS);
