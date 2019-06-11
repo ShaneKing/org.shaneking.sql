@@ -63,7 +63,7 @@ public class SKEntityTest extends SKUnit {
 
   @Test
   public void insertSql() {
-    Assert.assertEquals(prepareSKAuditEntityColumns.insertSql().toString(), "[insert into t_prepare_s_k_audit_entity_columns (version) values (?),[1]]");
+    Assert.assertEquals(prepareSKAuditEntityColumns.insertSql().toString(), "[insert into testschema.t_prepare_s_k_audit_entity_columns (version) values (?),[1]]");
   }
 
   @Test
@@ -108,13 +108,13 @@ public class SKEntityTest extends SKUnit {
 
   @Test
   public void selectSql() {
-    Assert.assertEquals(prepareSKAuditEntityColumns.selectSql().toString(), "[select create_datetime,create_user_id,invalid,invalid_datetime,invalid_user_id,last_modify_datetime,last_modify_user_id,id,version,has_length,re_name from t_prepare_s_k_audit_entity_columns where version=?,[1]]");
+    Assert.assertEquals(prepareSKAuditEntityColumns.selectSql().toString(), "[select create_datetime,create_user_id,invalid,invalid_datetime,invalid_user_id,last_modify_datetime,last_modify_user_id,id,version,has_length,re_name from testschema.t_prepare_s_k_audit_entity_columns where version=?,[1]]");
   }
 
   @Test
   public void selectSqlColumnNull() {
     prepareSKAuditEntityColumns.setVersion(null);
-    Assert.assertEquals(prepareSKAuditEntityColumns.selectSql().toString(), "[select create_datetime,create_user_id,invalid,invalid_datetime,invalid_user_id,last_modify_datetime,last_modify_user_id,id,version,has_length,re_name from t_prepare_s_k_audit_entity_columns,[]]");
+    Assert.assertEquals(prepareSKAuditEntityColumns.selectSql().toString(), "[select create_datetime,create_user_id,invalid,invalid_datetime,invalid_user_id,last_modify_datetime,last_modify_user_id,id,version,has_length,re_name from testschema.t_prepare_s_k_audit_entity_columns,[]]");
   }
 
   @Test
@@ -159,9 +159,9 @@ public class SKEntityTest extends SKUnit {
 
   @Test
   public void updateByIdAndVersionSql() {
-    Assert.assertEquals(prepareSKAuditEntityColumns.updateByIdAndVersionSql().toString(), "[update t_prepare_s_k_audit_entity_columns set version=? where version=?,[2, 1]]");
+    Assert.assertEquals(prepareSKAuditEntityColumns.updateByIdAndVersionSql().toString(), "[update testschema.t_prepare_s_k_audit_entity_columns set version=? where version=?,[2, 1]]");
     prepareSKAuditEntityColumns.setVersion(null);
-    Assert.assertEquals(prepareSKAuditEntityColumns.updateByIdAndVersionSql().toString(), "[update t_prepare_s_k_audit_entity_columns set ,[]]");//TODO maybe control by user
+    Assert.assertEquals(prepareSKAuditEntityColumns.updateByIdAndVersionSql().toString(), "[update testschema.t_prepare_s_k_audit_entity_columns set ,[]]");//TODO maybe control by user
   }
 
   @Test

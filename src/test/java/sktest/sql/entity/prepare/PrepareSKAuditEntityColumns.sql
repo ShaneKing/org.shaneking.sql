@@ -1,4 +1,4 @@
-create table `t_prepare_s_k_audit_entity_columns` (
+create table `testschema`.`t_prepare_s_k_audit_entity_columns` (
   `version` int not null,
   `id` varchar(40) not null,
   `create_datetime` varchar(20),

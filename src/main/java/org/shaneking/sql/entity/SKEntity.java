@@ -35,34 +35,44 @@ import java.util.stream.Collectors;
 @Slf4j
 @ToString
 public class SKEntity<J> {
+  @Transient
   public static final String APPEND_AND = " and ";
+  @Transient
   public static final String APPEND_WHERE = " where ";
   @Getter
   @JsonIgnore
+  @Transient
   private final Map<String, Column> columnMap = Maps.newHashMap();
   @Getter
   @JsonIgnore
+  @Transient
   private final Map<String, String> dbColumnMap = Maps.newHashMap();
   @Getter
   @JsonIgnore
+  @Transient
   private final Map<String, Field> fieldMap = Maps.newHashMap();
   @Getter
   @JsonIgnore
+  @Transient
   private final List<String> fieldNameList = Lists.newArrayList();
   @Getter
   @JsonIgnore
+  @Transient
   private final List<String> idFieldNameList = Lists.newLinkedList();
   @Getter
   @JsonIgnore
+  @Transient
   private final List<String> versionFieldNameList = Lists.newLinkedList();
 
   @Getter
   @JsonIgnore
   @Setter
+  @Transient
   private String fullTableName;
   @Getter
   @JsonIgnore
   @Setter
+  @Transient
   private Table table;
 
   /**
@@ -86,6 +96,7 @@ public class SKEntity<J> {
    */
   @Getter
   @Setter
+  @Transient
   private J whereJson;
 
   public SKEntity() {
@@ -116,7 +127,12 @@ public class SKEntity<J> {
 
   public String createTableSql() {
     List<String> sqlList = Lists.newArrayList();
-    sqlList.add(MessageFormat.format("create table `{0}` (", this.getFullTableName()));
+    String schema = this.getTable().schema();
+    if (Strings.isNullOrEmpty(schema)) {
+      sqlList.add(MessageFormat.format("create table `{0}` (", this.getFullTableName()));
+    } else {
+      sqlList.add(MessageFormat.format("create table `{0}`.`{1}` (", schema, this.getFullTableName().substring(schema.length() + 1)));
+    }
     for (String versionColumn : this.getVersionFieldNameList()) {
       sqlList.add(this.createColumnStatement(versionColumn, true));
     }
@@ -144,20 +160,22 @@ public class SKEntity<J> {
       initColumnInfo(skEntityClass.getSuperclass());
     }
     for (Field field : skEntityClass.getDeclaredFields()) {
-      Column column = field.getAnnotation(Column.class);
-      if (column != null) {
-        this.getColumnMap().put(field.getName(), column);
-        this.getFieldMap().put(field.getName(), field);
-        this.getDbColumnMap().put(field.getName(), Strings.isNullOrEmpty(column.name()) ? String0.upper2lower(field.getName()) : column.name());
-        if (this.getFieldNameList().indexOf(field.getName()) == -1) {
-          this.getFieldNameList().add(field.getName());
+      if (field.getAnnotation(Transient.class) == null) {
+        Column column = field.getAnnotation(Column.class);
+        if (column != null) {
+          this.getColumnMap().put(field.getName(), column);
+          this.getFieldMap().put(field.getName(), field);
+          this.getDbColumnMap().put(field.getName(), Strings.isNullOrEmpty(column.name()) ? String0.upper2lower(field.getName()) : column.name());
+          if (this.getFieldNameList().indexOf(field.getName()) == -1) {
+            this.getFieldNameList().add(field.getName());
+          }
         }
-      }
-      if (field.getAnnotation(Id.class) != null && this.getIdFieldNameList().indexOf(field.getName()) == -1) {
-        this.getIdFieldNameList().add(field.getName());
-      }
-      if (field.getAnnotation(Version.class) != null && this.getVersionFieldNameList().indexOf(field.getName()) == -1) {
-        this.getVersionFieldNameList().add(field.getName());
+        if (field.getAnnotation(Id.class) != null && this.getIdFieldNameList().indexOf(field.getName()) == -1) {
+          this.getIdFieldNameList().add(field.getName());
+        }
+        if (field.getAnnotation(Version.class) != null && this.getVersionFieldNameList().indexOf(field.getName()) == -1) {
+          this.getVersionFieldNameList().add(field.getName());
+        }
       }
     }
   }

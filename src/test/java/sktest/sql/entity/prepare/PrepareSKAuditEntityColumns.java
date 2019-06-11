@@ -9,7 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Table;
 
 @Accessors(chain = true)
-@Table
+@Table(name = "t_prepare_s_k_audit_entity_columns", schema = "testschema")
 @ToString(callSuper = true)
 public class PrepareSKAuditEntityColumns extends PrepareSKAuditEntityIdVersion {
   @Getter
