@@ -25,6 +25,7 @@ import org.shaneking.sql.OperationContent;
 
 import javax.persistence.*;
 import java.lang.reflect.Field;
+import java.sql.ResultSet;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
@@ -125,6 +126,15 @@ public class SKEntity<J> {
     return rtn;
   }
 
+  public String createIndexSql() {
+    return Joiner.on("\n").join(Lists.newArrayList(this.getTable().uniqueConstraints()).parallelStream().map(uniqueConstraint -> {
+      String schema = this.getTable().schema();
+      String indexName = "u_idx_" + Joiner.on("_").join(uniqueConstraint.columnNames());
+      String indexColumns = "`" + Joiner.on("` asc, `").join(uniqueConstraint.columnNames()) + "` asc";
+      return Strings.isNullOrEmpty(schema) ? MessageFormat.format("alter table `{0}` add unique index `{1}` ({2});", this.getFullTableName(), indexName, indexColumns) : MessageFormat.format("alter table `{0}`.`{1}` add unique index `{2}` ({3});", schema, this.getTable().name(), indexName, indexColumns);
+    }).collect(Collectors.toList()));
+  }
+
   public String createTableSql() {
     List<String> sqlList = Lists.newArrayList();
     String schema = this.getTable().schema();
@@ -190,6 +200,26 @@ public class SKEntity<J> {
       this.setFullTableName(this.getFullTableName() + "t" + (classTableName.startsWith(String0.UNDERLINE) ? classTableName : String0.UNDERLINE + classTableName));
     } else {
       this.setFullTableName(this.getFullTableName() + this.getTable().name());
+    }
+  }
+
+  public void mapRow(ResultSet rs) {
+    String columnFieldTypeString = null;
+    Object o = null;
+    for (String fieldName : this.getFieldNameList()) {
+      try {
+        columnFieldTypeString = this.getFieldMap().get(fieldName).getType().getCanonicalName();
+        if (Integer.class.getCanonicalName().equals(columnFieldTypeString)) {
+          o = rs.getInt(this.getDbColumnMap().get(fieldName));
+        } else {
+          o = rs.getString(this.getDbColumnMap().get(fieldName));
+        }
+        if (o != null) {
+          this.getClass().getMethod("set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1), o.getClass()).invoke(this, o);
+        }
+      } catch (Exception e) {
+        log.error(e.getMessage(), e);
+      }
     }
   }
 
