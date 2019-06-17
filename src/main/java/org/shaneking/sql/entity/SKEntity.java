@@ -22,6 +22,7 @@ import org.shaneking.skava.ling.lang.String0;
 import org.shaneking.skava.ling.lang.String20;
 import org.shaneking.sql.Keyword0;
 import org.shaneking.sql.OperationContent;
+import org.shaneking.sql.PageHelper;
 
 import javax.persistence.*;
 import java.lang.reflect.Field;
@@ -75,6 +76,11 @@ public class SKEntity<J> {
   @Setter
   @Transient
   private Table table;
+
+  @Getter
+  @Setter
+  @Transient
+  private PageHelper pageHelper = new PageHelper();
 
   /**
    * J maybe fastjson,gson,jackson...
@@ -230,6 +236,47 @@ public class SKEntity<J> {
     return rtnInt;
   }
 
+  public Tuple.Pair<String, List<Object>> deleteByIdSql() {
+    List<Object> rtnObjectList = Lists.newArrayList();
+
+    List<String> whereIdList = Lists.newArrayList();
+    whereStatement(whereIdList, rtnObjectList, this.getIdFieldNameList());
+    whereStatementExt(whereIdList, rtnObjectList, this.getIdFieldNameList());
+
+    List<String> sqlList = Lists.newArrayList();
+    sqlList.add("delete from");
+    sqlList.add(this.getFullTableName());
+    if (whereIdList.size() > 0) {
+      sqlList.add("where");
+      sqlList.add(Joiner.on(APPEND_AND).join(whereIdList));
+    }
+
+    return Tuple.of(Joiner.on(String0.BLACK).join(sqlList), rtnObjectList);
+  }
+
+  public Tuple.Pair<String, List<Object>> deleteByIdAndVersionSql() {
+    return this.deleteOrUpdateByIdAndVersionSql(this.deleteByIdSql());
+  }
+
+  public Tuple.Pair<String, List<Object>> deleteOrUpdateByIdAndVersionSql(@NonNull Tuple.Pair<String, List<Object>> deleteOrUpdateByIdSql) {
+    Tuple.Pair<String, List<Object>> rtn = deleteOrUpdateByIdSql;
+    StringBuffer rtnSql = new StringBuffer(Tuple.getFirst(rtn));
+    List<Object> rtnObjectList = Tuple.getSecond(rtn);
+
+    List<String> whereVersionList = Lists.newArrayList();
+    whereStatement(whereVersionList, rtnObjectList, this.getVersionFieldNameList());
+    whereStatementExt(whereVersionList, rtnObjectList, this.getVersionFieldNameList());
+    if (whereVersionList.size() > 0) {
+      if (rtnSql.indexOf(APPEND_WHERE) == -1) {
+        rtnSql.append(APPEND_WHERE);
+      } else {
+        rtnSql.append(APPEND_AND);
+      }
+      rtnSql.append(Joiner.on(APPEND_AND).join(whereVersionList));
+    }
+    return Tuple.of(rtnSql.toString(), rtnObjectList);
+  }
+
   public int insert() {
     int rtnInt = 0;
     //implements by sub entity
@@ -312,6 +359,10 @@ public class SKEntity<J> {
     orderByStatement(orderByList, rtnObjectList);
     orderByStatementExt(orderByList, rtnObjectList);
 
+    List<String> limitAndOffsetList = Lists.newArrayList();
+    limitAndOffsetStatement(limitAndOffsetList, rtnObjectList);
+    limitAndOffsetStatementExt(limitAndOffsetList, rtnObjectList);
+
     List<String> sqlList = Lists.newArrayList();
     sqlList.add("select");
     sqlList.add(Joiner.on(String0.COMMA).join(selectList));
@@ -332,6 +383,9 @@ public class SKEntity<J> {
     if (orderByList.size() > 0) {
       sqlList.add("order by");
       sqlList.add(Joiner.on(String0.COMMA).join(orderByList));
+    }
+    if (limitAndOffsetList.size() > 0) {
+      sqlList.add(Joiner.on(String0.BLACK).join(limitAndOffsetList));
     }
 
     return Tuple.of(Joiner.on(String0.BLACK).join(sqlList), rtnObjectList);
@@ -376,22 +430,7 @@ public class SKEntity<J> {
   }
 
   public Tuple.Pair<String, List<Object>> updateByIdAndVersionSql() {
-    Tuple.Pair<String, List<Object>> rtn = this.updateByIdSql();
-    StringBuffer rtnSql = new StringBuffer(Tuple.getFirst(rtn));
-    List<Object> rtnObjectList = Tuple.getSecond(rtn);
-
-    List<String> whereVersionList = Lists.newArrayList();
-    whereStatement(whereVersionList, rtnObjectList, this.getVersionFieldNameList());
-    whereStatementExt(whereVersionList, rtnObjectList, this.getVersionFieldNameList());
-    if (whereVersionList.size() > 0) {
-      if (rtnSql.indexOf(APPEND_WHERE) == -1) {
-        rtnSql.append(APPEND_WHERE);
-      } else {
-        rtnSql.append(APPEND_AND);
-      }
-      rtnSql.append(Joiner.on(APPEND_AND).join(whereVersionList));
-    }
-    return Tuple.of(rtnSql.toString(), rtnObjectList);
+    return this.deleteOrUpdateByIdAndVersionSql(this.updateByIdSql());
   }
 
   public void updateStatement(@NonNull List<String> updateList, @NonNull List<Object> objectList) {
@@ -440,6 +479,20 @@ public class SKEntity<J> {
   }
 
   public void havingStatementExt(@NonNull List<String> havingByList, @NonNull List<Object> objectList) {
+    //implements by sub entity
+  }
+
+  public void limitAndOffsetStatement(@NonNull List<String> limitAndOffsetList, @NonNull List<Object> objectList) {
+    //implements by sub entity
+    if (this.getPageHelper().getLimit() != null) {
+      limitAndOffsetList.add(MessageFormat.format("limit {0}", this.getPageHelper().getLimit()));
+    }
+    if (this.getPageHelper().getOffset() != null) {
+      limitAndOffsetList.add(MessageFormat.format("offset {0}", this.getPageHelper().getOffset()));
+    }
+  }
+
+  public void limitAndOffsetStatementExt(@NonNull List<String> limitAndOffsetList, @NonNull List<Object> objectList) {
     //implements by sub entity
   }
 
