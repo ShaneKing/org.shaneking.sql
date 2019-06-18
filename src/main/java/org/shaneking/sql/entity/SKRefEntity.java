@@ -13,16 +13,19 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
 
+/**
+ * Used for upload file
+ */
 @Accessors(chain = true)
 @ToString(callSuper = true)
 public class SKRefEntity<J> extends SKAuditEntity<J> {
 
-  @Column(length = 40)
+  @Column(length = 40, columnDefinition = "COMMENT '关联唯一标识'")
   @Getter
   @Setter
   private String refId;
 
-  @Column(length = 40)
+  @Column(length = 40, columnDefinition = "COMMENT '关联类型'")
   @Getter
   @Setter
   private String refType;

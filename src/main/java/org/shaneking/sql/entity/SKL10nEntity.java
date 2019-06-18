@@ -19,7 +19,7 @@ public class SKL10nEntity<J> extends SKAuditEntity<J> {
   /**
    * @see org.shaneking.skava.ling.util.Date0#H_MI_S
    */
-  @Column(length = 10)
+  @Column(length = 10, columnDefinition = "COMMENT '创建时区'")
   @Getter
   @Setter
   private String createTimezone;
@@ -27,7 +27,7 @@ public class SKL10nEntity<J> extends SKAuditEntity<J> {
   /**
    * @see org.shaneking.skava.ling.util.Date0#H_MI_S
    */
-  @Column(length = 10)
+  @Column(length = 10, columnDefinition = "COMMENT '失效时区'")
   @Getter
   @Setter
   private String invalidTimezone;
@@ -35,7 +35,7 @@ public class SKL10nEntity<J> extends SKAuditEntity<J> {
   /**
    * @see org.shaneking.skava.ling.util.Date0#H_MI_S
    */
-  @Column(length = 10)
+  @Column(length = 10, columnDefinition = "COMMENT '最后修改时区'")
   @Getter
   @Setter
   private String lastModifyTimezone;
