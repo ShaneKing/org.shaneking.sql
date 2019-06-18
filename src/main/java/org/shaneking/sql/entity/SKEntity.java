@@ -442,7 +442,7 @@ public class SKEntity<J> {
         o = null;
         log.warn(e.toString());
       }
-      if (o != null && !Strings.isNullOrEmpty(o.toString())) {
+      if (o != null) {//can update to empty
         updateList.add(this.getDbColumnMap().get(fieldName) + String20.EQUAL_QUESTION);
         if (this.getVersionFieldNameList().indexOf(fieldName) == -1) {
           objectList.add(o);
@@ -523,13 +523,15 @@ public class SKEntity<J> {
         }
         for (OperationContent oc : this.findOperationContentList(fieldName)) {
           if (Keyword0.BETWEEN.equalsIgnoreCase(oc.getOp())) {
-            if (oc.getCl().size() == 2) {
+            if (oc.getCl() != null && oc.getCl().size() == 2) {
               whereList.add(this.getDbColumnMap().get(fieldName) + String0.BLACK + oc.getOp() + String0.BLACK + String0.QUESTION + String0.BLACK + Keyword0.AND + String0.BLACK + String0.QUESTION);
               objectList.addAll(oc.getCl());
             }
           } else if (Keyword0.IN.equalsIgnoreCase(oc.getOp())) {
-            whereList.add(this.getDbColumnMap().get(fieldName) + String0.BLACK + oc.getOp() + String0.BLACK + String0.OPEN_PARENTHESIS + Joiner.on(String0.COMMA).join(Collections.nCopies(oc.getCl().size(), String0.QUESTION)) + String0.CLOSE_PARENTHESIS);
-            objectList.addAll(oc.getCl());
+            if (oc.getCl() != null && oc.getCl().size() > 0) {
+              whereList.add(this.getDbColumnMap().get(fieldName) + String0.BLACK + oc.getOp() + String0.BLACK + String0.OPEN_PARENTHESIS + Joiner.on(String0.COMMA).join(Collections.nCopies(oc.getCl().size(), String0.QUESTION)) + String0.CLOSE_PARENTHESIS);
+              objectList.addAll(oc.getCl());
+            }
           } else {
             whereList.add(this.getDbColumnMap().get(fieldName) + String0.BLACK + oc.getOp() + String0.BLACK + String0.QUESTION);
             objectList.add(Strings.nullToEmpty(oc.getBw()) + oc.getCs() + oc.getEw());

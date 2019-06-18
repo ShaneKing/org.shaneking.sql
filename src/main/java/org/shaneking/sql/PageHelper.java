@@ -15,7 +15,7 @@ public class PageHelper {
 
   @Getter
   @Setter
-  private Integer limit;
+  private Integer limit = 100;
 
   @Getter
   @Setter
