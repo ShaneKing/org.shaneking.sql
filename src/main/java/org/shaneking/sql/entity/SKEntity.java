@@ -65,18 +65,20 @@ public class SKEntity<J> {
   @JsonIgnore
   @Transient
   private final List<String> versionFieldNameList = Lists.newLinkedList();
-
   @Getter
   @JsonIgnore
   @Setter
   @Transient
   private String fullTableName;
   @Getter
+  @Setter
+  @Transient
+  private PageHelper pageHelper = new PageHelper();
+  @Getter
   @JsonIgnore
   @Setter
   @Transient
   private Table table;
-
   /**
    * J maybe fastjson,gson,jackson...
    * <blockquote><pre>
@@ -100,11 +102,6 @@ public class SKEntity<J> {
   @Setter
   @Transient
   private J whereJson;
-
-  @Getter
-  @Setter
-  @Transient
-  private PageHelper pageHelper = new PageHelper();
 
   public SKEntity() {
     initTableInfo();
