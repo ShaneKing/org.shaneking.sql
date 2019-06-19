@@ -29,6 +29,6 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
     <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.18.6" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.26" level="project" />
-    <orderEntry type="library" name="Maven: org.shaneking:org.shaneking.skava:0.4.13" level="project" />
+    <orderEntry type="module" module-name="org.shaneking.skava" />
   </component>
 </module>

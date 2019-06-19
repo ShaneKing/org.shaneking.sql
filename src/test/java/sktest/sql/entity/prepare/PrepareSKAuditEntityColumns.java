@@ -7,16 +7,17 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Accessors(chain = true)
-@Table(name = "t_prepare_s_k_audit_entity_columns", schema = "testschema")
+@Table(name = "t_prepare_s_k_audit_entity_columns", schema = "testschema", uniqueConstraints = {@UniqueConstraint(columnNames = {"re_name"})})
 @ToString(callSuper = true)
 public class PrepareSKAuditEntityColumns extends PrepareSKAuditEntityIdVersion {
   @Getter
   @Setter
   private String withoutAnnotation;
 
-  @Column(length = 10)
+  @Column(length = 10, unique = true)
   @Getter
   @Setter
   private String hasLength;

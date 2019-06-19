@@ -16,17 +16,17 @@ public class SKAuditEntity<J> extends SKEntity<J> {
   /**
    * @see org.shaneking.skava.ling.util.Date0#DATE_TIME
    */
-  @Column(length = 20, updatable = false, columnDefinition = "COMMENT '创建时间'")
+  @Column(length = 20, updatable = false, columnDefinition = "COMMENT 'The creation time of record'")
   @Getter
   @Setter
   private String createDatetime;
 
-  @Column(length = 40, updatable = false, columnDefinition = "COMMENT '创建人'")
+  @Column(length = 40, updatable = false, columnDefinition = "COMMENT 'The creator of record'")
   @Getter
   @Setter
   private String createUserId;
 
-  @Column(length = 1, columnDefinition = "COMMENT '是否失效{Y:已失效,N:未失效(默认值)}'")
+  @Column(length = 1, columnDefinition = "COMMENT 'The invalid status of record {Y:Invalid,N:Valid(Default)}'")
   @Getter
   @Setter
   private String invalid;
@@ -34,12 +34,12 @@ public class SKAuditEntity<J> extends SKEntity<J> {
   /**
    * @see org.shaneking.skava.ling.util.Date0#DATE_TIME
    */
-  @Column(length = 20, columnDefinition = "COMMENT '失效时间'")
+  @Column(length = 20, columnDefinition = "COMMENT 'The invalid time of record'")
   @Getter
   @Setter
   private String invalidDatetime;
 
-  @Column(length = 40, columnDefinition = "COMMENT '失效人'")
+  @Column(length = 40, columnDefinition = "COMMENT 'The invalid operator of record'")
   @Getter
   @Setter
   private String invalidUserId;
@@ -47,12 +47,12 @@ public class SKAuditEntity<J> extends SKEntity<J> {
   /**
    * @see org.shaneking.skava.ling.util.Date0#DATE_TIME
    */
-  @Column(length = 20, columnDefinition = "COMMENT '最后修改时间'")
+  @Column(length = 20, columnDefinition = "COMMENT 'The last modification time of record'")
   @Getter
   @Setter
   private String lastModifyDatetime;
 
-  @Column(length = 40, columnDefinition = "COMMENT '最后修改人'")
+  @Column(length = 40, columnDefinition = "COMMENT 'The last modified person of record'")
   @Getter
   @Setter
   private String lastModifyUserId;

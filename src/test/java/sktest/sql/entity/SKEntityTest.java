@@ -29,6 +29,12 @@ public class SKEntityTest extends SKUnit {
   }
 
   @Test
+  public void createIndexSql() throws Exception {
+    Assert.assertEquals(new String(Files.toByteArray(new File("src/test/java/sktest/sql/entity/prepare/PrepareSKAuditEntityColumns_Index.sql"))).trim(), prepareSKAuditEntityColumns.createIndexSql().trim());
+    Assert.assertEquals(new String(Files.toByteArray(new File("src/test/java/sktest/sql/entity/prepare/PrepareSKAuditEntityTableName_Index.sql"))).trim(), prepareSKAuditEntityTableName.createIndexSql().trim());
+  }
+
+  @Test
   public void createTableSql() throws Exception {
     Assert.assertEquals(new String(Files.toByteArray(new File("src/test/java/sktest/sql/entity/prepare/PrepareSKAuditEntityColumns.sql"))).trim(), prepareSKAuditEntityColumns.createTableSql().trim());
     Assert.assertEquals(new String(Files.toByteArray(new File("src/test/java/sktest/sql/entity/prepare/PrepareSKAuditEntityTableName.sql"))).trim(), prepareSKAuditEntityTableName.createTableSql().trim());
