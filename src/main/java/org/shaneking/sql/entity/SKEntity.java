@@ -33,6 +33,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Design for has cache want single table operation
+ */
 @Accessors(chain = true)
 @Slf4j
 @ToString
@@ -80,7 +83,7 @@ public class SKEntity<J> {
   @Transient
   private Table table;
   /**
-   * J maybe fastjson,gson,jackson...
+   * I don't want Map<String, OperationContent> to limit you, J maybe fastjson, gson, jackson...
    * <blockquote><pre>
    *     {
    *         createDatetime:{
@@ -236,40 +239,8 @@ public class SKEntity<J> {
   }
 
   //curd
-  public Tuple.Pair<String, List<Object>> countSql() {
-    return selectSql(Lists.newArrayList("count(1)"), null);
-  }
-
-  public int delete() {
-    int rtnInt = 0;
-    //implements by sub entity
-    return rtnInt;
-  }
-
-  public Tuple.Pair<String, List<Object>> deleteByIdSql() {
-    List<Object> rtnObjectList = Lists.newArrayList();
-
-    List<String> whereIdList = Lists.newArrayList();
-    whereStatement(whereIdList, rtnObjectList, this.getIdFieldNameList());
-    whereStatementExt(whereIdList, rtnObjectList, this.getIdFieldNameList());
-
-    List<String> sqlList = Lists.newArrayList();
-    sqlList.add("delete from");
-    sqlList.add(this.getFullTableName());
-    if (whereIdList.size() > 0) {
-      sqlList.add("where");
-      sqlList.add(Joiner.on(APPEND_AND).join(whereIdList));
-    }
-
-    return Tuple.of(Joiner.on(String0.BLACK).join(sqlList), rtnObjectList);
-  }
-
-  public Tuple.Pair<String, List<Object>> deleteByIdAndVersionSql() {
-    return this.deleteOrUpdateByIdAndVersionSql(this.deleteByIdSql());
-  }
-
-  public Tuple.Pair<String, List<Object>> deleteOrUpdateByIdAndVersionSql(@NonNull Tuple.Pair<String, List<Object>> deleteOrUpdateByIdSql) {
-    Tuple.Pair<String, List<Object>> rtn = deleteOrUpdateByIdSql;
+  private Tuple.Pair<String, List<Object>> appendVersion2ByIdSql(@NonNull Tuple.Pair<String, List<Object>> byIdSql) {
+    Tuple.Pair<String, List<Object>> rtn = byIdSql;
     StringBuffer rtnSql = new StringBuffer(Tuple.getFirst(rtn));
     List<Object> rtnObjectList = Tuple.getSecond(rtn);
 
@@ -287,16 +258,37 @@ public class SKEntity<J> {
     return Tuple.of(rtnSql.toString(), rtnObjectList);
   }
 
-  public int insert() {
-    int rtnInt = 0;
-    //implements by sub entity
-    return rtnInt;
+  private Tuple.Pair<String, List<Object>> appendWhereByFields2Sql(@NonNull List<String> sqlList, @NonNull List<Object> rtnObjectList, @NonNull List<String> fieldNameList) {
+    List<String> whereList = Lists.newArrayList();
+    whereStatement(whereList, rtnObjectList, fieldNameList);
+    whereStatementExt(whereList, rtnObjectList, fieldNameList);
+
+    if (whereList.size() > 0) {
+      if (sqlList.contains(APPEND_WHERE.trim())) {
+        sqlList.add(APPEND_WHERE.trim());
+      } else {
+        sqlList.add(APPEND_AND.trim());
+      }
+      sqlList.add(Joiner.on(APPEND_AND).join(whereList));
+    }
+
+    return Tuple.of(Joiner.on(String0.BLACK).join(sqlList), rtnObjectList);
   }
 
-  public int insertOrUpdateById() {
-    int rtnInt = 0;
-    //implements by sub entity
-    return rtnInt;
+  public Tuple.Pair<String, List<Object>> countSql() {
+    return selectSql(Lists.newArrayList("count(1)"), null);
+  }
+
+  public Tuple.Pair<String, List<Object>> deleteByIdSql() {
+    return appendWhereByFields2Sql(Lists.newArrayList("delete from", this.getFullTableName()), Lists.newArrayList(), this.getIdFieldNameList());
+  }
+
+  public Tuple.Pair<String, List<Object>> deleteByIdAndVersionSql() {
+    return this.appendVersion2ByIdSql(this.deleteByIdSql());
+  }
+
+  public Tuple.Pair<String, List<Object>> deleteSql() {
+    return appendWhereByFields2Sql(Lists.newArrayList("delete from", this.getFullTableName()), Lists.newArrayList(), this.getFieldNameList());
   }
 
   public Tuple.Pair<String, List<Object>> insertSql() {
@@ -336,12 +328,6 @@ public class SKEntity<J> {
     //implements by sub entity
   }
 
-  public List<? extends SKEntity> select() {
-    List<? extends SKEntity> rtnList = Lists.newArrayList();
-    //implements by sub entity
-    return rtnList;
-  }
-
   public Tuple.Pair<String, List<Object>> selectSql() {
     List<Object> rtnObjectList = Lists.newArrayList();
 
@@ -378,31 +364,6 @@ public class SKEntity<J> {
     List<String> orderByList = Lists.newArrayList();
     orderByStatement(orderByList, rtnObjectList);
     orderByStatementExt(orderByList, rtnObjectList);
-
-    return selectSql(rtnObjectList, selectList, fromList, whereList, groupByList, havingList, orderByList);
-  }
-
-  public Tuple.Pair<String, List<Object>> selectSql(@NonNull List<String> selectList, List<Object> selectObjectList, @NonNull List<String> fromList, List<Object> fromObjectList, List<String> whereList, List<Object> whereObjectList, List<String> groupByList, List<Object> groupByObjectList, List<String> havingList, List<Object> havingObjectList, List<String> orderByList, List<Object> orderByObjectList) {
-    List<Object> rtnObjectList = Lists.newArrayList();
-
-    if (selectObjectList != null) {
-      rtnObjectList.addAll(selectObjectList);
-    }
-    if (fromObjectList != null) {
-      rtnObjectList.addAll(fromObjectList);
-    }
-    if (whereObjectList != null) {
-      rtnObjectList.addAll(whereObjectList);
-    }
-    if (groupByObjectList != null) {
-      rtnObjectList.addAll(groupByObjectList);
-    }
-    if (havingObjectList != null) {
-      rtnObjectList.addAll(havingObjectList);
-    }
-    if (orderByObjectList != null) {
-      rtnObjectList.addAll(orderByObjectList);
-    }
 
     return selectSql(rtnObjectList, selectList, fromList, whereList, groupByList, havingList, orderByList);
   }
@@ -451,12 +412,6 @@ public class SKEntity<J> {
     //implements by sub entity
   }
 
-  public int update() {
-    int rtnInt = 0;
-    //implements by sub entity
-    return rtnInt;
-  }
-
   public Tuple.Pair<String, List<Object>> updateByIdSql() {
     List<Object> rtnObjectList = Lists.newArrayList();
 
@@ -482,7 +437,7 @@ public class SKEntity<J> {
   }
 
   public Tuple.Pair<String, List<Object>> updateByIdAndVersionSql() {
-    return this.deleteOrUpdateByIdAndVersionSql(this.updateByIdSql());
+    return this.appendVersion2ByIdSql(this.updateByIdSql());
   }
 
   public void updateStatement(@NonNull List<String> updateList, @NonNull List<Object> objectList) {
@@ -586,7 +541,7 @@ public class SKEntity<J> {
             }
           } else {
             whereList.add(this.getDbColumnMap().get(fieldName) + String0.BLACK + oc.getOp() + String0.BLACK + String0.QUESTION);
-            objectList.add(Strings.nullToEmpty(oc.getBw()) + oc.getCs() + oc.getEw());
+            objectList.add(Strings.nullToEmpty(oc.getBw()) + oc.getCs() + Strings.nullToEmpty(oc.getEw()));
           }
         }
       }

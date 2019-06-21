@@ -10,8 +10,6 @@ import javax.persistence.Column;
 @Accessors(chain = true)
 @ToString(callSuper = true)
 public class SKAuditEntity<J> extends SKEntity<J> {
-  public static final String INVALID__Y = "Y";
-  public static final String INVALID__N = "N";
 
   /**
    * @see org.shaneking.skava.ling.util.Date0#DATE_TIME

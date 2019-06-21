@@ -53,21 +53,6 @@ public class SKEntityTest extends SKUnit {
   }
 
   @Test
-  public void delete() {
-    Assert.assertEquals(prepareSKAuditEntityColumns.delete(), 0);
-  }
-
-  @Test
-  public void insert() {
-    Assert.assertEquals(prepareSKAuditEntityColumns.insert(), 0);
-  }
-
-  @Test
-  public void insertOrUpdateById() {
-    Assert.assertEquals(prepareSKAuditEntityColumns.insertOrUpdateById(), 0);
-  }
-
-  @Test
   public void insertSql() {
     Assert.assertEquals(prepareSKAuditEntityColumns.insertSql().toString(), "[insert into testschema.t_prepare_s_k_audit_entity_columns (version) values (?),[1]]");
   }
@@ -105,11 +90,6 @@ public class SKEntityTest extends SKUnit {
   @Test(expected = NullPointerException.class)
   public void insertStatementExtNull2() {
     prepareSKAuditEntityColumns.insertStatementExt(Lists.newArrayList(), null);
-  }
-
-  @Test
-  public void select() {
-    Assert.assertEquals(prepareSKAuditEntityColumns.select().toString(), "[]");
   }
 
   @Test
@@ -156,11 +136,6 @@ public class SKEntityTest extends SKUnit {
   @Test(expected = NullPointerException.class)
   public void selectStatementExtNull2() {
     prepareSKAuditEntityColumns.selectStatementExt(Lists.newArrayList(), null);
-  }
-
-  @Test
-  public void update() {
-    Assert.assertEquals(prepareSKAuditEntityColumns.update(), 0);
   }
 
   @Test
