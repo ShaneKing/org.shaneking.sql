@@ -27,7 +27,7 @@ public class SKAuditEntityTest extends SKUnit {
 
   @Test
   public void setter() {
-    prepareSKAuditEntityColumnNoGetMethod.setNoGetMethod("").setCreateDatetime("").setCreateUserId("").setInvalid("").setInvalidDatetime("").setInvalidUserId("").setLastModifyDatetime("").setLastModifyUserId("").setWhereJson("");
+    prepareSKAuditEntityColumnNoGetMethod.setNoGetMethod("").setCreateDatetime("").setCreateUserId("").setInvalid("").setInvalidDatetime("").setInvalidUserId("").setLastModifyDatetime("").setLastModifyUserId("").setWhereOCs("");
   }
 
 

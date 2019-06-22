@@ -34,7 +34,7 @@ public class PrepareSKAuditEntityOverride extends PrepareSKAuditEntityIdVersion 
   }
 
   @Override
-  public List<OperationContent> findOperationContentList(String fieldName) {
+  public List<OperationContent> findWhereOCs(String fieldName) {
     if ("createUserId".equals(fieldName)) {
       return Lists.newArrayList(new OperationContent().setOp(Keyword0.IN).setCl(Lists.newArrayList("1", "a", ",")));
     } else if ("createDatetime".equals(fieldName)) {
@@ -44,6 +44,6 @@ public class PrepareSKAuditEntityOverride extends PrepareSKAuditEntityIdVersion 
     } else if ("lastModifyDatetime".equals(fieldName)) {
       return Lists.newArrayList(new OperationContent().setBw(String0.PERCENT).setCs("1949-10-01").setEw(String0.PERCENT).setOp("like"));
     }
-    return super.findOperationContentList(fieldName);
+    return super.findWhereOCs(fieldName);
   }
 }

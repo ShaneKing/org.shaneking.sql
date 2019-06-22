@@ -20,12 +20,12 @@ import javax.persistence.Column;
 @ToString(callSuper = true)
 public class SKRefEntity<J> extends SKAuditEntity<J> {
 
-  @Column(length = 40, columnDefinition = "COMMENT '关联唯一标识'")
+  @Column(length = 40, columnDefinition = "COMMENT 'Relation unique flag'")
   @Getter
   @Setter
   private String refId;
 
-  @Column(length = 40, columnDefinition = "COMMENT '关联类型'")
+  @Column(length = 40, columnDefinition = "COMMENT 'Relation type'")
   @Getter
   @Setter
   private String refType;

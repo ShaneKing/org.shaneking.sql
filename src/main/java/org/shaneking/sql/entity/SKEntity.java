@@ -41,9 +41,13 @@ import java.util.stream.Collectors;
 @ToString
 public class SKEntity<J> {
   @Transient
-  public static final String APPEND_AND = " and ";
+  private static final String EMPTY_COMMENT_WITH_BLACK_PREFIX = " ''";
   @Transient
-  public static final String APPEND_WHERE = " where ";
+  private static final String UNIQUE_INDEX_NAME_PREFIX = "u_idx_";
+  @Transient
+  private static final String APPEND_AND = " and ";
+  @Transient
+  private static final String APPEND_WHERE = " where ";
   @Getter
   @JsonIgnore
   @Transient
@@ -72,7 +76,7 @@ public class SKEntity<J> {
   @JsonIgnore
   @Setter
   @Transient
-  private String fullTableName;
+  private String dbTableName;
   @Getter
   @Setter
   @Transient
@@ -81,9 +85,9 @@ public class SKEntity<J> {
   @JsonIgnore
   @Setter
   @Transient
-  private Table table;
+  private Table javaTable;
   /**
-   * I don't want Map<String, OperationContent> to limit you, J maybe fastjson, gson, jackson...
+   * I don't want Map<String, OperationContent> to limit everyone, J maybe Map/fastjson/gson/jackson...
    * <blockquote><pre>
    *     {
    *         createDatetime:{
@@ -104,7 +108,7 @@ public class SKEntity<J> {
   @Getter
   @Setter
   @Transient
-  private J whereJson;
+  private J whereOCs;
 
   public SKEntity() {
     initTableInfo();
@@ -112,52 +116,47 @@ public class SKEntity<J> {
   }
 
   private String createColumnStatement(String columnName, boolean idOrVersion) {
-    String rtn = null;
+    String rtn, columnDbTypeString;
     Field columnField = this.getFieldMap().get(columnName);
-    String columnFieldTypeString = columnField.getType().getCanonicalName();
-    String columnDbTypeString = null;
-    String partNotNull = (idOrVersion || !this.getColumnMap().get(columnName).nullable()) ? " not null" : String0.EMPTY;
+    String partNotNull = (idOrVersion || !this.getColumnMap().get(columnName).nullable()) ? Keyword0.NOT_NULL_WITH_BLACK_PREFIX : String0.EMPTY;
     if (columnField.getAnnotation(Lob.class) != null) {
       columnDbTypeString = Keyword0.TYPE_LONGTEXT;
-    } else if (Integer.class.getCanonicalName().equals(columnFieldTypeString)) {
+    } else if (Integer.class.getCanonicalName().equals(columnField.getType().getCanonicalName())) {
       columnDbTypeString = Keyword0.TYPE_INT;
     } else {
       columnDbTypeString = Keyword0.TYPE_VARCHAR;
     }
-    String[] comments = Strings.nullToEmpty(this.getColumnMap().get(columnName).columnDefinition()).split(Keyword0.COMMENT);
-    String comment = comments.length > 1 ? comments[1] : " ''";
+    String[] comments = Strings.nullToEmpty(this.getColumnMap().get(columnName).columnDefinition()).split(Keyword0.COMMENT4ANNOTATION);
+    String commentWithBlackPrefix = comments.length > 1 ? comments[1] : EMPTY_COMMENT_WITH_BLACK_PREFIX;
     if (Keyword0.TYPE_LONGTEXT.equals(columnDbTypeString) || Keyword0.TYPE_INT.equals(columnDbTypeString)) {
-      rtn = MessageFormat.format("  `{0}` {1}{2} comment{3},", this.getDbColumnMap().get(columnName), columnDbTypeString, partNotNull, comment);
+      rtn = MessageFormat.format("  `{0}` {1}{2} {3}{4},", this.getDbColumnMap().get(columnName), columnDbTypeString, partNotNull, Keyword0.COMMENT, commentWithBlackPrefix);
     } else {
-      rtn = MessageFormat.format("  `{0}` {1}({2}){3} comment{4},", this.getDbColumnMap().get(columnName), columnDbTypeString, String.valueOf(this.getColumnMap().get(columnName).length()), partNotNull, comment);
+      rtn = MessageFormat.format("  `{0}` {1}({2}){3} {4}{5},", this.getDbColumnMap().get(columnName), columnDbTypeString, String.valueOf(this.getColumnMap().get(columnName).length()), partNotNull, Keyword0.COMMENT, commentWithBlackPrefix);
     }
     return rtn;
   }
 
   public String createIndexSql() {
-    List<String> indexList = Lists.newArrayList(this.getTable().uniqueConstraints()).parallelStream().map(uniqueConstraint -> {
-      String schema = this.getTable().schema();
-      String indexName = "u_idx_" + Joiner.on("_").join(uniqueConstraint.columnNames());
-      String indexColumns = "`" + Joiner.on("` asc, `").join(uniqueConstraint.columnNames()) + "` asc";
-      return Strings.isNullOrEmpty(schema) ? MessageFormat.format("alter table `{0}` add unique index `{1}` ({2});", this.getFullTableName(), indexName, indexColumns) : MessageFormat.format("alter table `{0}`.`{1}` add unique index `{2}` ({3});", schema, this.getFullTableName().split("\\.")[1], indexName, indexColumns);
-    }).collect(Collectors.toList());
-    indexList.addAll(fieldNameList.parallelStream().filter(fieldName -> columnMap.get(fieldName).unique()).map(fieldName -> {
-      String schema = this.getTable().schema();
-      String indexName = "u_idx_" + dbColumnMap.get(fieldName);
-      String indexColumns = "`" + dbColumnMap.get(fieldName) + "` asc";
-      return Strings.isNullOrEmpty(schema) ? MessageFormat.format("alter table `{0}` add unique index `{1}` ({2});", this.getFullTableName(), indexName, indexColumns) : MessageFormat.format("alter table `{0}`.`{1}` add unique index `{2}` ({3});", schema, this.getFullTableName().split("\\.")[1], indexName, indexColumns);
-    }).collect(Collectors.toList()));
-    return Joiner.on("\n").join(indexList);
+    Map<String, List<String>> idxPartNameColumnsMap = Maps.newHashMap();
+    Lists.newArrayList(this.getJavaTable().uniqueConstraints()).stream().filter(uniqueConstraint -> uniqueConstraint.columnNames().length > 0).forEach(uniqueConstraint -> {
+      idxPartNameColumnsMap.put(Joiner.on(String0.UNDERLINE).join(uniqueConstraint.columnNames()), Lists.newArrayList(uniqueConstraint.columnNames()));
+    });
+    this.getFieldNameList().stream().filter(fieldName -> this.getColumnMap().get(fieldName).unique()).forEach(fieldName -> {
+      idxPartNameColumnsMap.put(this.getDbColumnMap().get(fieldName), Lists.newArrayList(this.getDbColumnMap().get(fieldName)));
+    });
+    List<String> createIndexStatementList = Lists.newArrayList();
+    String idxSchemaPart = String0.notNull2empty2(Strings.nullToEmpty(this.getJavaTable().schema()), MessageFormat.format("`{0}`.", this.getJavaTable().schema()));
+    idxPartNameColumnsMap.forEach((idxPartName, columnList) -> {
+      String indexColumns = "`" + (columnList.size() > 1 ? Joiner.on("` asc, `").join(columnList) : columnList.get(0)) + "` asc";
+      createIndexStatementList.add(MessageFormat.format("{0} {1}`{2}` {3} `{4}` ({5});", Keyword0.ALTER_TABLE, idxSchemaPart, this.getDbTableName(), Keyword0.ADD_UNIQUE_INDEX, UNIQUE_INDEX_NAME_PREFIX + idxPartName, indexColumns));
+    });
+    return Joiner.on(String0.BR).join(createIndexStatementList);
   }
 
   public String createTableSql() {
     List<String> sqlList = Lists.newArrayList();
-    String schema = this.getTable().schema();
-    if (Strings.isNullOrEmpty(schema)) {
-      sqlList.add(MessageFormat.format("create table `{0}` (", this.getFullTableName()));
-    } else {
-      sqlList.add(MessageFormat.format("create table `{0}`.`{1}` (", schema, this.getFullTableName().substring(schema.length() + 1)));
-    }
+    String idxSchemaPart = String0.notNull2empty2(Strings.nullToEmpty(this.getJavaTable().schema()), MessageFormat.format("`{0}`.", this.getJavaTable().schema()));
+    sqlList.add(MessageFormat.format("{0} {1}`{2}` (", Keyword0.CREATE_TABLE, idxSchemaPart, this.getDbTableName()));
     for (String versionColumn : this.getVersionFieldNameList()) {
       sqlList.add(this.createColumnStatement(versionColumn, true));
     }
@@ -169,15 +168,19 @@ public class SKEntity<J> {
         sqlList.add(this.createColumnStatement(columnName, false));
       }
     }
-    sqlList.add(MessageFormat.format("  primary key (`{0}`)", Joiner.on("`,`").join(this.getIdFieldNameList().stream().map(idFieldName -> this.getDbColumnMap().get(idFieldName)).collect(Collectors.toList()))));
+    sqlList.add(MessageFormat.format("  {0} (`{1}`)", Keyword0.PRIMARY_KEY, Joiner.on("`,`").join(this.getIdFieldNameList().stream().map(idFieldName -> this.getDbColumnMap().get(idFieldName)).collect(Collectors.toList()))));
     sqlList.add(String0.CLOSE_PARENTHESIS + String0.SEMICOLON);
     return Joiner.on("\n").join(sqlList);
   }
 
-  public List<OperationContent> findOperationContentList(String fieldName) {
+  public List<OperationContent> findWhereOCs(String fieldName) {
     List<OperationContent> rtnList = Lists.newArrayList();
     //implements by sub entity
     return rtnList;
+  }
+
+  public String fullTableName() {
+    return String0.notNull2empty2(Strings.nullToEmpty(this.getJavaTable().schema()), this.getJavaTable().schema() + String0.DOT) + this.getDbTableName();
   }
 
   public void initColumnInfo(Class<? extends Object> skEntityClass) {
@@ -206,21 +209,20 @@ public class SKEntity<J> {
   }
 
   public void initTableInfo() {
-    if (this.getTable() == null) {
-      this.setTable(this.getClass().getAnnotation(Table.class));
+    if (this.getJavaTable() == null) {
+      this.setJavaTable(this.getClass().getAnnotation(Table.class));
     }
-    this.setFullTableName(Strings.isNullOrEmpty(this.getTable().schema()) ? String0.EMPTY : this.getTable().schema() + String0.DOT);
-    if (Strings.isNullOrEmpty(this.getTable().name())) {
+    if (Strings.isNullOrEmpty(this.getJavaTable().name())) {
       String classTableName = String0.upper2lower(Lists.reverse(Lists.newArrayList(this.getClass().getName().split(String20.BACKSLASH_DOT))).get(0));
-      this.setFullTableName(this.getFullTableName() + "t" + (classTableName.startsWith(String0.UNDERLINE) ? classTableName : String0.UNDERLINE + classTableName));
+      this.setDbTableName("t" + (classTableName.startsWith(String0.UNDERLINE) ? classTableName : String0.UNDERLINE + classTableName));
     } else {
-      this.setFullTableName(this.getFullTableName() + this.getTable().name());
+      this.setDbTableName(this.getJavaTable().name());
     }
   }
 
   public void mapRow(ResultSet rs) {
-    String columnFieldTypeString = null;
-    Object o = null;
+    String columnFieldTypeString;
+    Object o;
     for (String fieldName : this.getFieldNameList()) {
       try {
         columnFieldTypeString = this.getFieldMap().get(fieldName).getType().getCanonicalName();
@@ -239,56 +241,57 @@ public class SKEntity<J> {
   }
 
   //curd
-  private Tuple.Pair<String, List<Object>> appendVersion2ByIdSql(@NonNull Tuple.Pair<String, List<Object>> byIdSql) {
-    Tuple.Pair<String, List<Object>> rtn = byIdSql;
-    StringBuffer rtnSql = new StringBuffer(Tuple.getFirst(rtn));
-    List<Object> rtnObjectList = Tuple.getSecond(rtn);
+  public Tuple.Pair<List<String>, List<Object>> appendVersion2ByIdSql(@NonNull Tuple.Pair<List<String>, List<Object>> byIdSqlTuple) {
+    List<String> sqlList = Tuple.getFirst(byIdSqlTuple);
+    List<Object> rtnObjectList = Tuple.getSecond(byIdSqlTuple);
 
     List<String> whereVersionList = Lists.newArrayList();
     whereStatement(whereVersionList, rtnObjectList, this.getVersionFieldNameList());
     whereStatementExt(whereVersionList, rtnObjectList, this.getVersionFieldNameList());
     if (whereVersionList.size() > 0) {
-      if (rtnSql.indexOf(APPEND_WHERE) == -1) {
-        rtnSql.append(APPEND_WHERE);
+      if (sqlList.contains(Keyword0.WHERE)) {
+        sqlList.add(Keyword0.AND);
       } else {
-        rtnSql.append(APPEND_AND);
+        sqlList.add(Keyword0.WHERE);
       }
-      rtnSql.append(Joiner.on(APPEND_AND).join(whereVersionList));
+      sqlList.addAll(whereVersionList);
     }
-    return Tuple.of(rtnSql.toString(), rtnObjectList);
+    return Tuple.of(sqlList, rtnObjectList);
   }
 
-  private Tuple.Pair<String, List<Object>> appendWhereByFields2Sql(@NonNull List<String> sqlList, @NonNull List<Object> rtnObjectList, @NonNull List<String> fieldNameList) {
+  public Tuple.Pair<List<String>, List<Object>> appendWhereByFields2Sql(@NonNull List<String> sqlList, @NonNull List<Object> rtnObjectList, @NonNull List<String> fieldNameList) {
     List<String> whereList = Lists.newArrayList();
     whereStatement(whereList, rtnObjectList, fieldNameList);
     whereStatementExt(whereList, rtnObjectList, fieldNameList);
 
     if (whereList.size() > 0) {
-      if (sqlList.contains(APPEND_WHERE.trim())) {
-        sqlList.add(APPEND_WHERE.trim());
+      if (sqlList.contains(Keyword0.WHERE)) {
+        sqlList.add(Keyword0.AND);
       } else {
-        sqlList.add(APPEND_AND.trim());
+        sqlList.add(Keyword0.WHERE);
       }
       sqlList.add(Joiner.on(APPEND_AND).join(whereList));
     }
 
-    return Tuple.of(Joiner.on(String0.BLACK).join(sqlList), rtnObjectList);
-  }
-
-  public Tuple.Pair<String, List<Object>> countSql() {
-    return selectSql(Lists.newArrayList("count(1)"), null);
+    return Tuple.of(sqlList, rtnObjectList);
   }
 
   public Tuple.Pair<String, List<Object>> deleteByIdSql() {
-    return appendWhereByFields2Sql(Lists.newArrayList("delete from", this.getFullTableName()), Lists.newArrayList(), this.getIdFieldNameList());
+    Tuple.Pair<List<String>, List<Object>> pair = this.appendWhereByFields2Sql(Lists.newArrayList(Keyword0.DELETE_FROM, this.fullTableName()), Lists.newArrayList(), this.getIdFieldNameList());
+    return Tuple.of(Joiner.on(String0.BLACK).join(Tuple.getFirst(pair)), Tuple.getSecond(pair));
   }
 
   public Tuple.Pair<String, List<Object>> deleteByIdAndVersionSql() {
-    return this.appendVersion2ByIdSql(this.deleteByIdSql());
+    Tuple.Pair<List<String>, List<Object>> pair = this.appendVersion2ByIdSql(this.appendWhereByFields2Sql(Lists.newArrayList(Keyword0.DELETE_FROM, this.fullTableName()), Lists.newArrayList(), this.getIdFieldNameList()));
+    return Tuple.of(Joiner.on(String0.BLACK).join(Tuple.getFirst(pair)), Tuple.getSecond(pair));
   }
 
+  /**
+   * Less attentions, maybe want more limit?
+   */
   public Tuple.Pair<String, List<Object>> deleteSql() {
-    return appendWhereByFields2Sql(Lists.newArrayList("delete from", this.getFullTableName()), Lists.newArrayList(), this.getFieldNameList());
+    Tuple.Pair<List<String>, List<Object>> pair = this.appendWhereByFields2Sql(Lists.newArrayList(Keyword0.DELETE_FROM, this.fullTableName()), Lists.newArrayList(), this.getFieldNameList());
+    return Tuple.of(Joiner.on(String0.BLACK).join(Tuple.getFirst(pair)), Tuple.getSecond(pair));
   }
 
   public Tuple.Pair<String, List<Object>> insertSql() {
@@ -299,10 +302,10 @@ public class SKEntity<J> {
     insertStatementExt(insertList, rtnObjectList);
 
     List<String> sqlList = Lists.newArrayList();
-    sqlList.add("insert into");
-    sqlList.add(this.getFullTableName());
+    sqlList.add(Keyword0.INSERT_INFO);
+    sqlList.add(this.fullTableName());
     sqlList.add(String0.OPEN_PARENTHESIS + Joiner.on(String0.COMMA).join(insertList) + String0.CLOSE_PARENTHESIS);
-    sqlList.add("values");
+    sqlList.add(Keyword0.VALUES);
     sqlList.add(String0.OPEN_PARENTHESIS + Strings.repeat(String0.COMMA + String0.QUESTION, insertList.size()).substring(1) + String0.CLOSE_PARENTHESIS);
 
     return Tuple.of(Joiner.on(String0.BLACK).join(sqlList), rtnObjectList);
@@ -328,6 +331,11 @@ public class SKEntity<J> {
     //implements by sub entity
   }
 
+  public Tuple.Pair<String, List<Object>> selectCountSql() {
+    Tuple.Pair<List<String>, List<Object>> pair = this.selectSql(Lists.newArrayList(Keyword0.COUNT_1_), Lists.newArrayList());
+    return Tuple.of(Joiner.on(String0.BLACK).join(Tuple.getFirst(pair)), Tuple.getSecond(pair));
+  }
+
   public Tuple.Pair<String, List<Object>> selectSql() {
     List<Object> rtnObjectList = Lists.newArrayList();
 
@@ -335,15 +343,13 @@ public class SKEntity<J> {
     selectStatement(selectList, rtnObjectList);
     selectStatementExt(selectList, rtnObjectList);
 
-    return selectSql(selectList, rtnObjectList);
+    Tuple.Pair<List<String>, List<Object>> pair = this.selectSql(selectList, rtnObjectList);
+    return Tuple.of(Joiner.on(String0.BLACK).join(Tuple.getFirst(pair)), Tuple.getSecond(pair));
   }
 
-  public Tuple.Pair<String, List<Object>> selectSql(@NonNull List<String> selectList, List<Object> selectObjectList) {
+  public Tuple.Pair<List<String>, List<Object>> selectSql(@NonNull List<String> selectList, @NonNull List<Object> selectObjectList) {
     List<Object> rtnObjectList = Lists.newArrayList();
-
-    if (selectObjectList != null) {
-      rtnObjectList.addAll(selectObjectList);
-    }
+    rtnObjectList.addAll(selectObjectList);
 
     List<String> fromList = Lists.newArrayList();
     fromStatement(fromList, rtnObjectList);
@@ -368,28 +374,28 @@ public class SKEntity<J> {
     return selectSql(rtnObjectList, selectList, fromList, whereList, groupByList, havingList, orderByList);
   }
 
-  public Tuple.Pair<String, List<Object>> selectSql(@NonNull List<Object> objectList, @NonNull List<String> selectList, @NonNull List<String> fromList, List<String> whereList, List<String> groupByList, List<String> havingList, List<String> orderByList) {
+  public Tuple.Pair<List<String>, List<Object>> selectSql(@NonNull List<Object> objectList, @NonNull List<String> selectList, @NonNull List<String> fromList, List<String> whereList, List<String> groupByList, List<String> havingList, List<String> orderByList) {
     List<Object> rtnObjectList = Lists.newArrayList();
 
     List<String> sqlList = Lists.newArrayList();
-    sqlList.add("select");
+    sqlList.add(Keyword0.SELECT);
     sqlList.add(Joiner.on(String0.COMMA).join(selectList));
-    sqlList.add("from");
+    sqlList.add(Keyword0.FROM);
     sqlList.add(Joiner.on(String0.COMMA).join(fromList));
     if (whereList != null && whereList.size() > 0) {
-      sqlList.add("where");
+      sqlList.add(Keyword0.WHERE);
       sqlList.add(Joiner.on(APPEND_AND).join(whereList));
     }
     if (groupByList != null && groupByList.size() > 0) {
-      sqlList.add("group by");
+      sqlList.add(Keyword0.GROUP_BY);
       sqlList.add(Joiner.on(String0.COMMA).join(groupByList));
     }
     if (havingList != null && havingList.size() > 0) {
-      sqlList.add("having");
+      sqlList.add(Keyword0.HAVING);
       sqlList.add(Joiner.on(APPEND_AND).join(havingList));
     }
     if (orderByList != null && orderByList.size() > 0) {
-      sqlList.add("order by");
+      sqlList.add(Keyword0.ORDER_BY);
       sqlList.add(Joiner.on(String0.COMMA).join(orderByList));
     }
     rtnObjectList.addAll(objectList);
@@ -401,7 +407,7 @@ public class SKEntity<J> {
       sqlList.add(Joiner.on(String0.BLACK).join(limitAndOffsetList));
     }
 
-    return Tuple.of(Joiner.on(String0.BLACK).join(sqlList), rtnObjectList);
+    return Tuple.of(sqlList, rtnObjectList);
   }
 
   public void selectStatement(@NonNull List<String> selectList, @NonNull List<Object> objectList) {
@@ -413,6 +419,11 @@ public class SKEntity<J> {
   }
 
   public Tuple.Pair<String, List<Object>> updateByIdSql() {
+    Tuple.Pair<List<String>, List<Object>> pair = this.updateByIdSqlList();
+    return Tuple.of(Joiner.on(String0.BLACK).join(Tuple.getFirst(pair)), Tuple.getSecond(pair));
+  }
+
+  private Tuple.Pair<List<String>, List<Object>> updateByIdSqlList() {
     List<Object> rtnObjectList = Lists.newArrayList();
 
     List<String> updateList = Lists.newArrayList();
@@ -424,20 +435,21 @@ public class SKEntity<J> {
     whereStatementExt(whereIdList, rtnObjectList, this.getIdFieldNameList());
 
     List<String> sqlList = Lists.newArrayList();
-    sqlList.add("update");
-    sqlList.add(this.getFullTableName());
-    sqlList.add("set");
+    sqlList.add(Keyword0.UPDATE);
+    sqlList.add(this.fullTableName());
+    sqlList.add(Keyword0.SET);
     sqlList.add(Joiner.on(String0.COMMA).join(updateList));
     if (whereIdList.size() > 0) {
-      sqlList.add("where");
+      sqlList.add(Keyword0.WHERE);
       sqlList.add(Joiner.on(APPEND_AND).join(whereIdList));
     }
 
-    return Tuple.of(Joiner.on(String0.BLACK).join(sqlList), rtnObjectList);
+    return Tuple.of(sqlList, rtnObjectList);
   }
 
   public Tuple.Pair<String, List<Object>> updateByIdAndVersionSql() {
-    return this.appendVersion2ByIdSql(this.updateByIdSql());
+    Tuple.Pair<List<String>, List<Object>> pair = this.appendVersion2ByIdSql(this.updateByIdSqlList());
+    return Tuple.of(Joiner.on(String0.BLACK).join(Tuple.getFirst(pair)), Tuple.getSecond(pair));
   }
 
   public void updateStatement(@NonNull List<String> updateList, @NonNull List<Object> objectList) {
@@ -466,7 +478,7 @@ public class SKEntity<J> {
 
   //others
   public void fromStatement(@NonNull List<String> fromList, @NonNull List<Object> objectList) {
-    fromList.add(this.getFullTableName());
+    fromList.add(this.fullTableName());
   }
 
   public void fromStatementExt(@NonNull List<String> fromList, @NonNull List<Object> objectList) {
@@ -492,10 +504,10 @@ public class SKEntity<J> {
   public void limitAndOffsetStatement(@NonNull List<String> limitAndOffsetList, @NonNull List<Object> objectList) {
     //implements by sub entity
     if (this.getPageHelper().getLimit() != null) {
-      limitAndOffsetList.add(MessageFormat.format("limit {0}", this.getPageHelper().getLimit()));
+      limitAndOffsetList.add(MessageFormat.format("{0} {1}", Keyword0.LIMIT, this.getPageHelper().getLimit()));
     }
     if (this.getPageHelper().getOffset() != null) {
-      limitAndOffsetList.add(MessageFormat.format("offset {0}", this.getPageHelper().getOffset()));
+      limitAndOffsetList.add(MessageFormat.format("{0} {1}", Keyword0.OFFSET, this.getPageHelper().getOffset()));
     }
   }
 
@@ -528,7 +540,7 @@ public class SKEntity<J> {
           whereList.add(this.getDbColumnMap().get(fieldName) + String20.EQUAL_QUESTION);
           objectList.add(o);
         }
-        for (OperationContent oc : this.findOperationContentList(fieldName)) {
+        for (OperationContent oc : this.findWhereOCs(fieldName)) {
           if (Keyword0.BETWEEN.equalsIgnoreCase(oc.getOp())) {
             if (oc.getCl() != null && oc.getCl().size() == 2) {
               whereList.add(this.getDbColumnMap().get(fieldName) + String0.BLACK + oc.getOp() + String0.BLACK + String0.QUESTION + String0.BLACK + Keyword0.AND + String0.BLACK + String0.QUESTION);
