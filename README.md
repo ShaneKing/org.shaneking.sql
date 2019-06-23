@@ -1,5 +1,5 @@
 # [Sql][]
-🆒Automatic generation of scripts and parameters for ShaneKing（测试覆盖率保持在80%以上）, More to see [shaneking.org][].
+🆒Automatic generation of scripts and parameters for ShaneKing, More to see [shaneking.org][].
 
 ## Badge
 ### Build
