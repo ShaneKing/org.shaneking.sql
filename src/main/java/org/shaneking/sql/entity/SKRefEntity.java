@@ -18,7 +18,7 @@ import javax.persistence.Column;
  */
 @Accessors(chain = true)
 @ToString(callSuper = true)
-public class SKRefEntity<J> extends SKAuditEntity<J> {
+public class SKRefEntity<J> extends SKAuditIdVersionEntity<J> {
 
   @Column(length = 40, columnDefinition = "COMMENT 'Relation unique flag'")
   @Getter

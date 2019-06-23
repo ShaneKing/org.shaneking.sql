@@ -44,10 +44,6 @@ public class SKEntity<J> {
   private static final String EMPTY_COMMENT_WITH_BLACK_PREFIX = " ''";
   @Transient
   private static final String UNIQUE_INDEX_NAME_PREFIX = "u_idx_";
-  @Transient
-  private static final String APPEND_AND = " and ";
-  @Transient
-  private static final String APPEND_WHERE = " where ";
   @Getter
   @JsonIgnore
   @Transient
@@ -270,7 +266,7 @@ public class SKEntity<J> {
       } else {
         sqlList.add(Keyword0.WHERE);
       }
-      sqlList.add(Joiner.on(APPEND_AND).join(whereList));
+      sqlList.add(Joiner.on(Keyword0.AND_WITH_BLACK_PREFIX_WITH_BLACK_SUFFIX).join(whereList));
     }
 
     return Tuple.of(sqlList, rtnObjectList);
@@ -384,7 +380,7 @@ public class SKEntity<J> {
     sqlList.add(Joiner.on(String0.COMMA).join(fromList));
     if (whereList != null && whereList.size() > 0) {
       sqlList.add(Keyword0.WHERE);
-      sqlList.add(Joiner.on(APPEND_AND).join(whereList));
+      sqlList.add(Joiner.on(Keyword0.AND_WITH_BLACK_PREFIX_WITH_BLACK_SUFFIX).join(whereList));
     }
     if (groupByList != null && groupByList.size() > 0) {
       sqlList.add(Keyword0.GROUP_BY);
@@ -392,7 +388,7 @@ public class SKEntity<J> {
     }
     if (havingList != null && havingList.size() > 0) {
       sqlList.add(Keyword0.HAVING);
-      sqlList.add(Joiner.on(APPEND_AND).join(havingList));
+      sqlList.add(Joiner.on(Keyword0.AND_WITH_BLACK_PREFIX_WITH_BLACK_SUFFIX).join(havingList));
     }
     if (orderByList != null && orderByList.size() > 0) {
       sqlList.add(Keyword0.ORDER_BY);
@@ -441,7 +437,7 @@ public class SKEntity<J> {
     sqlList.add(Joiner.on(String0.COMMA).join(updateList));
     if (whereIdList.size() > 0) {
       sqlList.add(Keyword0.WHERE);
-      sqlList.add(Joiner.on(APPEND_AND).join(whereIdList));
+      sqlList.add(Joiner.on(Keyword0.AND_WITH_BLACK_PREFIX_WITH_BLACK_SUFFIX).join(whereIdList));
     }
 
     return Tuple.of(sqlList, rtnObjectList);
