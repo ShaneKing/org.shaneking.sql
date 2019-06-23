@@ -1,62 +1,38 @@
-/*
- * @(#)AddressEntityTest.java		Created at 2017/9/10
- *
- * Copyright (c) ShaneKing All rights reserved.
- * ShaneKing PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- */
 package sktest.sql.entity;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.shaneking.skava.t3.jackson.OM3;
 import sktest.sql.SKUnit;
-import sktest.sql.entity.prepare.PrepareSKRefEntityAddress;
+import sktest.sql.entity.prepare.PrepareSKRefEntity;
 
-import java.util.UUID;
+import java.sql.ResultSet;
 
+@RunWith(MockitoJUnitRunner.class)
 public class SKRefEntityTest extends SKUnit {
-  private PrepareSKRefEntityAddress prepareSKRefEntityAddress = new PrepareSKRefEntityAddress();
+  @Mock
+  private ResultSet resultSet;
 
-  @Before
-  public void setUp() {
-    super.setUp();
-    prepareSKRefEntityAddress = new PrepareSKRefEntityAddress();
+  @Test
+  public void setter() {
+    skPrint(new PrepareSKRefEntity().setRefId(SKEntityTest.SKTEST1_ID).setRefType("sktest1_ref_type"));
   }
 
   @Test
-  public void testRefInsertSql() {
-    Assert.assertEquals(prepareSKRefEntityAddress.insertSql().toString(), "[insert into testSchema.t_address (version) values (?),[1]]");
-  }
+  public void mapRow() throws Exception {
+    PrepareSKRefEntity prepareEntity = new PrepareSKRefEntity();
 
-  @Test
-  public void testRefInsertSql2() {
-    String uuid = UUID.randomUUID().toString();
-    prepareSKRefEntityAddress.setId(uuid).setAddress("Junjin Load No.500").setRefId("").setRefType("");
-    skPrint(prepareSKRefEntityAddress);
-    Assert.assertEquals(prepareSKRefEntityAddress.insertSql().toString(), "[insert into testSchema.t_address (id,version,address) values (?,?,?),[" + uuid + ", 1, Junjin Load No.500]]");
-  }
+    Mockito.when(resultSet.getString("id")).thenReturn(SKEntityTest.SKTEST1_ID);
+    Mockito.when(resultSet.getInt("version")).thenReturn(1);
 
-  @Test
-  public void testRefSelectSql() {
-    Assert.assertEquals(prepareSKRefEntityAddress.selectSql().toString(), "[select create_datetime,create_user_id,invalid,invalid_datetime,invalid_user_id,last_modify_datetime,last_modify_user_id,ref_id,ref_type,id,version,address,postcode,primary from testSchema.t_address where version=? limit 100,[1]]");
-  }
+    Mockito.when(resultSet.getInt("int_for_map_row_exception")).thenReturn(2);
 
-  @Test
-  public void testRefSelectSql2() {
-    String uuid = UUID.randomUUID().toString();
-    prepareSKRefEntityAddress.setId(uuid).setAddress("Junjin Load No.500").setRefId("").setRefType("");
-    skPrint(prepareSKRefEntityAddress);
-    Assert.assertEquals(prepareSKRefEntityAddress.selectSql().toString(), "[select create_datetime,create_user_id,invalid,invalid_datetime,invalid_user_id,last_modify_datetime,last_modify_user_id,ref_id,ref_type,id,version,address,postcode,primary from testSchema.t_address where id=? and version=? and address=? limit 100,[" + uuid + ", 1, Junjin Load No.500]]");
-  }
+    prepareEntity.mapRow(resultSet);
 
-  @Test
-  public void testRefUpdateByIdAndVersionSql() {
-    String uuid = UUID.randomUUID().toString();
-    prepareSKRefEntityAddress.setId(uuid).setAddress("Junjin Load No.500").setRefId("").setRefType("");
-    skPrint(prepareSKRefEntityAddress);
-    Assert.assertEquals(prepareSKRefEntityAddress.updateByIdAndVersionSql().toString(), "[update testSchema.t_address set ref_id=?,ref_type=?,version=?,address=? where id=? and version=?,[, , 2, Junjin Load No.500, " + uuid + ", 1]]");
+    Assert.assertEquals("{\"pageHelper\":{\"limit\":100},\"id\":\"sktest1_id\",\"version\":1}", OM3.writeValueAsString(prepareEntity));
   }
 }
-
-
-

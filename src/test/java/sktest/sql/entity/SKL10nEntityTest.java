@@ -1,16 +1,13 @@
 package sktest.sql.entity;
 
-import org.junit.Assert;
 import org.junit.Test;
 import sktest.sql.SKUnit;
-import sktest.sql.entity.prepare.PrepareSKL10nEntityZone;
+import sktest.sql.entity.prepare.PrepareSKL10nEntity;
 
 public class SKL10nEntityTest extends SKUnit {
   @Test
-  public void testInsertSql() {
-    PrepareSKL10nEntityZone prepareSKL10NEntityZone = new PrepareSKL10nEntityZone();
-    prepareSKL10NEntityZone.setCreateTimezone("").setInvalidTimezone("").setLastModifyTimezone("");
-    skPrint(prepareSKL10NEntityZone);
-    Assert.assertEquals(prepareSKL10NEntityZone.insertSql().toString(), "[insert into t_prepare_s_k_l_1_0n_entity_zone (version) values (?),[1]]");
+  public void setter() {
+    skPrint(new PrepareSKL10nEntity().setCreateTimezone("0800").setInvalidTimezone("0800").setLastModifyTimezone("0800"));
   }
+
 }

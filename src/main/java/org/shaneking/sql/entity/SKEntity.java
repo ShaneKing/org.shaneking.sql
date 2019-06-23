@@ -17,9 +17,9 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
-import org.shaneking.skava.ling.collect.Tuple;
 import org.shaneking.skava.ling.lang.String0;
 import org.shaneking.skava.ling.lang.String20;
+import org.shaneking.skava.sk.collect.Tuple;
 import org.shaneking.sql.Keyword0;
 import org.shaneking.sql.OperationContent;
 import org.shaneking.sql.PageHelper;
@@ -169,7 +169,7 @@ public class SKEntity<J> {
     return Joiner.on("\n").join(sqlList);
   }
 
-  public List<OperationContent> findWhereOCs(String fieldName) {
+  public List<OperationContent> findWhereOCs(@NonNull String fieldName) {
     List<OperationContent> rtnList = Lists.newArrayList();
     //implements by sub entity
     return rtnList;

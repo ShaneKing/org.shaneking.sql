@@ -1,0 +1,1 @@
+["select invalid,last_modify_datetime,last_modify_user_id,id,version,has_length,no_get_method,not_null_col,unique_col,re_name_col,long_text from sktest1_schema.sktest1_table where invalid=? and id=? and version=? and has_length=? and re_name_col=? limit 100",["Y","sktest1_id",1,"hasLength","reName"]]

@@ -2,344 +2,174 @@ package sktest.sql.entity;
 
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.shaneking.skava.ling.lang.String0;
+import org.shaneking.skava.sk.collect.Tuple;
+import org.shaneking.skava.t3.jackson.OM3;
 import sktest.sql.SKUnit;
-import sktest.sql.entity.prepare.PrepareSKAuditEntityColumnNoGetMethod;
-import sktest.sql.entity.prepare.PrepareSKAuditEntityColumns;
-import sktest.sql.entity.prepare.PrepareSKAuditEntityOverride;
-import sktest.sql.entity.prepare.prepareSKAuditEntityTableName;
+import sktest.sql.entity.prepare.PrepareSKEntity;
 
 import java.io.File;
+import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.List;
 
+//Parameterized step1:add Parameterized.class to RunWith
+@RunWith(Parameterized.class)
+@Slf4j
 public class SKEntityTest extends SKUnit {
-  private PrepareSKAuditEntityColumnNoGetMethod prepareSKAuditEntityColumnNoGetMethod = new PrepareSKAuditEntityColumnNoGetMethod();
-  private PrepareSKAuditEntityColumns prepareSKAuditEntityColumns = new PrepareSKAuditEntityColumns();
-  private PrepareSKAuditEntityOverride prepareSKAuditEntityOverride = new PrepareSKAuditEntityOverride();
-  private prepareSKAuditEntityTableName prepareSKAuditEntityTableName = new prepareSKAuditEntityTableName();
+  public static final String SKTEST1_ID = "sktest1_id";
+  private static final String FMT_FILE = "src/test/java/sktest/sql/entity/prepare/PrepareSKEntity_{0}.sql";
+  private PrepareSKEntity prepareEntity;
+  private File sqlFile;
 
-  @Before
+  //Parameterized step2:use step2 data to constructor object
+  public SKEntityTest(String invalid, String id, Integer version, String hasLength, String noGetMethod, String withoutAnnotation, String reName) {
+    super();
+    prepareEntity = new PrepareSKEntity().setInvalid(invalid).setId(id).setVersion(version).setHasLength(hasLength).setNoGetMethod(noGetMethod).setWithoutAnnotation(withoutAnnotation).setReName(reName);
+  }
+
+  //Parameterized step2:static method return collection
+  @Parameterized.Parameters
+  public static List<Object[]> SKEntityTestParameters() {
+    return Arrays.asList(new Object[][]{{null, null, null, null, null, null, null}, {String0.Y, SKTEST1_ID, 1, "hasLength", "noGetMethod", "withoutAnnotation", "reName"}});
+  }
+
+//  public static void main(String[] args) {
+//    System.out.println(OM3.writeValueAsString(new PrepareSKEntity()));
+//  }
+
+  @Override
   public void setUp() {
     super.setUp();
-    prepareSKAuditEntityColumnNoGetMethod = new PrepareSKAuditEntityColumnNoGetMethod();
-    prepareSKAuditEntityColumns = new PrepareSKAuditEntityColumns();
-    prepareSKAuditEntityOverride = new PrepareSKAuditEntityOverride();
-    prepareSKAuditEntityTableName = new prepareSKAuditEntityTableName();
+    sqlFile = new File(MessageFormat.format(FMT_FILE, testName.getMethodName()));
+//    if (!sqlFile.exists()) {
+//      try {
+//        sqlFile.createNewFile();
+//      } catch (Exception e) {
+//        log.error(e.getMessage(), e);
+//      }
+//    }
   }
 
   @Test
   public void createIndexSql() throws Exception {
-    Assert.assertEquals(new String(Files.toByteArray(new File("src/test/java/sktest/sql/entity/prepare/PrepareSKAuditEntityColumns_Index.sql"))).trim(), prepareSKAuditEntityColumns.createIndexSql().trim());
-    Assert.assertEquals(new String(Files.toByteArray(new File("src/test/java/sktest/sql/entity/prepare/PrepareSKAuditEntityTableName_Index.sql"))).trim(), prepareSKAuditEntityTableName.createIndexSql().trim());
+    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), prepareEntity.createIndexSql().trim());
   }
 
   @Test
   public void createTableSql() throws Exception {
-    Assert.assertEquals(new String(Files.toByteArray(new File("src/test/java/sktest/sql/entity/prepare/PrepareSKAuditEntityColumns.sql"))).trim(), prepareSKAuditEntityColumns.createTableSql().trim());
-    Assert.assertEquals(new String(Files.toByteArray(new File("src/test/java/sktest/sql/entity/prepare/PrepareSKAuditEntityTableName.sql"))).trim(), prepareSKAuditEntityTableName.createTableSql().trim());
+    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), prepareEntity.createTableSql().trim());
   }
 
   @Test
-  public void initColumnInfo() {
-    prepareSKAuditEntityColumns.initColumnInfo(prepareSKAuditEntityColumns.getClass());
-    prepareSKAuditEntityTableName.initColumnInfo(prepareSKAuditEntityTableName.getClass());
+  public void findWhereOCs() {
+    Assert.assertEquals("[]", OM3.writeValueAsString(prepareEntity.findWhereOCs("id")));
   }
 
   @Test
-  public void initTableInfo() {
-    prepareSKAuditEntityColumns.initTableInfo();
-    prepareSKAuditEntityTableName.initTableInfo();
+  public void fullTableName() {
+    Assert.assertEquals("sktest1_schema.sktest1_table", prepareEntity.fullTableName());
   }
 
   @Test
-  public void insertSql() {
-    Assert.assertEquals(prepareSKAuditEntityColumns.insertSql().toString(), "[insert into testschema.t_prepare_s_k_audit_entity_columns (version) values (?),[1]]");
+  public void appendVersion2ByIdSql() throws Exception {
+    Tuple.Pair<List<String>, List<Object>> byIdSqlTuple = Tuple.of(Lists.newArrayList(), Lists.newArrayList());
+    Tuple.Pair<List<String>, List<Object>> appendVersion2ByIdSqlTuple = prepareEntity.appendVersion2ByIdSql(byIdSqlTuple);
+    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(appendVersion2ByIdSqlTuple));
   }
 
   @Test
-  public void insertStatement() {
-    prepareSKAuditEntityColumns.insertStatement(Lists.newArrayList(), Lists.newArrayList());
+  public void appendWhereByFields2Sql() throws Exception {
+    Tuple.Pair<List<String>, List<Object>> appendWhereByFields2SqlTuple = prepareEntity.appendWhereByFields2Sql(Lists.newArrayList(), Lists.newArrayList(), prepareEntity.getFieldNameList());
+    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(appendWhereByFields2SqlTuple));
   }
 
   @Test
-  public void insertStatementColumnNoGetMethod() {
-    prepareSKAuditEntityColumnNoGetMethod.insertStatement(Lists.newArrayList(), Lists.newArrayList());
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void insertStatementNull1() {
-    prepareSKAuditEntityColumns.insertStatement(null, Lists.newArrayList());
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void insertStatementNull2() {
-    prepareSKAuditEntityColumns.insertStatement(Lists.newArrayList(), null);
+  public void deleteByIdSql() throws Exception {
+    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareEntity.deleteByIdSql()));
   }
 
   @Test
-  public void insertStatementExt() {
-    prepareSKAuditEntityColumns.insertStatementExt(Lists.newArrayList(), Lists.newArrayList());
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void insertStatementExtNull1() {
-    prepareSKAuditEntityColumns.insertStatementExt(null, Lists.newArrayList());
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void insertStatementExtNull2() {
-    prepareSKAuditEntityColumns.insertStatementExt(Lists.newArrayList(), null);
+  public void deleteByIdSql_null() throws Exception {
+    prepareEntity.setId(null);
+    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareEntity.deleteByIdSql()));
   }
 
   @Test
-  public void selectSql() {
-    Assert.assertEquals(prepareSKAuditEntityColumns.selectSql().toString(), "[select create_datetime,create_user_id,invalid,invalid_datetime,invalid_user_id,last_modify_datetime,last_modify_user_id,id,version,has_length,re_name from testschema.t_prepare_s_k_audit_entity_columns where version=? limit 100,[1]]");
+  public void deleteByIdAndVersionSql() throws Exception {
+    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareEntity.deleteByIdAndVersionSql()));
   }
 
   @Test
-  public void selectSqlColumnNull() {
-    prepareSKAuditEntityColumns.setVersion(null);
-    Assert.assertEquals(prepareSKAuditEntityColumns.selectSql().toString(), "[select create_datetime,create_user_id,invalid,invalid_datetime,invalid_user_id,last_modify_datetime,last_modify_user_id,id,version,has_length,re_name from testschema.t_prepare_s_k_audit_entity_columns limit 100,[]]");
+  public void deleteByIdAndVersionSql_null() throws Exception {
+    prepareEntity.setId(null);
+    prepareEntity.setVersion(null);
+    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareEntity.deleteByIdAndVersionSql()));
   }
 
   @Test
-  public void selectSqlOverride() {
-    Assert.assertEquals(prepareSKAuditEntityOverride.selectSql().toString(), "[select create_datetime,create_user_id,invalid,invalid_datetime,invalid_user_id,last_modify_datetime,last_modify_user_id,id,version from t_prepare_s_k_audit_entity_override where create_user_id in (?,?,?) and invalid_datetime between ? and ? and last_modify_datetime like ? and version=? group by version having version > ? order by version limit 100,[1, a, ,, 1949-10-01, 1996-07, %1949-10-01%, 1, 1]]");
+  public void deleteSql() throws Exception {
+    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareEntity.deleteSql()));
   }
 
   @Test
-  public void selectStatement() {
-    prepareSKAuditEntityColumns.selectStatement(Lists.newArrayList(), Lists.newArrayList());
+  public void insertSql() throws Exception {
+    if (!"{\"pageHelper\":{\"limit\":100}}".equals(OM3.writeValueAsString(prepareEntity))) {
+      Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareEntity.insertSql()));
+    }
   }
 
-  @Test(expected = NullPointerException.class)
-  public void selectStatementNull1() {
-    prepareSKAuditEntityColumns.selectStatement(null, Lists.newArrayList());
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void selectStatementNull2() {
-    prepareSKAuditEntityColumns.selectStatement(Lists.newArrayList(), null);
-  }
-
-  @Test
-  public void selectStatementExt() {
-    prepareSKAuditEntityColumns.selectStatementExt(Lists.newArrayList(), Lists.newArrayList());
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void selectStatementExtNull1() {
-    prepareSKAuditEntityColumns.selectStatementExt(null, Lists.newArrayList());
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void selectStatementExtNull2() {
-    prepareSKAuditEntityColumns.selectStatementExt(Lists.newArrayList(), null);
+  @Test(expected = StringIndexOutOfBoundsException.class)
+  public void insertSql_null() throws Exception {
+    prepareEntity = new PrepareSKEntity();
+    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareEntity.insertSql()));
   }
 
   @Test
-  public void updateByIdAndVersionSql() {
-    Assert.assertEquals(prepareSKAuditEntityColumns.updateByIdAndVersionSql().toString(), "[update testschema.t_prepare_s_k_audit_entity_columns set version=? where version=?,[2, 1]]");
-    prepareSKAuditEntityColumns.setVersion(null);
-    Assert.assertEquals(prepareSKAuditEntityColumns.updateByIdAndVersionSql().toString(), "[update testschema.t_prepare_s_k_audit_entity_columns set ,[]]");//TODO maybe control by user
+  public void selectCountSql() throws Exception {
+    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareEntity.selectCountSql()));
   }
 
   @Test
-  public void updateStatement() {
-    prepareSKAuditEntityColumns.updateStatement(Lists.newArrayList(), Lists.newArrayList());
+  public void selectSql() throws Exception {
+    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareEntity.selectSql()));
   }
 
   @Test
-  public void updateStatementColumnNoGetMethod() {
-    prepareSKAuditEntityColumnNoGetMethod.updateStatement(Lists.newArrayList(), Lists.newArrayList());
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void updateStatementNull1() {
-    prepareSKAuditEntityColumns.updateStatement(null, Lists.newArrayList());
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void updateStatementNull2() {
-    prepareSKAuditEntityColumns.updateStatement(Lists.newArrayList(), null);
+  public void selectSql_a2() throws Exception {
+    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareEntity.selectSql(Lists.newArrayList(), Lists.newArrayList())));
   }
 
   @Test
-  public void updateStatementExt() {
-    prepareSKAuditEntityColumns.updateStatementExt(Lists.newArrayList(), Lists.newArrayList());
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void updateStatementExtNull1() {
-    prepareSKAuditEntityColumns.updateStatementExt(null, Lists.newArrayList());
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void updateStatementExtNull2() {
-    prepareSKAuditEntityColumns.updateStatementExt(Lists.newArrayList(), null);
+  public void selectSql_a7() throws Exception {
+    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareEntity.selectSql(Lists.newArrayList(), Lists.newArrayList(), Lists.newArrayList(), Lists.newArrayList(), Lists.newArrayList(), Lists.newArrayList(), Lists.newArrayList())));
   }
 
   @Test
-  public void fromStatement() {
-    prepareSKAuditEntityColumns.fromStatement(Lists.newArrayList(), Lists.newArrayList());
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void fromStatementNull1() {
-    prepareSKAuditEntityColumns.fromStatement(null, Lists.newArrayList());
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void fromStatementNull2() {
-    prepareSKAuditEntityColumns.fromStatement(Lists.newArrayList(), null);
+  public void updateByIdSql() throws Exception {
+    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareEntity.updateByIdSql()));
   }
 
   @Test
-  public void fromStatementExt() {
-    prepareSKAuditEntityColumns.fromStatementExt(Lists.newArrayList(), Lists.newArrayList());
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void fromStatementExtNull1() {
-    prepareSKAuditEntityColumns.fromStatementExt(null, Lists.newArrayList());
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void fromStatementExtNull2() {
-    prepareSKAuditEntityColumns.fromStatementExt(Lists.newArrayList(), null);
+  public void updateByIdSql_null() throws Exception {
+    prepareEntity.setId(null);
+    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareEntity.updateByIdSql()));
   }
 
   @Test
-  public void groupByStatement() {
-    prepareSKAuditEntityColumns.groupByStatement(Lists.newArrayList(), Lists.newArrayList());
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void groupByStatementNull1() {
-    prepareSKAuditEntityColumns.groupByStatement(null, Lists.newArrayList());
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void groupByStatementNull2() {
-    prepareSKAuditEntityColumns.groupByStatement(Lists.newArrayList(), null);
+  public void updateByIdAndVersionSql() throws Exception {
+    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareEntity.updateByIdAndVersionSql()));
   }
 
   @Test
-  public void groupByStatementExt() {
-    prepareSKAuditEntityColumns.groupByStatementExt(Lists.newArrayList(), Lists.newArrayList());
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void groupByStatementExtNull1() {
-    prepareSKAuditEntityColumns.groupByStatementExt(null, Lists.newArrayList());
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void groupByStatementExtNull2() {
-    prepareSKAuditEntityColumns.groupByStatementExt(Lists.newArrayList(), null);
-  }
-
-  @Test
-  public void havingStatement() {
-    prepareSKAuditEntityColumns.havingStatement(Lists.newArrayList(), Lists.newArrayList());
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void havingStatementNull1() {
-    prepareSKAuditEntityColumns.havingStatement(null, Lists.newArrayList());
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void havingStatementNull2() {
-    prepareSKAuditEntityColumns.havingStatement(Lists.newArrayList(), null);
-  }
-
-  @Test
-  public void havingStatementExt() {
-    prepareSKAuditEntityColumns.havingStatementExt(Lists.newArrayList(), Lists.newArrayList());
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void havingStatementExtNull1() {
-    prepareSKAuditEntityColumns.havingStatementExt(null, Lists.newArrayList());
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void havingStatementExtNull2() {
-    prepareSKAuditEntityColumns.havingStatementExt(Lists.newArrayList(), null);
-  }
-
-  @Test
-  public void orderByStatement() {
-    prepareSKAuditEntityColumns.orderByStatement(Lists.newArrayList(), Lists.newArrayList());
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void orderByStatementNull1() {
-    prepareSKAuditEntityColumns.orderByStatement(null, Lists.newArrayList());
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void orderByStatementNull2() {
-    prepareSKAuditEntityColumns.orderByStatement(Lists.newArrayList(), null);
-  }
-
-  @Test
-  public void orderByStatementExt() {
-    prepareSKAuditEntityColumns.orderByStatementExt(Lists.newArrayList(), Lists.newArrayList());
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void orderByStatementExtNull1() {
-    prepareSKAuditEntityColumns.orderByStatementExt(null, Lists.newArrayList());
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void orderByStatementExtNull2() {
-    prepareSKAuditEntityColumns.orderByStatementExt(Lists.newArrayList(), null);
-  }
-
-  @Test
-  public void whereStatement() {
-    prepareSKAuditEntityColumnNoGetMethod.whereStatement(Lists.newArrayList(), Lists.newArrayList());
-    prepareSKAuditEntityColumns.whereStatement(Lists.newArrayList(), Lists.newArrayList());
-  }
-
-  @Test
-  public void whereStatementColumnMap() {
-    prepareSKAuditEntityColumns.setHasLength("hasLength");
-    prepareSKAuditEntityColumns.getColumnMap().remove("hasLength");
-    prepareSKAuditEntityColumns.whereStatement(Lists.newArrayList(), Lists.newArrayList());
-  }
-
-  @Test
-  public void whereStatementOperationContent() {
-    prepareSKAuditEntityOverride.whereStatement(Lists.newArrayList(), Lists.newArrayList());
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void whereStatementNull1() {
-    prepareSKAuditEntityColumns.whereStatement(null, Lists.newArrayList());
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void whereStatementNull2() {
-    prepareSKAuditEntityColumns.whereStatement(Lists.newArrayList(), null);
-  }
-
-  @Test
-  public void whereStatementExt() {
-    prepareSKAuditEntityColumns.whereStatementExt(Lists.newArrayList(), Lists.newArrayList());
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void whereStatementExtNull1() {
-    prepareSKAuditEntityColumns.whereStatementExt(null, Lists.newArrayList());
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void whereStatementExtNull2() {
-    prepareSKAuditEntityColumns.whereStatementExt(Lists.newArrayList(), null);
+  public void updateByIdAndVersionSql_null() throws Exception {
+    prepareEntity.setId(null);
+    prepareEntity.setVersion(null);
+    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareEntity.updateByIdAndVersionSql()));
   }
 }

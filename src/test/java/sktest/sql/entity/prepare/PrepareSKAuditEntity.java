@@ -1,37 +1,21 @@
 package sktest.sql.entity.prepare;
 
 import com.google.common.collect.Lists;
-import lombok.NonNull;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.shaneking.skava.ling.lang.String0;
 import org.shaneking.sql.Keyword0;
 import org.shaneking.sql.OperationContent;
+import org.shaneking.sql.entity.SKAuditEntity;
 
 import javax.persistence.Table;
 import java.util.List;
+import java.util.Map;
 
 @Accessors(chain = true)
 @Table
 @ToString(callSuper = true)
-public class PrepareSKAuditEntityOverride extends PrepareSKAuditEntityIdVersion {
-
-
-  @Override
-  public void groupByStatementExt(@NonNull List groupByList, @NonNull List objectList) {
-    groupByList.add("version");
-  }
-
-  @Override
-  public void havingStatementExt(@NonNull List havingList, @NonNull List list) {
-    havingList.add("version > ?");
-    list.add(this.getVersion());
-  }
-
-  @Override
-  public void orderByStatementExt(@NonNull List orderByList, @NonNull List list) {
-    orderByList.add("version");
-  }
+public class PrepareSKAuditEntity extends SKAuditEntity<Map<String, OperationContent>> {
 
   @Override
   public List<OperationContent> findWhereOCs(String fieldName) {
