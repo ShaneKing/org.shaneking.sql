@@ -1,9 +1,12 @@
 package org.shaneking.sql.entity;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import org.shaneking.skava.ling.lang.String0;
+import org.shaneking.skava.ling.util.Date0;
 
 import javax.persistence.Column;
 
@@ -54,4 +57,8 @@ public class SKAuditEntity<J> extends SKEntity<J> {
   @Getter
   @Setter
   private String lastModifyUserId;
+
+  public SKAuditEntity<J> initWithCreateUserId(@NonNull String createUserId) {
+    return this.setCreateDatetime(Date0.on().dateTime()).setCreateUserId(createUserId).setInvalid(String0.N);
+  }
 }

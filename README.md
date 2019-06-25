@@ -1,6 +1,11 @@
 # [Sql][]
 🆒Automatic generation of scripts and parameters for ShaneKing, More to see [shaneking.org][].
 
+## Features
+- Suitable for single-table operating systems with distributed caching
+- One-click generation of a table statement, build an index statement
+- Dynamically generate CRUD statements
+
 ## Badge
 ### Build
 [![][travis img]][travis]
