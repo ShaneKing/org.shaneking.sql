@@ -59,6 +59,6 @@ public class SKAuditEntity<J> extends SKEntity<J> {
   private String lastModifyUserId;
 
   public SKAuditEntity<J> initWithCreateUserId(@NonNull String createUserId) {
-    return this.setCreateDatetime(Date0.on().dateTime()).setCreateUserId(createUserId).setInvalid(String0.N);
+    return this.setCreateDatetime(String0.null2empty2(this.getCreateDatetime(), Date0.on().dateTime())).setCreateUserId(String0.null2empty2(this.getCreateUserId(), createUserId)).setInvalid(String0.null2empty2(this.getInvalid(), String0.N));
   }
 }

@@ -5,8 +5,8 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import org.shaneking.skava.ling.lang.Integer0;
 import org.shaneking.skava.ling.lang.String0;
-import org.shaneking.skava.ling.util.Date0;
 import org.shaneking.skava.ling.util.UUID0;
 
 import javax.persistence.Column;
@@ -34,7 +34,7 @@ public class SKAuditIdVersionEntity<J> extends SKAuditEntity<J> {
   }
 
   public SKAuditIdVersionEntity<J> initWithCreateUserIdAndId(@NonNull String createUserId, @NonNull String id) {
-    super.setCreateDatetime(Date0.on().dateTime()).setCreateUserId(createUserId).setInvalid(String0.N);
-    return this.setId(id).setVersion(0);
+    super.initWithCreateUserId(createUserId);
+    return this.setId(String0.null2empty2(this.getId(), id)).setVersion(Integer0.null2Zero(this.getVersion()));
   }
 }
