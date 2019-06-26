@@ -36,8 +36,6 @@ ShaneKing is released under [Apache-2.0][].
 [codecov img]:https://codecov.io/github/ShaneKing/org.shaneking.sql/coverage.svg?branch=mirror
 [codacy]:https://app.codacy.com/project/ShaneKing/org.shaneking.sql/
 [codacy img]:https://api.codacy.com/project/badge/Grade/86c1da8a6e064f469e167d1bebacbebd
-[saucelabs]:https://saucelabs.com/u/ShaneKing
-[saucelabs img]:https://saucelabs.com/browser-matrix/ShaneKing.svg
 
 [mavenbadge]:http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.shaneking%22%20AND%20a%3A%22org.shaneking.sql%22
 [mavenbadge img]:https://maven-badges.herokuapp.com/maven-central/org.shaneking/org.shaneking.sql/badge.svg
