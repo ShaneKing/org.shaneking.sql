@@ -10,7 +10,7 @@ import org.junit.runners.Parameterized;
 import org.shaneking.skava.ling.lang.String0;
 import org.shaneking.skava.t3.jackson.OM3;
 import sktest.sql.SKUnit;
-import sktest.sql.entity.prepare.PrepareSKAuditEntity;
+import sktest.sql.entity.prepare.PrepareSKIdAdtVerFullEntity;
 
 import java.io.File;
 import java.text.MessageFormat;
@@ -20,15 +20,15 @@ import java.util.List;
 //Parameterized step1:add Parameterized.class to RunWith
 @RunWith(Parameterized.class)
 @Slf4j
-public class SKAuditEntityTest extends SKUnit {
-  private static final String FMT_FILE = "src/test/java/sktest/sql/entity/prepare/PrepareSKAuditEntity_{0}.sql";
-  private PrepareSKAuditEntity prepareEntity;
+public class SKIdAdtVerFullEntityTest extends SKUnit {
+  private static final String FMT_FILE = "src/test/java/sktest/sql/entity/prepare/PrepareSKIdAdtVerFullEntity_{0}.sql";
+  private PrepareSKIdAdtVerFullEntity prepareEntity;
   private File sqlFile;
 
   //Parameterized step2:use step2 data to constructor object
-  public SKAuditEntityTest(String invalid) {
+  public SKIdAdtVerFullEntityTest(String invalid) {
     super();
-    prepareEntity = new PrepareSKAuditEntity();
+    prepareEntity = new PrepareSKIdAdtVerFullEntity();
     prepareEntity.setInvalid(invalid);
   }
 
@@ -72,7 +72,7 @@ public class SKAuditEntityTest extends SKUnit {
 
   @Test
   public void fullTableName() {
-    Assert.assertEquals("t_prepare_s_k_audit_entity", prepareEntity.fullTableName());
+    Assert.assertEquals("t_prepare_s_k_id_adt_ver_full_entity", prepareEntity.fullTableName());
   }
 
   @Test

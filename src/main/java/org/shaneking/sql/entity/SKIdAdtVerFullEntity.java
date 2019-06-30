@@ -12,7 +12,7 @@ import javax.persistence.Column;
 
 @Accessors(chain = true)
 @ToString(callSuper = true)
-public class SKAuditEntity<J> extends SKEntity<J> {
+public class SKIdAdtVerFullEntity<J> extends SKIdAdtVerEntity<J> {
 
   /**
    * @see org.shaneking.skava.ling.util.Date0#DATE_TIME
@@ -27,11 +27,6 @@ public class SKAuditEntity<J> extends SKEntity<J> {
   @Setter
   private String createUserId;
 
-  @Column(length = 1, columnDefinition = "COMMENT 'The invalid status of record {Y:Invalid,N:Valid(Default)}'")
-  @Getter
-  @Setter
-  private String invalid;
-
   /**
    * @see org.shaneking.skava.ling.util.Date0#DATE_TIME
    */
@@ -45,20 +40,13 @@ public class SKAuditEntity<J> extends SKEntity<J> {
   @Setter
   private String invalidUserId;
 
-  /**
-   * @see org.shaneking.skava.ling.util.Date0#DATE_TIME
-   */
-  @Column(length = 20, columnDefinition = "COMMENT 'The last modification time of record'")
-  @Getter
-  @Setter
-  private String lastModifyDatetime;
+  public SKIdAdtVerFullEntity<J> initWithUserId(@NonNull String userId) {
+    this.initVersion().initInvalid();
+    return this.setCreateDatetime(String0.null2empty2(this.getLastModifyDatetime(), Date0.on().dateTime())).setCreateUserId(String0.null2empty2(this.getLastModifyUserId(), userId));
+  }
 
-  @Column(length = 40, columnDefinition = "COMMENT 'The last modified person of record'")
-  @Getter
-  @Setter
-  private String lastModifyUserId;
-
-  public SKAuditEntity<J> initWithCreateUserId(@NonNull String createUserId) {
-    return this.setCreateDatetime(String0.null2empty2(this.getCreateDatetime(), Date0.on().dateTime())).setCreateUserId(String0.null2empty2(this.getCreateUserId(), createUserId)).setInvalid(String0.null2empty2(this.getInvalid(), String0.N));
+  public SKIdAdtVerFullEntity<J> initWithUserIdAndId(@NonNull String userId, @NonNull String id) {
+    this.initId(id);
+    return this.initWithUserId(userId);
   }
 }

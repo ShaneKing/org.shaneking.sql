@@ -1,0 +1,1 @@
+["select id,invalid,last_modify_datetime,last_modify_user_id,version from t_prepare_s_k_id_adt_ver_entity where id=? and invalid=? and last_modify_datetime=? and last_modify_user_id=? and version=? group by version having version > ? order by version limit 100",["sktest1_id","Y","2019-06-23 20:00:07","SKTEST1_USER_ID",1,1]]

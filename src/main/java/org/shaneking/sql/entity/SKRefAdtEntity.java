@@ -1,5 +1,5 @@
 /*
- * @(#)SKRefEntity.java		Created at 2017/9/10
+ * @(#)SKRefAdtVerFullEntity.java		Created at 2017/9/10
  *
  * Copyright (c) ShaneKing All rights reserved.
  * ShaneKing PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
@@ -14,11 +14,11 @@ import lombok.experimental.Accessors;
 import javax.persistence.Column;
 
 /**
- * Used for upload file
+ * Just reference, used for upload file
  */
 @Accessors(chain = true)
 @ToString(callSuper = true)
-public class SKRefEntity<J> extends SKAuditIdVersionEntity<J> {
+public class SKRefAdtEntity<J> extends SKIdAdtEntity<J> {
 
   @Column(length = 40, columnDefinition = "COMMENT 'Relation unique flag'")
   @Getter

@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.shaneking.sql.OperationContent;
-import org.shaneking.sql.entity.SKRefEntity;
+import org.shaneking.sql.entity.SKRefAdtVerFullEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
@@ -13,7 +13,7 @@ import java.util.Map;
 @Accessors(chain = true)
 @Table
 @ToString(callSuper = true)
-public class PrepareSKRefEntity extends SKRefEntity<Map<String, OperationContent>> {
+public class PrepareSKRefAdtVerFullEntity extends SKRefAdtVerFullEntity<Map<String, OperationContent>> {
 
   @Column(nullable = false)
   @Getter

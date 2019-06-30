@@ -1,0 +1,1 @@
+[["select","","from","t_prepare_s_k_id_adt_ver_full_entity","where","invalid=? and last_modify_datetime like ? and create_user_id in (?,?,?) and invalid_datetime between ? and ?","limit 100"],["Y","%1949-10-01%","1","a",",","1949-10-01","1996-07"]]
