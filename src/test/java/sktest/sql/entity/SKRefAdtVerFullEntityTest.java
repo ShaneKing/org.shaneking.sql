@@ -33,6 +33,6 @@ public class SKRefAdtVerFullEntityTest extends SKUnit {
 
     prepareEntity.mapRow(resultSet);
 
-    Assert.assertEquals("{\"pageHelper\":{\"limit\":100},\"id\":\"sktest1_id\",\"version\":1}", OM3.writeValueAsString(prepareEntity));
+    Assert.assertEquals("{\"id\":\"sktest1_id\",\"version\":1}", OM3.writeValueAsString(prepareEntity));
   }
 }

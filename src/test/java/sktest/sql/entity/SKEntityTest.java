@@ -119,7 +119,7 @@ public class SKEntityTest extends SKUnit {
 
   @Test
   public void insertSql() throws Exception {
-    if (!"{\"pageHelper\":{\"limit\":100}}".equals(OM3.writeValueAsString(prepareEntity))) {
+    if (!"{}".equals(OM3.writeValueAsString(prepareEntity))) {
       Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareEntity.insertSql()));
     }
   }

@@ -38,7 +38,8 @@ public class PageHelperTest extends SKUnit {
 
   @Test
   public void getLimit() {
-    Assert.assertEquals(100, Integer0.null2Zero(prepareSKEntityPageHelper.getPageHelper().getLimit()));
+    prepareSKEntityPageHelper.setPageHelper(new PageHelper());
+    Assert.assertEquals(0, Integer0.null2Zero(prepareSKEntityPageHelper.getPageHelper().getLimit()));
   }
 
   @Test

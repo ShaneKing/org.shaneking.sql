@@ -17,6 +17,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
+import org.shaneking.skava.ling.lang.Integer0;
 import org.shaneking.skava.ling.lang.String0;
 import org.shaneking.skava.ling.lang.String20;
 import org.shaneking.skava.sk.collect.Tuple;
@@ -76,7 +77,7 @@ public class SKEntity<J> {
   @Getter
   @Setter
   @Transient
-  private PageHelper pageHelper = new PageHelper();
+  private PageHelper pageHelper;
   @Getter
   @JsonIgnore
   @Setter
@@ -498,13 +499,9 @@ public class SKEntity<J> {
   }
 
   public void limitAndOffsetStatement(@NonNull List<String> limitAndOffsetList, @NonNull List<Object> objectList) {
-    //implements by sub entity
-    if (this.getPageHelper().getLimit() != null) {
-      limitAndOffsetList.add(MessageFormat.format("{0} {1}", Keyword0.LIMIT, this.getPageHelper().getLimit()));
-    }
-    if (this.getPageHelper().getOffset() != null) {
-      limitAndOffsetList.add(MessageFormat.format("{0} {1}", Keyword0.OFFSET, this.getPageHelper().getOffset()));
-    }
+    PageHelper pageHelper = this.getPageHelper() == null ? new PageHelper() : this.getPageHelper();
+    limitAndOffsetList.add(MessageFormat.format("{0} {1}", Keyword0.LIMIT, Integer0.gt2d(Integer0.null2Default(pageHelper.getLimit(), PageHelper.DEFAULT_LIMIT), PageHelper.DEFAULT_LIMIT)));
+    limitAndOffsetList.add(MessageFormat.format("{0} {1}", Keyword0.OFFSET, Integer0.lt2d(Integer0.null2Zero(pageHelper.getOffset()), 0)));
   }
 
   public void limitAndOffsetStatementExt(@NonNull List<String> limitAndOffsetList, @NonNull List<Object> objectList) {
