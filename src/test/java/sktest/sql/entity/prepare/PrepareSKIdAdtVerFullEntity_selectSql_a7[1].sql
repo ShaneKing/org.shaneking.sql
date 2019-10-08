@@ -1,1 +1,1 @@
-[["select","","from","","limit 100 offset 0"],[]]
+[["select","","from","","limit 30 offset 0"],[]]

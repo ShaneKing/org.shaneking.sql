@@ -47,4 +47,10 @@ public class PageHelperTest extends SKUnit {
     prepareSKEntityPageHelper.setPageHelper(new PageHelper().setLimit(99).setOffset(33));
     Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareSKEntityPageHelper.selectSql()));
   }
+
+  @Test
+  public void selectSql2() throws Exception {
+    prepareSKEntityPageHelper.setPageHelper(new PageHelper().setLimit(29).setOffset(33));
+    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareSKEntityPageHelper.selectSql()));
+  }
 }

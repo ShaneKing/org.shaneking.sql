@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @ToString
 public class PageHelper {
-  public static int DEFAULT_LIMIT = 100;
+  public static int DEFAULT_LIMIT = 30;
 
   @Getter
   @Setter
