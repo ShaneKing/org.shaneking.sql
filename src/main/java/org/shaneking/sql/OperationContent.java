@@ -13,6 +13,9 @@ public class OperationContent {
   //will trans in request and response, so abbreviation
   @Getter
   @Setter
+  private String le;//left expr
+  @Getter
+  @Setter
   private String op;//between,>,like...
   @Getter
   @Setter

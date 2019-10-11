@@ -195,19 +195,19 @@ public class SKEntity<J> {
     return rtnList;
   }
 
-  public void fillOc(@NonNull List<String> list, @NonNull List<Object> objectList, OperationContent oc, String fieldName) {
+  public void fillOc(@NonNull List<String> list, @NonNull List<Object> objectList, OperationContent oc, String leftExpr) {
     if (Keyword0.BETWEEN.equalsIgnoreCase(oc.getOp())) {
       if (oc.getCl() != null && oc.getCl().size() == 2) {
-        list.add(this.getDbColumnMap().get(fieldName) + String0.BLACK + oc.getOp() + String0.BLACK + String0.QUESTION + String0.BLACK + Keyword0.AND + String0.BLACK + String0.QUESTION);
+        list.add(leftExpr + String0.BLACK + oc.getOp() + String0.BLACK + String0.QUESTION + String0.BLACK + Keyword0.AND + String0.BLACK + String0.QUESTION);
         objectList.addAll(oc.getCl());
       }
     } else if (Keyword0.IN.equalsIgnoreCase(oc.getOp())) {
       if (oc.getCl() != null && oc.getCl().size() > 0) {
-        list.add(this.getDbColumnMap().get(fieldName) + String0.BLACK + oc.getOp() + String0.BLACK + String0.OPEN_PARENTHESIS + Joiner.on(String0.COMMA).join(Collections.nCopies(oc.getCl().size(), String0.QUESTION)) + String0.CLOSE_PARENTHESIS);
+        list.add(leftExpr + String0.BLACK + oc.getOp() + String0.BLACK + String0.OPEN_PARENTHESIS + Joiner.on(String0.COMMA).join(Collections.nCopies(oc.getCl().size(), String0.QUESTION)) + String0.CLOSE_PARENTHESIS);
         objectList.addAll(oc.getCl());
       }
     } else {
-      list.add(this.getDbColumnMap().get(fieldName) + String0.BLACK + oc.getOp() + String0.BLACK + String0.QUESTION);
+      list.add(leftExpr + String0.BLACK + oc.getOp() + String0.BLACK + String0.QUESTION);
       objectList.add(Strings.nullToEmpty(oc.getBw()) + oc.getCs() + Strings.nullToEmpty(oc.getEw()));
     }
   }
@@ -506,7 +506,7 @@ public class SKEntity<J> {
     for (String fieldName : fieldNameList) {
       if (this.getColumnMap().get(fieldName) != null) {
         for (OperationContent oc : this.findHavingOCs(fieldName)) {
-          this.fillOc(havingList, objectList, oc, fieldName);
+          this.fillOc(havingList, objectList, oc, String0.null2empty2(oc.getLe(), this.getDbColumnMap().get(fieldName)));
         }
       }
     }
@@ -543,7 +543,7 @@ public class SKEntity<J> {
           objectList.add(o);
         }
         for (OperationContent oc : this.findWhereOCs(fieldName)) {
-          this.fillOc(whereList, objectList, oc, fieldName);
+          this.fillOc(whereList, objectList, oc, String0.null2empty2(oc.getLe(), this.getDbColumnMap().get(fieldName)));
         }
       }
     }
