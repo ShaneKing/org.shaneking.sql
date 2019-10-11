@@ -64,25 +64,38 @@ public class SKEntity<J> {
   @Getter
   @JsonIgnore
   @Transient
-  private final List<String> idFieldNameList = Lists.newLinkedList();
+  private final List<String> idFieldNameList = Lists.newArrayList();
   @Getter
   @JsonIgnore
   @Transient
-  private final List<String> versionFieldNameList = Lists.newLinkedList();
+  private final List<String> versionFieldNameList = Lists.newArrayList();
   @Getter
   @JsonIgnore
   @Setter
   @Transient
   private String dbTableName;
   @Getter
-  @Setter
-  @Transient
-  private PageHelper pageHelper;
-  @Getter
   @JsonIgnore
   @Setter
   @Transient
   private Table javaTable;
+
+  @Getter
+  @Setter
+  @Transient
+  private List<String> groupByList;
+  @Getter
+  @Setter
+  @Transient
+  private J havingOCs;
+  @Getter
+  @Setter
+  @Transient
+  private List<String> orderByList;
+  @Getter
+  @Setter
+  @Transient
+  private PageHelper pageHelper;
   /**
    * I don't want Map<String, OperationContent> to limit everyone, J maybe Map/fastjson/gson/jackson...
    * <blockquote><pre>
@@ -170,10 +183,33 @@ public class SKEntity<J> {
     return Joiner.on("\n").join(sqlList);
   }
 
+  public List<OperationContent> findHavingOCs(@NonNull String fieldName) {
+    List<OperationContent> rtnList = Lists.newArrayList();
+    //implements by sub entity
+    return rtnList;
+  }
+
   public List<OperationContent> findWhereOCs(@NonNull String fieldName) {
     List<OperationContent> rtnList = Lists.newArrayList();
     //implements by sub entity
     return rtnList;
+  }
+
+  public void fillOc(@NonNull List<String> list, @NonNull List<Object> objectList, OperationContent oc, String fieldName) {
+    if (Keyword0.BETWEEN.equalsIgnoreCase(oc.getOp())) {
+      if (oc.getCl() != null && oc.getCl().size() == 2) {
+        list.add(this.getDbColumnMap().get(fieldName) + String0.BLACK + oc.getOp() + String0.BLACK + String0.QUESTION + String0.BLACK + Keyword0.AND + String0.BLACK + String0.QUESTION);
+        objectList.addAll(oc.getCl());
+      }
+    } else if (Keyword0.IN.equalsIgnoreCase(oc.getOp())) {
+      if (oc.getCl() != null && oc.getCl().size() > 0) {
+        list.add(this.getDbColumnMap().get(fieldName) + String0.BLACK + oc.getOp() + String0.BLACK + String0.OPEN_PARENTHESIS + Joiner.on(String0.COMMA).join(Collections.nCopies(oc.getCl().size(), String0.QUESTION)) + String0.CLOSE_PARENTHESIS);
+        objectList.addAll(oc.getCl());
+      }
+    } else {
+      list.add(this.getDbColumnMap().get(fieldName) + String0.BLACK + oc.getOp() + String0.BLACK + String0.QUESTION);
+      objectList.add(Strings.nullToEmpty(oc.getBw()) + oc.getCs() + Strings.nullToEmpty(oc.getEw()));
+    }
   }
 
   public String fullTableName() {
@@ -244,7 +280,6 @@ public class SKEntity<J> {
 
     List<String> whereVersionList = Lists.newArrayList();
     whereStatement(whereVersionList, rtnObjectList, this.getVersionFieldNameList());
-    whereStatementExt(whereVersionList, rtnObjectList, this.getVersionFieldNameList());
     if (whereVersionList.size() > 0) {
       if (sqlList.contains(Keyword0.WHERE)) {
         sqlList.add(Keyword0.AND);
@@ -259,7 +294,6 @@ public class SKEntity<J> {
   public Tuple.Pair<List<String>, List<Object>> appendWhereByFields2Sql(@NonNull List<String> sqlList, @NonNull List<Object> rtnObjectList, @NonNull List<String> fieldNameList) {
     List<String> whereList = Lists.newArrayList();
     whereStatement(whereList, rtnObjectList, fieldNameList);
-    whereStatementExt(whereList, rtnObjectList, fieldNameList);
 
     if (whereList.size() > 0) {
       if (sqlList.contains(Keyword0.WHERE)) {
@@ -296,7 +330,6 @@ public class SKEntity<J> {
 
     List<String> insertList = Lists.newArrayList();
     insertStatement(insertList, rtnObjectList);
-    insertStatementExt(insertList, rtnObjectList);
 
     List<String> sqlList = Lists.newArrayList();
     sqlList.add(Keyword0.INSERT_INFO);
@@ -324,10 +357,6 @@ public class SKEntity<J> {
     }
   }
 
-  public void insertStatementExt(@NonNull List<String> insertList, @NonNull List<Object> objectList) {
-    //implements by sub entity
-  }
-
   public Tuple.Pair<String, List<Object>> selectCountSql() {
     Tuple.Pair<List<String>, List<Object>> pair = this.selectSql(Lists.newArrayList(Keyword0.COUNT_1_), Lists.newArrayList());
     return Tuple.of(Joiner.on(String0.BLACK).join(Tuple.getFirst(pair)), Tuple.getSecond(pair));
@@ -338,7 +367,6 @@ public class SKEntity<J> {
 
     List<String> selectList = Lists.newArrayList();
     selectStatement(selectList, rtnObjectList);
-    selectStatementExt(selectList, rtnObjectList);
 
     Tuple.Pair<List<String>, List<Object>> pair = this.selectSql(selectList, rtnObjectList);
     return Tuple.of(Joiner.on(String0.BLACK).join(Tuple.getFirst(pair)), Tuple.getSecond(pair));
@@ -350,23 +378,18 @@ public class SKEntity<J> {
 
     List<String> fromList = Lists.newArrayList();
     fromStatement(fromList, rtnObjectList);
-    fromStatementExt(fromList, rtnObjectList);
 
     List<String> whereList = Lists.newArrayList();
     whereStatement(whereList, rtnObjectList);
-    whereStatementExt(whereList, rtnObjectList);
 
     List<String> groupByList = Lists.newArrayList();
     groupByStatement(groupByList, rtnObjectList);
-    groupByStatementExt(groupByList, rtnObjectList);
 
     List<String> havingList = Lists.newArrayList();
     havingStatement(havingList, rtnObjectList);
-    havingStatementExt(havingList, rtnObjectList);
 
     List<String> orderByList = Lists.newArrayList();
     orderByStatement(orderByList, rtnObjectList);
-    orderByStatementExt(orderByList, rtnObjectList);
 
     return selectSql(rtnObjectList, selectList, fromList, whereList, groupByList, havingList, orderByList);
   }
@@ -399,7 +422,6 @@ public class SKEntity<J> {
 
     List<String> limitAndOffsetList = Lists.newArrayList();
     limitAndOffsetStatement(limitAndOffsetList, rtnObjectList);
-    limitAndOffsetStatementExt(limitAndOffsetList, rtnObjectList);
     if (limitAndOffsetList.size() > 0) {
       sqlList.add(Joiner.on(String0.BLACK).join(limitAndOffsetList));
     }
@@ -409,10 +431,6 @@ public class SKEntity<J> {
 
   public void selectStatement(@NonNull List<String> selectList, @NonNull List<Object> objectList) {
     selectList.addAll(this.getFieldNameList().stream().map((String fieldName) -> this.getDbColumnMap().get(fieldName)).collect(Collectors.toList()));
-  }
-
-  public void selectStatementExt(@NonNull List<String> selectList, @NonNull List<Object> objectList) {
-    //implements by sub entity
   }
 
   public Tuple.Pair<String, List<Object>> updateByIdSql() {
@@ -425,11 +443,9 @@ public class SKEntity<J> {
 
     List<String> updateList = Lists.newArrayList();
     updateStatement(updateList, rtnObjectList);
-    updateStatementExt(updateList, rtnObjectList);
 
     List<String> whereIdList = Lists.newArrayList();
     whereStatement(whereIdList, rtnObjectList, this.getIdFieldNameList());
-    whereStatementExt(whereIdList, rtnObjectList, this.getIdFieldNameList());
 
     List<String> sqlList = Lists.newArrayList();
     sqlList.add(Keyword0.UPDATE);
@@ -469,33 +485,31 @@ public class SKEntity<J> {
     }
   }
 
-  public void updateStatementExt(@NonNull List<String> updateList, @NonNull List<Object> objectList) {
-    //implements by sub entity
-  }
-
   //others
   public void fromStatement(@NonNull List<String> fromList, @NonNull List<Object> objectList) {
     fromList.add(this.fullTableName());
   }
 
-  public void fromStatementExt(@NonNull List<String> fromList, @NonNull List<Object> objectList) {
-    //implements by sub entity
-  }
-
   public void groupByStatement(@NonNull List<String> groupByList, @NonNull List<Object> objectList) {
-    //implements by sub entity
+    if (this.getGroupByList() != null) {
+      groupByList.addAll(this.getGroupByList());
+    }
   }
 
-  public void groupByStatementExt(@NonNull List<String> groupByList, @NonNull List<Object> objectList) {
-    //implements by sub entity
+  public void havingStatement(@NonNull List<String> havingList, @NonNull List<Object> objectList) {
+    if (this.getHavingOCs() != null) {
+      this.havingStatement(havingList, objectList, this.getFieldNameList());
+    }
   }
 
-  public void havingStatement(@NonNull List<String> havingByList, @NonNull List<Object> objectList) {
-    //implements by sub entity
-  }
-
-  public void havingStatementExt(@NonNull List<String> havingByList, @NonNull List<Object> objectList) {
-    //implements by sub entity
+  public void havingStatement(@NonNull List<String> havingList, @NonNull List<Object> objectList, @NonNull List<String> fieldNameList) {
+    for (String fieldName : fieldNameList) {
+      if (this.getColumnMap().get(fieldName) != null) {
+        for (OperationContent oc : this.findHavingOCs(fieldName)) {
+          this.fillOc(havingList, objectList, oc, fieldName);
+        }
+      }
+    }
   }
 
   public void limitAndOffsetStatement(@NonNull List<String> limitAndOffsetList, @NonNull List<Object> objectList) {
@@ -504,15 +518,10 @@ public class SKEntity<J> {
     limitAndOffsetList.add(MessageFormat.format("{0} {1}", Keyword0.OFFSET, Integer0.lt2d(Integer0.null2Zero(pageHelper.getOffset()), 0)));
   }
 
-  public void limitAndOffsetStatementExt(@NonNull List<String> limitAndOffsetList, @NonNull List<Object> objectList) {
-    //implements by sub entity
-  }
-
   public void orderByStatement(@NonNull List<String> orderByList, @NonNull List<Object> objectList) {
-  }
-
-  public void orderByStatementExt(@NonNull List<String> orderByList, @NonNull List<Object> objectList) {
-    //implements by sub entity
+    if (this.getOrderByList() != null) {
+      orderByList.addAll(this.getOrderByList());
+    }
   }
 
   public void whereStatement(@NonNull List<String> whereList, @NonNull List<Object> objectList) {
@@ -534,30 +543,9 @@ public class SKEntity<J> {
           objectList.add(o);
         }
         for (OperationContent oc : this.findWhereOCs(fieldName)) {
-          if (Keyword0.BETWEEN.equalsIgnoreCase(oc.getOp())) {
-            if (oc.getCl() != null && oc.getCl().size() == 2) {
-              whereList.add(this.getDbColumnMap().get(fieldName) + String0.BLACK + oc.getOp() + String0.BLACK + String0.QUESTION + String0.BLACK + Keyword0.AND + String0.BLACK + String0.QUESTION);
-              objectList.addAll(oc.getCl());
-            }
-          } else if (Keyword0.IN.equalsIgnoreCase(oc.getOp())) {
-            if (oc.getCl() != null && oc.getCl().size() > 0) {
-              whereList.add(this.getDbColumnMap().get(fieldName) + String0.BLACK + oc.getOp() + String0.BLACK + String0.OPEN_PARENTHESIS + Joiner.on(String0.COMMA).join(Collections.nCopies(oc.getCl().size(), String0.QUESTION)) + String0.CLOSE_PARENTHESIS);
-              objectList.addAll(oc.getCl());
-            }
-          } else {
-            whereList.add(this.getDbColumnMap().get(fieldName) + String0.BLACK + oc.getOp() + String0.BLACK + String0.QUESTION);
-            objectList.add(Strings.nullToEmpty(oc.getBw()) + oc.getCs() + Strings.nullToEmpty(oc.getEw()));
-          }
+          this.fillOc(whereList, objectList, oc, fieldName);
         }
       }
     }
-  }
-
-  public void whereStatementExt(@NonNull List<String> whereList, @NonNull List<Object> objectList) {
-    //implements by sub entity
-  }
-
-  public void whereStatementExt(@NonNull List<String> whereList, @NonNull List<Object> objectList, @NonNull List<String> fieldNameList) {
-    //implements by sub entity
   }
 }

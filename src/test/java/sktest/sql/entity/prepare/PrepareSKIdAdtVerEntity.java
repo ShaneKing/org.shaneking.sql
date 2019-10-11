@@ -18,18 +18,21 @@ public class PrepareSKIdAdtVerEntity extends SKIdAdtVerEntity<Map<String, Operat
 
 
   @Override
-  public void groupByStatementExt(@NonNull List groupByList, @NonNull List objectList) {
+  public void groupByStatement(@NonNull List<String> groupByList, @NonNull List<Object> objectList) {
+    super.groupByStatement(groupByList, objectList);
     groupByList.add("version");
   }
 
   @Override
-  public void havingStatementExt(@NonNull List havingList, @NonNull List list) {
+  public void havingStatement(@NonNull List<String> havingList, @NonNull List<Object> objectList) {
+    super.havingStatement(havingList, objectList);
     havingList.add("version > ?");
-    list.add(Integer0.null2Zero(this.getVersion()));
+    objectList.add(Integer0.null2Zero(this.getVersion()));
   }
 
   @Override
-  public void orderByStatementExt(@NonNull List orderByList, @NonNull List list) {
+  public void orderByStatement(@NonNull List<String> orderByList, @NonNull List<Object> objectList) {
+    super.orderByStatement(orderByList, objectList);
     orderByList.add("version");
   }
 }
