@@ -42,7 +42,7 @@ public class SKIdAdtVerFullEntity<J> extends SKIdAdtVerEntity<J> {
 
   public SKIdAdtVerFullEntity<J> initWithUserId(@NonNull String userId) {
     this.initVersion().initInvalid();
-    return this.setCreateDatetime(String0.null2empty2(this.getLastModifyDatetime(), Date0.on().dateTime())).setCreateUserId(String0.null2empty2(this.getLastModifyUserId(), userId));
+    return this.setCreateDatetime(String0.null2empty2(this.getCreateDatetime(), Date0.on().dateTime())).setCreateUserId(String0.null2empty2(this.getCreateUserId(), userId));
   }
 
   public SKIdAdtVerFullEntity<J> initWithUserIdAndId(@NonNull String userId, @NonNull String id) {
