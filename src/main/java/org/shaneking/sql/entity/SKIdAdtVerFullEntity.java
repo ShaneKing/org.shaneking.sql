@@ -20,29 +20,29 @@ public class SKIdAdtVerFullEntity<J> extends SKIdAdtVerEntity<J> {
   @Column(length = 20, updatable = false, columnDefinition = "COMMENT 'The creation time of record'")
   @Getter
   @Setter
-  private String createDatetime;
+  private String addDateTime;
 
-  @Column(length = 40, updatable = false, columnDefinition = "COMMENT 'The creator of record'")
+  @Column(length = 51, updatable = false, columnDefinition = "COMMENT 'The creator of record'")
   @Getter
   @Setter
-  private String createUserId;
+  private String addUserId;
 
   /**
    * @see org.shaneking.skava.ling.util.Date0#DATE_TIME
    */
-  @Column(length = 20, columnDefinition = "COMMENT 'The invalid time of record'")
+  @Column(length = 20, columnDefinition = "COMMENT 'The deleted time of record'")
   @Getter
   @Setter
-  private String invalidDatetime;
+  private String delDateTime;
 
-  @Column(length = 40, columnDefinition = "COMMENT 'The invalid operator of record'")
+  @Column(length = 51, columnDefinition = "COMMENT 'The deleted operator of record'")
   @Getter
   @Setter
-  private String invalidUserId;
+  private String delUserId;
 
   public SKIdAdtVerFullEntity<J> initWithUserId(@NonNull String userId) {
-    this.initVersion().initInvalid();
-    return this.setCreateDatetime(String0.null2empty2(this.getCreateDatetime(), Date0.on().dateTime())).setCreateUserId(String0.null2empty2(this.getCreateUserId(), userId));
+    this.initVer().initDeleted();
+    return this.setAddDateTime(String0.null2empty2(this.getAddDateTime(), Date0.on().dateTime())).setAddUserId(String0.null2empty2(this.getAddUserId(), userId));
   }
 
   public SKIdAdtVerFullEntity<J> initWithUserIdAndId(@NonNull String userId, @NonNull String id) {

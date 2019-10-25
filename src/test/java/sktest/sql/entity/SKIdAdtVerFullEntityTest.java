@@ -29,7 +29,7 @@ public class SKIdAdtVerFullEntityTest extends SKUnit {
   public SKIdAdtVerFullEntityTest(String invalid) {
     super();
     prepareEntity = new PrepareSKIdAdtVerFullEntity();
-    prepareEntity.setInvalid(invalid);
+    prepareEntity.setDeleted(invalid);
   }
 
   //Parameterized step2:static method return collection
@@ -67,7 +67,7 @@ public class SKIdAdtVerFullEntityTest extends SKUnit {
 
   @Test
   public void findWhereOCs() throws Exception {
-    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareEntity.findWhereOCs("createUserId")));
+    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareEntity.findWhereOCs("addUserId")));
   }
 
   @Test

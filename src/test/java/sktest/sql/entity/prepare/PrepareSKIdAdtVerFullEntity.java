@@ -19,13 +19,13 @@ public class PrepareSKIdAdtVerFullEntity extends SKIdAdtVerFullEntity<Map<String
 
   @Override
   public List<OperationContent> findWhereOCs(String fieldName) {
-    if ("createUserId".equals(fieldName)) {
+    if ("addUserId".equals(fieldName)) {
       return Lists.newArrayList(new OperationContent().setOp(Keyword0.IN).setCl(Lists.newArrayList("1", "a", ",")));
-    } else if ("createDatetime".equals(fieldName)) {
+    } else if ("addDateTime".equals(fieldName)) {
       return Lists.newArrayList(new OperationContent().setOp(Keyword0.BETWEEN).setCl(Lists.newArrayList("1949-10-01")));
-    } else if ("invalidDatetime".equals(fieldName)) {
+    } else if ("delDateTime".equals(fieldName)) {
       return Lists.newArrayList(new OperationContent().setOp(Keyword0.BETWEEN).setCl(Lists.newArrayList("1949-10-01", "1996-07")));
-    } else if ("lastModifyDatetime".equals(fieldName)) {
+    } else if ("modDateTime".equals(fieldName)) {
       return Lists.newArrayList(new OperationContent().setBw(String0.PERCENT).setCs("1949-10-01").setEw(String0.PERCENT).setOp("like"));
     }
     return super.findWhereOCs(fieldName);

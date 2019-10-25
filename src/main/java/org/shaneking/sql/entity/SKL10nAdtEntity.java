@@ -21,10 +21,10 @@ import javax.persistence.Column;
 public class SKL10nAdtEntity<J> extends SKIdAdtEntity<J> {
 
   /**
-   * @see org.shaneking.skava.ling.util.Date0#H_MI_S
+   * @see org.shaneking.skava.ling.util.Date0#XXX
    */
   @Column(length = 10, columnDefinition = "COMMENT 'The last modification time zone of record'")
   @Getter
   @Setter
-  private String lastModifyTimezone;
+  private String modZone;
 }

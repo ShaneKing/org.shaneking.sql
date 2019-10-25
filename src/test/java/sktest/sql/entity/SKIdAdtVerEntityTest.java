@@ -42,7 +42,7 @@ public class SKIdAdtVerEntityTest extends SKUnit {
   public void whereOCs() throws Exception {
     Map<String, OperationContent> ocMap = Maps.newHashMap();
     ocMap.put("id", new OperationContent().setOp(Keyword0.IN).setCl(Lists.newArrayList(SKEntityTest.SKTEST1_ID)));
-    prepareEntity.setVersion(1).setInvalid(String0.Y).setLastModifyDatetime(SKTEST1_DATE_TIME).setLastModifyUserId(SKTEST1_USER_ID).setId(SKEntityTest.SKTEST1_ID).setWhereOCs(ocMap);
+    prepareEntity.setVer(1).setDeleted(String0.Y).setModDateTime(SKTEST1_DATE_TIME).setModUserId(SKTEST1_USER_ID).setId(SKEntityTest.SKTEST1_ID).setWhereOCs(ocMap);
     Assert.assertEquals(new String(Files.toByteArray(new File("src/test/java/sktest/sql/entity/prepare/PrepareSKIdAdtVerEntity_whereOCs.sql"))).trim(), OM3.writeValueAsString(prepareEntity.selectSql()));
   }
 
@@ -50,7 +50,7 @@ public class SKIdAdtVerEntityTest extends SKUnit {
   public void appendWhereByFields2Sql() throws Exception {
     Map<String, OperationContent> ocMap = Maps.newHashMap();
     ocMap.put("id", new OperationContent().setOp(Keyword0.IN).setCl(Lists.newArrayList(SKEntityTest.SKTEST1_ID)));
-    prepareEntity.setVersion(1).setId(SKEntityTest.SKTEST1_ID);
-    Assert.assertEquals(new String(Files.toByteArray(new File("src/test/java/sktest/sql/entity/prepare/PrepareSKIdAdtVerEntity_appendWhereByFields2Sql.sql"))).trim(), OM3.writeValueAsString(prepareEntity.appendWhereByFields2Sql(Lists.newArrayList(Keyword0.SELECT, Keyword0.COUNT_1_, Keyword0.FROM, Keyword0.WHERE, "invalid=?"), Lists.newArrayList(String0.Y), prepareEntity.getFieldNameList())));
+    prepareEntity.setVer(1).setId(SKEntityTest.SKTEST1_ID);
+    Assert.assertEquals(new String(Files.toByteArray(new File("src/test/java/sktest/sql/entity/prepare/PrepareSKIdAdtVerEntity_appendWhereByFields2Sql.sql"))).trim(), OM3.writeValueAsString(prepareEntity.appendWhereByFields2Sql(Lists.newArrayList(Keyword0.SELECT, Keyword0.COUNT_1_, Keyword0.FROM, Keyword0.WHERE, "deleted=?"), Lists.newArrayList(String0.Y), prepareEntity.getFieldNameList())));
   }
 }

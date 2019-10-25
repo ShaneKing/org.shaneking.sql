@@ -15,10 +15,16 @@ import java.util.Map;
 @ToString(callSuper = true)
 public class PrepareSKEntity extends SKEntity<Map<String, OperationContent>> {
 
-  @Column(length = 1, columnDefinition = "COMMENT 'The invalid status of record {Y:Invalid,N:Valid(Default)}'")
+  @Column(length = 51)
+  @Getter
+  @Id
+  @Setter
+  private String id;
+
+  @Column(length = 1, columnDefinition = "COMMENT 'The deleted status of record {Y:Invalid,N:Valid(Default)}'")
   @Getter
   @Setter
-  private String invalid;
+  private String deleted;
 
   /**
    * @see org.shaneking.skava.ling.util.Date0#DATE_TIME
@@ -26,24 +32,18 @@ public class PrepareSKEntity extends SKEntity<Map<String, OperationContent>> {
   @Column(length = 20, columnDefinition = "COMMENT 'The last modification time of record'")
   @Getter
   @Setter
-  private String lastModifyDatetime;
+  private String modDateTime;
 
-  @Column(length = 40, columnDefinition = "COMMENT 'The last modified person of record'")
+  @Column(length = 51, columnDefinition = "COMMENT 'The last modified person of record'")
   @Getter
   @Setter
-  private String lastModifyUserId;
-
-  @Column(length = 40)
-  @Getter
-  @Id
-  @Setter
-  private String id;
+  private String modUserId;
 
   @Column(nullable = false)
   @Getter
   @Setter
   @Version
-  private Integer version;
+  private Integer ver;
 
   @Column(length = 10)
   @Getter

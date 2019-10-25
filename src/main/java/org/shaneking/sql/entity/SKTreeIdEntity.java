@@ -20,7 +20,7 @@ public class SKTreeIdEntity<J> extends SKIdEntity<J> {
   @Setter
   private String nodeName;
 
-  @Column(columnDefinition = "COMMENT 'Node path, /root/xxx/yyy/zzz/'")
+  @Column(columnDefinition = "COMMENT 'Node path, /root/xxx/yyy/zzz/parentId/id/'")
   @Getter
   @Setter
   private String nodePath;
@@ -30,7 +30,7 @@ public class SKTreeIdEntity<J> extends SKIdEntity<J> {
   @Setter
   private String nodeType;
 
-  @Column(length = 40, columnDefinition = "COMMENT 'Parent identifies'")
+  @Column(length = 51, columnDefinition = "COMMENT 'Parent identifies'")
   @Getter
   @Setter
   private String parentId;

@@ -25,15 +25,15 @@ public class SKL10nAdtVerFullEntity<J> extends SKIdAdtVerFullEntity<J> {
   @Column(length = 10, columnDefinition = "COMMENT 'The creation time zone of record'")
   @Getter
   @Setter
-  private String createTimezone;
+  private String addZone;
 
   /**
    * @see org.shaneking.skava.ling.util.Date0#H_MI_S
    */
-  @Column(length = 10, columnDefinition = "COMMENT 'The invalid time zone of record'")
+  @Column(length = 10, columnDefinition = "COMMENT 'The deleted time zone of record'")
   @Getter
   @Setter
-  private String invalidTimezone;
+  private String delZone;
 
   /**
    * @see org.shaneking.skava.ling.util.Date0#H_MI_S
@@ -41,5 +41,5 @@ public class SKL10nAdtVerFullEntity<J> extends SKIdAdtVerFullEntity<J> {
   @Column(length = 10, columnDefinition = "COMMENT 'The last modification time zone of record'")
   @Getter
   @Setter
-  private String lastModifyTimezone;
+  private String modZone;
 }

@@ -13,11 +13,13 @@ import javax.persistence.Id;
 @Accessors(chain = true)
 @ToString(callSuper = true)
 public class SKIdEntity<J> extends SKEntity<J> {
-  @Column(length = 40, updatable = false, columnDefinition = "COMMENT 'Uniquely identifies'")
+
+  //14+1+19=34 ~ 14+1+36=51
+  @Column(length = 51, updatable = false, columnDefinition = "COMMENT 'Uniquely identifies'")
   @Getter
   @Id
   @Setter
-  private String id;
+  private String id;//yyyyMMddHHmmss_uuid
 
   public SKIdEntity<J> initId(@NonNull String id) {
     return this.setId(String0.null2empty2(this.getId(), id));

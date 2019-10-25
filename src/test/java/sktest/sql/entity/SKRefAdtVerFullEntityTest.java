@@ -27,12 +27,12 @@ public class SKRefAdtVerFullEntityTest extends SKUnit {
     PrepareSKRefAdtVerFullEntity prepareEntity = new PrepareSKRefAdtVerFullEntity();
 
     Mockito.when(resultSet.getString("id")).thenReturn(SKEntityTest.SKTEST1_ID);
-    Mockito.when(resultSet.getInt("version")).thenReturn(1);
+    Mockito.when(resultSet.getInt("ver")).thenReturn(1);
 
     Mockito.when(resultSet.getInt("int_for_map_row_exception")).thenReturn(2);
 
     prepareEntity.mapRow(resultSet);
 
-    Assert.assertEquals("{\"id\":\"sktest1_id\",\"version\":1}", OM3.writeValueAsString(prepareEntity));
+    Assert.assertEquals("{\"id\":\"sktest1_id\",\"deleted\":\"N\",\"ver\":1}", OM3.writeValueAsString(prepareEntity));
   }
 }

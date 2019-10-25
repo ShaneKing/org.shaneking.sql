@@ -30,7 +30,7 @@ public class SKEntityTest extends SKUnit {
   //Parameterized step2:use step2 data to constructor object
   public SKEntityTest(String invalid, String id, Integer version, String hasLength, String noGetMethod, String withoutAnnotation, String reName) {
     super();
-    prepareEntity = new PrepareSKEntity().setInvalid(invalid).setId(id).setVersion(version).setHasLength(hasLength).setNoGetMethod(noGetMethod).setWithoutAnnotation(withoutAnnotation).setReName(reName);
+    prepareEntity = new PrepareSKEntity().setDeleted(invalid).setId(id).setVer(version).setHasLength(hasLength).setNoGetMethod(noGetMethod).setWithoutAnnotation(withoutAnnotation).setReName(reName);
   }
 
   //Parameterized step2:static method return collection
@@ -108,7 +108,7 @@ public class SKEntityTest extends SKUnit {
   @Test
   public void deleteByIdAndVersionSql_null() throws Exception {
     prepareEntity.setId(null);
-    prepareEntity.setVersion(null);
+    prepareEntity.setVer(null);
     Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareEntity.deleteByIdAndVersionSql()));
   }
 
@@ -169,7 +169,7 @@ public class SKEntityTest extends SKUnit {
   @Test
   public void updateByIdAndVersionSql_null() throws Exception {
     prepareEntity.setId(null);
-    prepareEntity.setVersion(null);
+    prepareEntity.setVer(null);
     Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareEntity.updateByIdAndVersionSql()));
   }
 }

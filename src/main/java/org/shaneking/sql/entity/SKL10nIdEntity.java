@@ -26,5 +26,5 @@ public class SKL10nIdEntity<J> extends SKIdEntity<J> {
   @Column(length = 10, columnDefinition = "COMMENT 'The last modification time zone of record'")
   @Getter
   @Setter
-  private String lastModifyTimezone;
+  private String modZone;
 }

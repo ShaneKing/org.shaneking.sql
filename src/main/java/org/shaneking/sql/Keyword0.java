@@ -1,5 +1,6 @@
 package org.shaneking.sql;
 
+import lombok.NonNull;
 import org.shaneking.skava.ling.lang.String0;
 
 public class Keyword0 {
@@ -34,4 +35,8 @@ public class Keyword0 {
   public static final String TYPE_INT = "int";
   public static final String TYPE_LONGTEXT = "longtext";
   public static final String TYPE_VARCHAR = "varchar";
+
+  public static String wrapBlack(@NonNull String keyword) {
+    return String0.BLACK + keyword + String0.BLACK;
+  }
 }

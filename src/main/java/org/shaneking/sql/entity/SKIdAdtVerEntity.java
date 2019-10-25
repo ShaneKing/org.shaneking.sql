@@ -18,15 +18,15 @@ public class SKIdAdtVerEntity<J> extends SKIdAdtEntity<J> {
   @Getter
   @Setter
   @Version
-  private Integer version;
+  private Integer ver;
 
-  public SKIdAdtVerEntity<J> initVersion() {
-    return this.setVersion(Integer0.null2Zero(this.getVersion()));
+  public SKIdAdtVerEntity<J> initVer() {
+    return this.setVer(Integer0.null2Zero(this.getVer()));
   }
 
   public SKIdAdtVerEntity<J> initWithUserId(@NonNull String userId) {
     super.initWithUserId(userId);
-    return this.initVersion();
+    return this.initVer();
   }
 
   public SKIdAdtVerEntity<J> initWithUserIdAndId(@NonNull String userId, @NonNull String id) {

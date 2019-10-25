@@ -9,22 +9,22 @@ public class SKEntitySetterTest extends SKUnit {
 
   @Test
   public void testSetterSKIdAdtVerFullEntity() {
-    skPrint(new PrepareSKIdAdtVerFullEntity().setCreateDatetime(Date0.on().dateTime()).setCreateUserId(SKIdAdtVerEntityTest.SKTEST1_USER_ID).setInvalidDatetime(Date0.on().dateTime()).setInvalidUserId(SKIdAdtVerEntityTest.SKTEST1_USER_ID));
+    skPrint(new PrepareSKIdAdtVerFullEntity().setAddDateTime(Date0.on().dateTime()).setAddUserId(SKIdAdtVerEntityTest.SKTEST1_USER_ID).setDelDateTime(Date0.on().dateTime()).setDelUserId(SKIdAdtVerEntityTest.SKTEST1_USER_ID));
   }
 
   @Test
   public void testSetterSKL10nAdtEntity() {
-    skPrint(new PrepareSKL10nAdtEntity().setLastModifyTimezone("+0800"));
+    skPrint(new PrepareSKL10nAdtEntity().setModZone("+0800"));
   }
 
   @Test
   public void testSetterSKL10nAdtVerEntity() {
-    skPrint(new PrepareSKL10nAdtVerEntity().setLastModifyTimezone("+0800"));
+    skPrint(new PrepareSKL10nAdtVerEntity().setModZone("+0800"));
   }
 
   @Test
   public void testSetterSKL10nAdtVerFullEntity() {
-    skPrint(new PrepareSKL10nAdtVerFullEntity().setCreateTimezone("+0800").setInvalidTimezone("+0800").setLastModifyTimezone("+0800"));
+    skPrint(new PrepareSKL10nAdtVerFullEntity().setAddZone("+0800").setDelZone("+0800").setModZone("+0800"));
   }
 
   @Test

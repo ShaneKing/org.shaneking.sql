@@ -26,8 +26,8 @@ public class PrepareSKIdAdtVerEntity extends SKIdAdtVerEntity<Map<String, Operat
   @Override
   public void havingStatement(@NonNull List<String> havingList, @NonNull List<Object> objectList) {
     super.havingStatement(havingList, objectList);
-    havingList.add("version > ?");
-    objectList.add(Integer0.null2Zero(this.getVersion()));
+    havingList.add("ver > ?");
+    objectList.add(Integer0.null2Zero(this.getVer()));
   }
 
   @Override
