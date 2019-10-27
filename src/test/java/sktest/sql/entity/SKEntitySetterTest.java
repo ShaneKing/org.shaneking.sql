@@ -9,7 +9,7 @@ public class SKEntitySetterTest extends SKUnit {
 
   @Test
   public void testSetterSKIdAdtVerFullEntity() {
-    skPrint(new PrepareSKIdAdtVerFullEntity().setAddDateTime(Date0.on().dateTime()).setAddUserId(SKIdAdtVerEntityTest.SKTEST1_USER_ID).setDelDateTime(Date0.on().dateTime()).setDelUserId(SKIdAdtVerEntityTest.SKTEST1_USER_ID));
+    skPrint(new PrepareSKIdAdtVerFullEntity().setCrtDateTime(Date0.on().dateTime()).setCrtUserId(SKIdAdtVerEntityTest.SKTEST1_USER_ID).setDelDateTime(Date0.on().dateTime()).setDelUserId(SKIdAdtVerEntityTest.SKTEST1_USER_ID));
   }
 
   @Test

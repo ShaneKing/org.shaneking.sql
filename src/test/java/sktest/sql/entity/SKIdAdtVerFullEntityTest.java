@@ -67,7 +67,7 @@ public class SKIdAdtVerFullEntityTest extends SKUnit {
 
   @Test
   public void findWhereOCs() throws Exception {
-    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareEntity.findWhereOCs("addUserId")));
+    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareEntity.findWhereOCs("crtUserId")));
   }
 
   @Test

@@ -24,11 +24,13 @@ public class SKIdAdtVerEntity<J> extends SKIdAdtEntity<J> {
     return this.setVer(Integer0.null2Zero(this.getVer()));
   }
 
+  @Override
   public SKIdAdtVerEntity<J> initWithUserId(@NonNull String userId) {
     super.initWithUserId(userId);
     return this.initVer();
   }
 
+  @Override
   public SKIdAdtVerEntity<J> initWithUserIdAndId(@NonNull String userId, @NonNull String id) {
     this.initId(id);
     return this.initWithUserId(userId);

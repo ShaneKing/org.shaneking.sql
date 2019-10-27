@@ -100,7 +100,7 @@ public class SKEntity<J> {
    * I don't want Map<String, OperationContent> to limit everyone, J maybe Map/fastjson/gson/jackson...
    * <blockquote><pre>
    *     {
-   *         addDateTime:{
+   *         crtDateTime:{
    *             op:'between',
    *             c:['2017-09-10','2019-04-27']
    *         },

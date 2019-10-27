@@ -20,12 +20,12 @@ public class SKIdAdtVerFullEntity<J> extends SKIdAdtVerEntity<J> {
   @Column(length = 20, updatable = false, columnDefinition = "COMMENT 'The creation time of record'")
   @Getter
   @Setter
-  private String addDateTime;
+  private String crtDateTime;
 
   @Column(length = 51, updatable = false, columnDefinition = "COMMENT 'The creator of record'")
   @Getter
   @Setter
-  private String addUserId;
+  private String crtUserId;
 
   /**
    * @see org.shaneking.skava.ling.util.Date0#DATE_TIME
@@ -40,11 +40,13 @@ public class SKIdAdtVerFullEntity<J> extends SKIdAdtVerEntity<J> {
   @Setter
   private String delUserId;
 
+  @Override
   public SKIdAdtVerFullEntity<J> initWithUserId(@NonNull String userId) {
     this.initVer().initDeleted();
-    return this.setAddDateTime(String0.null2empty2(this.getAddDateTime(), Date0.on().dateTime())).setAddUserId(String0.null2empty2(this.getAddUserId(), userId));
+    return this.setCrtDateTime(String0.null2empty2(this.getCrtDateTime(), Date0.on().dateTime())).setCrtUserId(String0.null2empty2(this.getCrtUserId(), userId));
   }
 
+  @Override
   public SKIdAdtVerFullEntity<J> initWithUserIdAndId(@NonNull String userId, @NonNull String id) {
     this.initId(id);
     return this.initWithUserId(userId);
