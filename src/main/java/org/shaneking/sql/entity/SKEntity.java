@@ -96,6 +96,10 @@ public class SKEntity<J> {
   @Setter
   @Transient
   private PageHelper pageHelper;
+  @Getter
+  @Setter
+  @Transient
+  private List<String> selectList;
   /**
    * I don't want Map<String, OperationContent> to limit everyone, J maybe Map/fastjson/gson/jackson...
    * <blockquote><pre>
@@ -253,10 +257,14 @@ public class SKEntity<J> {
     }
   }
 
+  public List<String> lstSelectFiled() {
+    return this.getSelectList() != null && this.getSelectList().size() > 0 ? this.getSelectList() : this.getFieldNameList();
+  }
+
   public void mapRow(ResultSet rs) {
     String columnFieldTypeString;
     Object o;
-    for (String fieldName : this.getFieldNameList()) {
+    for (String fieldName : this.lstSelectFiled()) {
       try {
         columnFieldTypeString = this.getFieldMap().get(fieldName).getType().getCanonicalName();
         if (Integer.class.getCanonicalName().equals(columnFieldTypeString)) {
@@ -430,7 +438,7 @@ public class SKEntity<J> {
   }
 
   public void selectStatement(@NonNull List<String> selectList, @NonNull List<Object> objectList) {
-    selectList.addAll(this.getFieldNameList().stream().map((String fieldName) -> this.getDbColumnMap().get(fieldName)).collect(Collectors.toList()));
+    selectList.addAll(this.lstSelectFiled().stream().map((String fieldName) -> this.getDbColumnMap().get(fieldName)).collect(Collectors.toList()));
   }
 
   public Tuple.Pair<String, List<Object>> updateByIdSql() {
@@ -514,7 +522,7 @@ public class SKEntity<J> {
 
   public void limitAndOffsetStatement(@NonNull List<String> limitAndOffsetList, @NonNull List<Object> objectList) {
     PageHelper pageHelper = this.getPageHelper() == null ? new PageHelper() : this.getPageHelper();
-    limitAndOffsetList.add(MessageFormat.format("{0} {1}", Keyword0.LIMIT, Integer0.gt2d(Integer0.null2Default(pageHelper.getLimit(), PageHelper.DEFAULT_LIMIT), PageHelper.DEFAULT_LIMIT)));
+    limitAndOffsetList.add(MessageFormat.format("{0} {1}", Keyword0.LIMIT, Integer0.gt2d(Integer0.null2Default(pageHelper.getLimit(), PageHelper.DEFAULT_LIMIT), PageHelper.MAX_LIMIT)));
     limitAndOffsetList.add(MessageFormat.format("{0} {1}", Keyword0.OFFSET, Integer0.lt2d(Integer0.null2Zero(pageHelper.getOffset()), 0)));
   }
 
