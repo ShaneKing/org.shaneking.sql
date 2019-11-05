@@ -15,7 +15,7 @@ import java.util.Map;
 @ToString(callSuper = true)
 public class PrepareSKEntity extends SKEntity<Map<String, OperationContent>> {
 
-  @Column(length = 51)
+  @Column(length = 40)
   @Getter
   @Id
   @Setter
@@ -34,7 +34,7 @@ public class PrepareSKEntity extends SKEntity<Map<String, OperationContent>> {
   @Setter
   private String modDateTime;
 
-  @Column(length = 51, columnDefinition = "COMMENT 'The last modified person of record'")
+  @Column(length = 40, columnDefinition = "COMMENT 'The last modified person of record'")
   @Getter
   @Setter
   private String modUserId;

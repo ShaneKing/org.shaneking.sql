@@ -27,7 +27,7 @@ public class SKIdAdtEntity<J> extends SKIdEntity<J> {
   @Setter
   private String modDateTime;
 
-  @Column(length = 51, columnDefinition = "COMMENT 'The last modified person of record'")
+  @Column(length = 40, columnDefinition = "COMMENT 'The last modified person of record'")
   @Getter
   @Setter
   private String modUserId;

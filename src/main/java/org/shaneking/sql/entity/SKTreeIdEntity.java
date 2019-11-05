@@ -30,7 +30,7 @@ public class SKTreeIdEntity<J> extends SKIdEntity<J> {
   @Setter
   private String nodeType;
 
-  @Column(length = 51, columnDefinition = "COMMENT 'Parent identifies'")
+  @Column(length = 40, columnDefinition = "COMMENT 'Parent identifies'")
   @Getter
   @Setter
   private String parentId;

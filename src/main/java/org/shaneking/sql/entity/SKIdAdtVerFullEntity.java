@@ -22,7 +22,7 @@ public class SKIdAdtVerFullEntity<J> extends SKIdAdtVerEntity<J> {
   @Setter
   private String crtDateTime;
 
-  @Column(length = 51, updatable = false, columnDefinition = "COMMENT 'The creator of record'")
+  @Column(length = 40, updatable = false, columnDefinition = "COMMENT 'The creator of record'")
   @Getter
   @Setter
   private String crtUserId;
@@ -35,7 +35,7 @@ public class SKIdAdtVerFullEntity<J> extends SKIdAdtVerEntity<J> {
   @Setter
   private String delDateTime;
 
-  @Column(length = 51, columnDefinition = "COMMENT 'The deleted operator of record'")
+  @Column(length = 40, columnDefinition = "COMMENT 'The deleted operator of record'")
   @Getter
   @Setter
   private String delUserId;

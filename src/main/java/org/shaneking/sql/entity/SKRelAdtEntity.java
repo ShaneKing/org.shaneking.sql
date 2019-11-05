@@ -34,7 +34,7 @@ public class SKRelAdtEntity<J> extends SKIdEntity<J> {
   @Setter
   private String rmvDateTime;
 
-  @Column(length = 51, columnDefinition = "COMMENT 'The removed operator of record'")
+  @Column(length = 40, columnDefinition = "COMMENT 'The removed operator of record'")
   @Getter
   @Setter
   private String rmvUserId;
