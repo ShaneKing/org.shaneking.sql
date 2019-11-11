@@ -24,7 +24,7 @@ public class SKEntitySetterTest extends SKUnit {
 
   @Test
   public void testSetterSKL10nAdtVerFullEntity() {
-    skPrint(new PrepareSKL10nAdtVerFullEntity().setAddZone("+0800").setDelZone("+0800").setModZone("+0800"));
+    skPrint(new PrepareSKL10nAdtVerFullEntity().setCrtZone("+0800").setDelZone("+0800").setModZone("+0800"));
   }
 
   @Test

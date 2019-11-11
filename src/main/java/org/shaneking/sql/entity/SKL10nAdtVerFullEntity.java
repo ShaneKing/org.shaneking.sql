@@ -25,7 +25,7 @@ public class SKL10nAdtVerFullEntity<J> extends SKIdAdtVerFullEntity<J> {
   @Column(length = 10, columnDefinition = "COMMENT 'The creation time zone of record'")
   @Getter
   @Setter
-  private String addZone;
+  private String crtZone;
 
   /**
    * @see org.shaneking.skava.ling.util.Date0#H_MI_S

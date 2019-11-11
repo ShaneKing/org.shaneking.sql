@@ -5,7 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 
-public class SKTreeIdAdtVerEntity<J> extends SKIdAdtVerEntity<J> {
+public class SKTreeAdtEntity<J> extends SKIdAdtEntity<J> {
   @Column(columnDefinition = "COMMENT 'Node description'")
   @Getter
   @Setter
