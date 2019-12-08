@@ -3,7 +3,7 @@ package sktest.sql.entity.prepare;
 import lombok.NonNull;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import org.shaneking.skava.ling.lang.Integer0;
+import org.shaneking.skava.lang.Integer0;
 import org.shaneking.sql.OperationContent;
 import org.shaneking.sql.entity.SKIdAdtVerEntity;
 
@@ -13,7 +13,7 @@ import java.util.Map;
 
 @Accessors(chain = true)
 @Table
-@ToString(callSuper = true)
+@ToString
 public class PrepareSKIdAdtVerEntity extends SKIdAdtVerEntity<Map<String, OperationContent>> {
 
 

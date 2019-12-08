@@ -10,6 +10,6 @@ import java.util.Map;
 
 @Accessors(chain = true)
 @Table
-@ToString(callSuper = true)
+@ToString
 public class PrepareSKL10nAdtEntity extends SKL10nAdtEntity<Map<String, OperationContent>> {
 }

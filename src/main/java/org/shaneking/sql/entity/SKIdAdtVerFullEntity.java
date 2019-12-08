@@ -5,17 +5,17 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import org.shaneking.skava.ling.lang.String0;
-import org.shaneking.skava.ling.util.Date0;
+import org.shaneking.skava.lang.String0;
+import org.shaneking.skava.util.Date0;
 
 import javax.persistence.Column;
 
 @Accessors(chain = true)
-@ToString(callSuper = true)
+@ToString
 public class SKIdAdtVerFullEntity<J> extends SKIdAdtVerEntity<J> {
 
   /**
-   * @see org.shaneking.skava.ling.util.Date0#DATE_TIME
+   * @see org.shaneking.skava.util.Date0#DATE_TIME
    */
   @Column(length = 20, updatable = false, columnDefinition = "COMMENT 'The creation time of record'")
   @Getter
@@ -28,7 +28,7 @@ public class SKIdAdtVerFullEntity<J> extends SKIdAdtVerEntity<J> {
   private String crtUserId;
 
   /**
-   * @see org.shaneking.skava.ling.util.Date0#DATE_TIME
+   * @see org.shaneking.skava.util.Date0#DATE_TIME
    */
   @Column(length = 20, columnDefinition = "COMMENT 'The deleted time of record'")
   @Getter

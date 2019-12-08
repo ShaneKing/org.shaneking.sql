@@ -1,7 +1,7 @@
 package org.shaneking.sql;
 
 import lombok.NonNull;
-import org.shaneking.skava.ling.lang.String0;
+import org.shaneking.skava.lang.String0;
 
 public class Keyword0 {
   public static final String COMMENT4ANNOTATION = "COMMENT";

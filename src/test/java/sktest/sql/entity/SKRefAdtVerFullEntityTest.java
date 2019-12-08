@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.shaneking.skava.t3.jackson.OM3;
+import org.shaneking.jackson.databind.OM3;
 import sktest.sql.SKUnit;
 import sktest.sql.entity.prepare.PrepareSKRefAdtVerFullEntity;
 

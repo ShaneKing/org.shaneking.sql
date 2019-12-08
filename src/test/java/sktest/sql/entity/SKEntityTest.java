@@ -7,9 +7,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.shaneking.skava.ling.lang.String0;
-import org.shaneking.skava.sk.collect.Tuple;
-import org.shaneking.skava.t3.jackson.OM3;
+import org.shaneking.jackson.databind.OM3;
+import org.shaneking.skava.lang.String0;
+import org.shaneking.skava.persistence.Tuple;
 import sktest.sql.SKUnit;
 import sktest.sql.entity.prepare.PrepareSKEntity;
 

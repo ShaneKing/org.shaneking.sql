@@ -5,13 +5,13 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import org.shaneking.skava.ling.lang.String0;
-import org.shaneking.skava.ling.util.Date0;
+import org.shaneking.skava.lang.String0;
+import org.shaneking.skava.util.Date0;
 
 import javax.persistence.Column;
 
 @Accessors(chain = true)
-@ToString(callSuper = true)
+@ToString
 public class SKIdAdtEntity<J> extends SKIdEntity<J> {
 
   @Column(length = 1, columnDefinition = "COMMENT 'The logic deleted status of record {Y:logic deleted,N:logic exist(default)}'")
@@ -20,7 +20,7 @@ public class SKIdAdtEntity<J> extends SKIdEntity<J> {
   private String deleted = String0.N;
 
   /**
-   * @see org.shaneking.skava.ling.util.Date0#DATE_TIME
+   * @see org.shaneking.skava.util.Date0#DATE_TIME
    */
   @Column(length = 20, columnDefinition = "COMMENT 'The last modification date time of record'")
   @Getter

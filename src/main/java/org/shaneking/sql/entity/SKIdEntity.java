@@ -5,13 +5,13 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import org.shaneking.skava.ling.lang.String0;
+import org.shaneking.skava.lang.String0;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 
 @Accessors(chain = true)
-@ToString(callSuper = true)
+@ToString
 public class SKIdEntity<J> extends SKEntity<J> {
 
   //System.currentTimeMillis()-UUID0.l19()=13+1+19=33=UUID0.cMl33()

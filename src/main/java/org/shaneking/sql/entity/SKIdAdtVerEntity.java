@@ -5,13 +5,13 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import org.shaneking.skava.ling.lang.Integer0;
+import org.shaneking.skava.lang.Integer0;
 
 import javax.persistence.Column;
 import javax.persistence.Version;
 
 @Accessors(chain = true)
-@ToString(callSuper = true)
+@ToString
 public class SKIdAdtVerEntity<J> extends SKIdAdtEntity<J> {
 
   @Column(nullable = false, columnDefinition = "COMMENT 'Version for optimistic locking'")

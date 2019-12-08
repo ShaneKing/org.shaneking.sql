@@ -1,7 +1,7 @@
 package sktest.sql.entity;
 
 import org.junit.Test;
-import org.shaneking.skava.ling.util.Date0;
+import org.shaneking.skava.util.Date0;
 import sktest.sql.SKUnit;
 import sktest.sql.entity.prepare.*;
 

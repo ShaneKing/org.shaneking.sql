@@ -1,16 +1,10 @@
-/*
- * @(#)SKRefAdtVerFullEntity.java		Created at 2017/9/10
- *
- * Copyright (c) ShaneKing All rights reserved.
- * ShaneKing PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- */
 package org.shaneking.sql.entity;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import org.shaneking.skava.ling.lang.String0;
+import org.shaneking.skava.lang.String0;
 
 import javax.persistence.Column;
 
@@ -18,7 +12,7 @@ import javax.persistence.Column;
  * Relation Entity
  */
 @Accessors(chain = true)
-@ToString(callSuper = true)
+@ToString
 public class SKRelAdtEntity<J> extends SKIdEntity<J> {
 
   @Column(length = 1, columnDefinition = "COMMENT 'The logic removed status of record {Y:logic removed,N:logic exist(default)}'")
@@ -27,7 +21,7 @@ public class SKRelAdtEntity<J> extends SKIdEntity<J> {
   private String removed = String0.N;
 
   /**
-   * @see org.shaneking.skava.ling.util.Date0#DATE_TIME
+   * @see org.shaneking.skava.util.Date0#DATE_TIME
    */
   @Column(length = 20, columnDefinition = "COMMENT 'The removed time of record'")
   @Getter

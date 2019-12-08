@@ -1,9 +1,3 @@
-/*
- * @(#)SKEntity.java		Created at 2017/9/10
- *
- * Copyright (c) ShaneKing All rights reserved.
- * ShaneKing PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- */
 package org.shaneking.sql.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -17,10 +11,10 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
-import org.shaneking.skava.ling.lang.Integer0;
-import org.shaneking.skava.ling.lang.String0;
-import org.shaneking.skava.ling.lang.String20;
-import org.shaneking.skava.sk.persistence.Tuple;
+import org.shaneking.skava.lang.Integer0;
+import org.shaneking.skava.lang.String0;
+import org.shaneking.skava.lang.String20;
+import org.shaneking.skava.persistence.Tuple;
 import org.shaneking.sql.Keyword0;
 import org.shaneking.sql.OperationContent;
 import org.shaneking.sql.PageHelper;
@@ -230,7 +224,7 @@ public class SKEntity<J> {
         if (column != null) {
           this.getColumnMap().put(field.getName(), column);
           this.getFieldMap().put(field.getName(), field);
-          this.getDbColumnMap().put(field.getName(), Strings.isNullOrEmpty(column.name()) ? String0.upper2lower(field.getName()) : column.name());
+          this.getDbColumnMap().put(field.getName(), Strings.isNullOrEmpty(column.name()) ? String0.field2DbColumn(field.getName()) : column.name());
           if (this.getFieldNameList().indexOf(field.getName()) == -1) {
             this.getFieldNameList().add(field.getName());
           }
@@ -250,7 +244,7 @@ public class SKEntity<J> {
       this.setJavaTable(this.getClass().getAnnotation(Table.class));
     }
     if (Strings.isNullOrEmpty(this.getJavaTable().name())) {
-      String classTableName = String0.upper2lower(Lists.reverse(Lists.newArrayList(this.getClass().getName().split(String20.BACKSLASH_DOT))).get(0));
+      String classTableName = String0.field2DbColumn(Lists.reverse(Lists.newArrayList(this.getClass().getName().split(String20.BACKSLASH_DOT))).get(0));
       this.setDbTableName("t" + (classTableName.startsWith(String0.UNDERLINE) ? classTableName : String0.UNDERLINE + classTableName));
     } else {
       this.setDbTableName(this.getJavaTable().name());

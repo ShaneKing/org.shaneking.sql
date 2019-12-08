@@ -12,7 +12,7 @@ import java.util.Map;
 
 @Accessors(chain = true)
 @Table
-@ToString(callSuper = true)
+@ToString
 public class PrepareSKRefAdtVerFullEntity extends SKRefAdtVerFullEntity<Map<String, OperationContent>> {
 
   @Column(nullable = false)

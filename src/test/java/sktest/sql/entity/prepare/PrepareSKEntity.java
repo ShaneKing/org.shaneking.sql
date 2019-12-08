@@ -12,7 +12,7 @@ import java.util.Map;
 
 @Accessors(chain = true)
 @Table(schema = "sktest1_schema", name = "sktest1_table", uniqueConstraints = {@UniqueConstraint(columnNames = {"has_length", "not_null_col"})})
-@ToString(callSuper = true)
+@ToString
 public class PrepareSKEntity extends SKEntity<Map<String, OperationContent>> {
 
   @Column(length = 40)
@@ -27,7 +27,7 @@ public class PrepareSKEntity extends SKEntity<Map<String, OperationContent>> {
   private String deleted;
 
   /**
-   * @see org.shaneking.skava.ling.util.Date0#DATE_TIME
+   * @see org.shaneking.skava.util.Date0#DATE_TIME
    */
   @Column(length = 20, columnDefinition = "COMMENT 'The last modification time of record'")
   @Getter

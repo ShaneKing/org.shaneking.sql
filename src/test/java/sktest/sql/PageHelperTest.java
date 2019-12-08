@@ -4,8 +4,8 @@ import com.google.common.io.Files;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.shaneking.skava.ling.lang.Integer0;
-import org.shaneking.skava.t3.jackson.OM3;
+import org.shaneking.jackson.databind.OM3;
+import org.shaneking.skava.lang.Integer0;
 import org.shaneking.sql.PageHelper;
 import sktest.sql.prepare.PrepareSKEntityPageHelper;
 

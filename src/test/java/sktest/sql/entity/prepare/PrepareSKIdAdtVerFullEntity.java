@@ -3,7 +3,7 @@ package sktest.sql.entity.prepare;
 import com.google.common.collect.Lists;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import org.shaneking.skava.ling.lang.String0;
+import org.shaneking.skava.lang.String0;
 import org.shaneking.sql.Keyword0;
 import org.shaneking.sql.OperationContent;
 import org.shaneking.sql.entity.SKIdAdtVerFullEntity;
@@ -14,7 +14,7 @@ import java.util.Map;
 
 @Accessors(chain = true)
 @Table
-@ToString(callSuper = true)
+@ToString
 public class PrepareSKIdAdtVerFullEntity extends SKIdAdtVerFullEntity<Map<String, OperationContent>> {
 
   @Override
