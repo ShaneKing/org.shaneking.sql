@@ -8,7 +8,7 @@ public class Keyword0 {
 
   public static final String ALTER_TABLE = "alter table";
   public static final String AND = "and";
-  public static final String AND_WITH_BLACK_PREFIX_WITH_BLACK_SUFFIX = String0.BLACK + AND + String0.BLACK;
+  public static final String AND_WITH_BLACK_PREFIX_WITH_BLACK_SUFFIX = String0.BLANK + AND + String0.BLANK;
   public static final String ADD_UNIQUE_INDEX = "add unique index";
   public static final String BETWEEN = "between";
   public static final String COMMENT = "comment";
@@ -22,7 +22,7 @@ public class Keyword0 {
   public static final String INSERT_INFO = "insert into";
   public static final String LIMIT = "limit";
   public static final String NOT_NULL = "not null";
-  public static final String NOT_NULL_WITH_BLACK_PREFIX = String0.BLACK + NOT_NULL;
+  public static final String NOT_NULL_WITH_BLACK_PREFIX = String0.BLANK + NOT_NULL;
   public static final String OFFSET = "offset";
   public static final String ORDER_BY = "order by";
   public static final String PRIMARY_KEY = "primary key";
@@ -37,6 +37,6 @@ public class Keyword0 {
   public static final String TYPE_VARCHAR = "varchar";
 
   public static String wrapBlack(@NonNull String keyword) {
-    return String0.BLACK + keyword + String0.BLACK;
+    return String0.BLANK + keyword + String0.BLANK;
   }
 }

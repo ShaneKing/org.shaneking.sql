@@ -14,10 +14,10 @@ import javax.persistence.Id;
 @ToString(callSuper = true)
 public class SKIdEntity<J> extends SKEntity<J> {
 
-  //System.currentTimeMillis()-UUID0.l19()=13+1+19=33
-  //System.currentTimeMillis()-SK.uuidShort()=13+1+22=36
-  //Date0.on().datetimes()-UUID0.l19()=17+1+19=37
-  //Date0.on().datetimes()-SK.l22()=17+1+22=40
+  //System.currentTimeMillis()-UUID0.l19()=13+1+19=33=UUID0.cMl33()
+  //Date.now()-SK.l22()=13+1+22=36=SK.cMl40()
+  //Date0.on().datetimes()-UUID0.l19()=17+1+19=37=UUID0.dMl37()
+  //Date0.on().datetimes()-SK.l22()=17+1+22=40=SK.cMl40()
   //Date0.on().datetimes()_UUID.randomUUID()=17+1+36=54
   @Column(length = 40, updatable = false, columnDefinition = "COMMENT 'Uniquely identifies'")
   @Getter

@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.shaneking.skava.ling.lang.Integer0;
 import org.shaneking.skava.ling.lang.String0;
 import org.shaneking.skava.ling.lang.String20;
-import org.shaneking.skava.sk.collect.Tuple;
+import org.shaneking.skava.sk.persistence.Tuple;
 import org.shaneking.sql.Keyword0;
 import org.shaneking.sql.OperationContent;
 import org.shaneking.sql.PageHelper;
@@ -202,16 +202,16 @@ public class SKEntity<J> {
   public void fillOc(@NonNull List<String> list, @NonNull List<Object> objectList, OperationContent oc, String leftExpr) {
     if (Keyword0.BETWEEN.equalsIgnoreCase(oc.getOp())) {
       if (oc.getCl() != null && oc.getCl().size() == 2) {
-        list.add(leftExpr + String0.BLACK + oc.getOp() + String0.BLACK + String0.QUESTION + String0.BLACK + Keyword0.AND + String0.BLACK + String0.QUESTION);
+        list.add(leftExpr + String0.BLANK + oc.getOp() + String0.BLANK + String0.QUESTION + String0.BLANK + Keyword0.AND + String0.BLANK + String0.QUESTION);
         objectList.addAll(oc.getCl());
       }
     } else if (Keyword0.IN.equalsIgnoreCase(oc.getOp())) {
       if (oc.getCl() != null && oc.getCl().size() > 0) {
-        list.add(leftExpr + String0.BLACK + oc.getOp() + String0.BLACK + String0.OPEN_PARENTHESIS + Joiner.on(String0.COMMA).join(Collections.nCopies(oc.getCl().size(), String0.QUESTION)) + String0.CLOSE_PARENTHESIS);
+        list.add(leftExpr + String0.BLANK + oc.getOp() + String0.BLANK + String0.OPEN_PARENTHESIS + Joiner.on(String0.COMMA).join(Collections.nCopies(oc.getCl().size(), String0.QUESTION)) + String0.CLOSE_PARENTHESIS);
         objectList.addAll(oc.getCl());
       }
     } else {
-      list.add(leftExpr + String0.BLACK + oc.getOp() + String0.BLACK + String0.QUESTION);
+      list.add(leftExpr + String0.BLANK + oc.getOp() + String0.BLANK + String0.QUESTION);
       objectList.add(Strings.nullToEmpty(oc.getBw()) + oc.getCs() + Strings.nullToEmpty(oc.getEw()));
     }
   }
@@ -317,12 +317,12 @@ public class SKEntity<J> {
 
   public Tuple.Pair<String, List<Object>> deleteByIdSql() {
     Tuple.Pair<List<String>, List<Object>> pair = this.appendWhereByFields2Sql(Lists.newArrayList(Keyword0.DELETE_FROM, this.fullTableName()), Lists.newArrayList(), this.getIdFieldNameList());
-    return Tuple.of(Joiner.on(String0.BLACK).join(Tuple.getFirst(pair)), Tuple.getSecond(pair));
+    return Tuple.of(Joiner.on(String0.BLANK).join(Tuple.getFirst(pair)), Tuple.getSecond(pair));
   }
 
   public Tuple.Pair<String, List<Object>> deleteByIdAndVersionSql() {
     Tuple.Pair<List<String>, List<Object>> pair = this.appendVersion2ByIdSql(this.appendWhereByFields2Sql(Lists.newArrayList(Keyword0.DELETE_FROM, this.fullTableName()), Lists.newArrayList(), this.getIdFieldNameList()));
-    return Tuple.of(Joiner.on(String0.BLACK).join(Tuple.getFirst(pair)), Tuple.getSecond(pair));
+    return Tuple.of(Joiner.on(String0.BLANK).join(Tuple.getFirst(pair)), Tuple.getSecond(pair));
   }
 
   /**
@@ -330,7 +330,7 @@ public class SKEntity<J> {
    */
   public Tuple.Pair<String, List<Object>> deleteSql() {
     Tuple.Pair<List<String>, List<Object>> pair = this.appendWhereByFields2Sql(Lists.newArrayList(Keyword0.DELETE_FROM, this.fullTableName()), Lists.newArrayList(), this.getFieldNameList());
-    return Tuple.of(Joiner.on(String0.BLACK).join(Tuple.getFirst(pair)), Tuple.getSecond(pair));
+    return Tuple.of(Joiner.on(String0.BLANK).join(Tuple.getFirst(pair)), Tuple.getSecond(pair));
   }
 
   public Tuple.Pair<String, List<Object>> insertSql() {
@@ -346,7 +346,7 @@ public class SKEntity<J> {
     sqlList.add(Keyword0.VALUES);
     sqlList.add(String0.OPEN_PARENTHESIS + Strings.repeat(String0.COMMA + String0.QUESTION, insertList.size()).substring(1) + String0.CLOSE_PARENTHESIS);
 
-    return Tuple.of(Joiner.on(String0.BLACK).join(sqlList), rtnObjectList);
+    return Tuple.of(Joiner.on(String0.BLANK).join(sqlList), rtnObjectList);
   }
 
   public void insertStatement(@NonNull List<String> insertList, @NonNull List<Object> objectList) {
@@ -367,7 +367,7 @@ public class SKEntity<J> {
 
   public Tuple.Pair<String, List<Object>> selectCountSql() {
     Tuple.Pair<List<String>, List<Object>> pair = this.selectSql(Lists.newArrayList(Keyword0.COUNT_1_), Lists.newArrayList());
-    return Tuple.of(Joiner.on(String0.BLACK).join(Tuple.getFirst(pair)), Tuple.getSecond(pair));
+    return Tuple.of(Joiner.on(String0.BLANK).join(Tuple.getFirst(pair)), Tuple.getSecond(pair));
   }
 
   public Tuple.Pair<String, List<Object>> selectSql() {
@@ -377,7 +377,7 @@ public class SKEntity<J> {
     selectStatement(selectList, rtnObjectList);
 
     Tuple.Pair<List<String>, List<Object>> pair = this.selectSql(selectList, rtnObjectList);
-    return Tuple.of(Joiner.on(String0.BLACK).join(Tuple.getFirst(pair)), Tuple.getSecond(pair));
+    return Tuple.of(Joiner.on(String0.BLANK).join(Tuple.getFirst(pair)), Tuple.getSecond(pair));
   }
 
   public Tuple.Pair<List<String>, List<Object>> selectSql(@NonNull List<String> selectList, @NonNull List<Object> selectObjectList) {
@@ -431,7 +431,7 @@ public class SKEntity<J> {
     List<String> limitAndOffsetList = Lists.newArrayList();
     limitAndOffsetStatement(limitAndOffsetList, rtnObjectList);
     if (limitAndOffsetList.size() > 0) {
-      sqlList.add(Joiner.on(String0.BLACK).join(limitAndOffsetList));
+      sqlList.add(Joiner.on(String0.BLANK).join(limitAndOffsetList));
     }
 
     return Tuple.of(sqlList, rtnObjectList);
@@ -443,7 +443,7 @@ public class SKEntity<J> {
 
   public Tuple.Pair<String, List<Object>> updateByIdSql() {
     Tuple.Pair<List<String>, List<Object>> pair = this.updateByIdSqlList();
-    return Tuple.of(Joiner.on(String0.BLACK).join(Tuple.getFirst(pair)), Tuple.getSecond(pair));
+    return Tuple.of(Joiner.on(String0.BLANK).join(Tuple.getFirst(pair)), Tuple.getSecond(pair));
   }
 
   private Tuple.Pair<List<String>, List<Object>> updateByIdSqlList() {
@@ -470,7 +470,7 @@ public class SKEntity<J> {
 
   public Tuple.Pair<String, List<Object>> updateByIdAndVersionSql() {
     Tuple.Pair<List<String>, List<Object>> pair = this.appendVersion2ByIdSql(this.updateByIdSqlList());
-    return Tuple.of(Joiner.on(String0.BLACK).join(Tuple.getFirst(pair)), Tuple.getSecond(pair));
+    return Tuple.of(Joiner.on(String0.BLANK).join(Tuple.getFirst(pair)), Tuple.getSecond(pair));
   }
 
   public void updateStatement(@NonNull List<String> updateList, @NonNull List<Object> objectList) {
