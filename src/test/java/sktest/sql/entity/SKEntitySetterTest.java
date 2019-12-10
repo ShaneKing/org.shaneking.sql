@@ -1,6 +1,8 @@
 package sktest.sql.entity;
 
+import org.junit.Assert;
 import org.junit.Test;
+import org.shaneking.jackson.databind.OM3;
 import org.shaneking.skava.util.Date0;
 import sktest.sql.SKUnit;
 import sktest.sql.entity.prepare.*;
@@ -14,32 +16,32 @@ public class SKEntitySetterTest extends SKUnit {
 
   @Test
   public void testSetterSKL10nAdtEntity() {
-    skPrint(new PrepareSKL10nAdtEntity().setModZone("+0800"));
+    Assert.assertEquals("{\"deleted\":\"N\",\"modZone\":\"+0800\"}", OM3.writeValueAsString(new PrepareSKL10nAdtEntity().setModZone("+0800")));
   }
 
   @Test
   public void testSetterSKL10nAdtVerEntity() {
-    skPrint(new PrepareSKL10nAdtVerEntity().setModZone("+0800"));
+    Assert.assertEquals("{\"deleted\":\"N\",\"modZone\":\"+0800\"}", OM3.writeValueAsString(new PrepareSKL10nAdtVerEntity().setModZone("+0800")));
   }
 
   @Test
   public void testSetterSKL10nAdtVerFullEntity() {
-    skPrint(new PrepareSKL10nAdtVerFullEntity().setCrtZone("+0800").setDelZone("+0800").setModZone("+0800"));
+    Assert.assertEquals("{\"deleted\":\"N\",\"crtZone\":\"+0800\",\"delZone\":\"+0800\",\"modZone\":\"+0800\"}", OM3.writeValueAsString(new PrepareSKL10nAdtVerFullEntity().setCrtZone("+0800").setDelZone("+0800").setModZone("+0800")));
   }
 
   @Test
   public void testSetterSKRefAdtEntity() {
-    skPrint(new PrepareSKRefAdtEntity().setRefType("sktest1_ref_type").setRefId("sktest1_ref_id"));
+    Assert.assertEquals("{\"deleted\":\"N\",\"refId\":\"sktest1_ref_id\",\"refType\":\"sktest1_ref_type\"}", OM3.writeValueAsString(new PrepareSKRefAdtEntity().setRefType("sktest1_ref_type").setRefId("sktest1_ref_id")));
   }
 
   @Test
   public void testSetterSKRefAdtVerEntity() {
-    skPrint(new PrepareSKRefAdtVerEntity().setRefType("sktest1_ref_type").setRefId("sktest1_ref_id"));
+    Assert.assertEquals("{\"deleted\":\"N\",\"refId\":\"sktest1_ref_id\",\"refType\":\"sktest1_ref_type\"}", OM3.writeValueAsString(new PrepareSKRefAdtVerEntity().setRefType("sktest1_ref_type").setRefId("sktest1_ref_id")));
   }
 
   @Test
   public void testSetterSKRefAdtVerFullEntity() {
-    skPrint(new PrepareSKRefAdtVerFullEntity().setRefType("sktest1_ref_type").setRefId("sktest1_ref_id"));
+    Assert.assertEquals("{\"deleted\":\"N\",\"refId\":\"sktest1_ref_id\",\"refType\":\"sktest1_ref_type\"}", OM3.writeValueAsString(new PrepareSKRefAdtVerFullEntity().setRefType("sktest1_ref_type").setRefId("sktest1_ref_id")));
   }
 
 }

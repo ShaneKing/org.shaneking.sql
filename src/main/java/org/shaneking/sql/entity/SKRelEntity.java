@@ -13,7 +13,7 @@ import javax.persistence.Column;
  */
 @Accessors(chain = true)
 @ToString
-public class SKRelAdtEntity<J> extends SKIdAdtEntity<J> {
+public class SKRelEntity<J> extends SKIdEntity<J> {
 
   @Column(length = 1, columnDefinition = "COMMENT 'The logic removed status of record {Y:logic removed,N:logic exist(default)}'")
   @Getter
