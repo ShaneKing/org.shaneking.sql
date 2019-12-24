@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.shaneking</groupId>
     <artifactId>org.shaneking</artifactId>
-    <version>0.2.1</version>
+    <version>0.10.0</version>
     <relativePath>../org.shaneking</relativePath>
   </parent>
 
@@ -15,7 +15,7 @@
   <packaging>jar</packaging>
 
   <name>Sql for ShaneKing</name>
-  <description>Automatic generation of scripts and parameters for ShaneKing</description>
+  <description>Sql For ShaneKing</description>
   <url>https://github.com/ShaneKing/org.shaneking.sql</url>
   <inceptionYear>2011-2019</inceptionYear>
 
@@ -81,24 +81,8 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-annotations</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-    </dependency>
-    <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>commons-codec</groupId>
-      <artifactId>commons-codec</artifactId>
     </dependency>
     <dependency>
       <groupId>javax.persistence</groupId>
@@ -110,8 +94,17 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
     </dependency>
     <dependency>
       <groupId>org.shaneking</groupId>
@@ -119,8 +112,9 @@
       <version>${project.parent.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
+      <groupId>org.shaneking</groupId>
+      <artifactId>org.shaneking.jackson</artifactId>
+      <version>${project.parent.version}</version>
     </dependency>
   </dependencies>
   <build>

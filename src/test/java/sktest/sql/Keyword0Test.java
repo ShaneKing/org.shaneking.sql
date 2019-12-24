@@ -10,4 +10,9 @@ public class Keyword0Test extends SKUnit {
   public void newInstance() {
     Assert.assertNotNull(new Keyword0().toString());
   }
+
+  @Test
+  public void wrapBlack() {
+    Assert.assertEquals(" a ", Keyword0.wrapBlack("a"));
+  }
 }
