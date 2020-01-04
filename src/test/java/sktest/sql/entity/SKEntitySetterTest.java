@@ -16,17 +16,17 @@ public class SKEntitySetterTest extends SKUnit {
 
   @Test
   public void testSetterSKL10nAdtEntity() {
-    Assert.assertEquals("{\"deleted\":\"N\",\"modZone\":\"+0800\"}", OM3.writeValueAsString(new PrepareSKL10nAdtEntity().setModZone("+0800")));
+    Assert.assertEquals("{\"deleted\":\"N\",\"modZone\":\"+0800\"}", OM3.writeValueAsString(new PrepareSKZoneAdtEntity().setModZone("+0800")));
   }
 
   @Test
   public void testSetterSKL10nAdtVerEntity() {
-    Assert.assertEquals("{\"deleted\":\"N\",\"modZone\":\"+0800\"}", OM3.writeValueAsString(new PrepareSKL10nAdtVerEntity().setModZone("+0800")));
+    Assert.assertEquals("{\"deleted\":\"N\",\"modZone\":\"+0800\"}", OM3.writeValueAsString(new PrepareSKZoneAdtVerEntity().setModZone("+0800")));
   }
 
   @Test
   public void testSetterSKL10nAdtVerFullEntity() {
-    Assert.assertEquals("{\"deleted\":\"N\",\"crtZone\":\"+0800\",\"delZone\":\"+0800\",\"modZone\":\"+0800\"}", OM3.writeValueAsString(new PrepareSKL10nAdtVerFullEntity().setCrtZone("+0800").setDelZone("+0800").setModZone("+0800")));
+    Assert.assertEquals("{\"deleted\":\"N\",\"crtZone\":\"+0800\",\"delZone\":\"+0800\",\"modZone\":\"+0800\"}", OM3.writeValueAsString(new PrepareSKZoneAdtVerFullEntity().setCrtZone("+0800").setDelZone("+0800").setModZone("+0800")));
   }
 
   @Test
