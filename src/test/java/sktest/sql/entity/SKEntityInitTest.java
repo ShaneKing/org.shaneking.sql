@@ -27,17 +27,17 @@ public class SKEntityInitTest extends SKUnit {
   }
 
   @Test
-  public void testInitSKL10nAdtEntity() {
+  public void testInitSKZoneAdtEntity() {
     skPrint(new PrepareSKZoneAdtEntity().initWithUserIdAndId(SKIdAdtVerEntityTest.SKTEST1_USER_ID, SKEntityTest.SKTEST1_ID));
   }
 
   @Test
-  public void testInitSKL10nAdtVerEntity() {
+  public void testInitSKZoneAdtVerEntity() {
     skPrint(new PrepareSKZoneAdtVerEntity().initWithUserIdAndId(SKIdAdtVerEntityTest.SKTEST1_USER_ID, SKEntityTest.SKTEST1_ID));
   }
 
   @Test
-  public void testInitSKL10nAdtVerFullEntity() {
+  public void testInitSKZoneAdtVerFullEntity() {
     skPrint(new PrepareSKZoneAdtVerFullEntity().initWithUserIdAndId(SKIdAdtVerEntityTest.SKTEST1_USER_ID, SKEntityTest.SKTEST1_ID));
   }
 

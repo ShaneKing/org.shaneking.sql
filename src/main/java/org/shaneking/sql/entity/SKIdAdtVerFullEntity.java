@@ -30,19 +30,19 @@ public class SKIdAdtVerFullEntity<J> extends SKIdAdtVerEntity<J> {
   /**
    * @see org.shaneking.skava.util.Date0#DATE_TIME
    */
-  @Column(length = 20, columnDefinition = "COMMENT 'The deleted time of record'")
+  @Column(length = 20, columnDefinition = "COMMENT 'The freezed time of record'")
   @Getter
   @Setter
-  private String delDateTime;
+  private String frzDateTime;
 
-  @Column(length = 40, columnDefinition = "COMMENT 'The deleted operator of record'")
+  @Column(length = 40, columnDefinition = "COMMENT 'The freezed operator of record'")
   @Getter
   @Setter
-  private String delUserId;
+  private String frzUserId;
 
   @Override
   public SKIdAdtVerFullEntity<J> initWithUserId(@NonNull String userId) {
-    this.initVer().initDeleted();
+    this.initVer().initFreezed();
     return this.setCrtDateTime(String0.null2empty2(this.getCrtDateTime(), Date0.on().dateTime())).setCrtUserId(String0.null2empty2(this.getCrtUserId(), userId));
   }
 

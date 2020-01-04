@@ -23,7 +23,7 @@ public class PrepareSKIdAdtVerFullEntity extends SKIdAdtVerFullEntity<Map<String
       return Lists.newArrayList(new OperationContent().setOp(Keyword0.IN).setCl(Lists.newArrayList("1", "a", ",")));
     } else if ("crtDateTime".equals(fieldName)) {
       return Lists.newArrayList(new OperationContent().setOp(Keyword0.BETWEEN).setCl(Lists.newArrayList("1949-10-01")));
-    } else if ("delDateTime".equals(fieldName)) {
+    } else if ("frzDateTime".equals(fieldName)) {
       return Lists.newArrayList(new OperationContent().setOp(Keyword0.BETWEEN).setCl(Lists.newArrayList("1949-10-01", "1996-07")));
     } else if ("modDateTime".equals(fieldName)) {
       return Lists.newArrayList(new OperationContent().setBw(String0.PERCENT).setCs("1949-10-01").setEw(String0.PERCENT).setOp("like"));

@@ -1,1 +1,1 @@
-["select id,deleted,mod_date_time,mod_user_id,ver,has_length,no_get_method,not_null_col,unique_col,re_name_col,long_text from sktest1_schema.sktest1_table where id=? and deleted=? and ver=? and has_length=? and re_name_col=? limit 30 offset 0",["sktest1_id","Y",1,"hasLength","reName"]]
+["select id,freezed,mod_date_time,mod_user_id,ver,has_length,no_get_method,not_null_col,unique_col,re_name_col,long_text from sktest1_schema.sktest1_table where id=? and freezed=? and ver=? and has_length=? and re_name_col=? limit 30 offset 0",["sktest1_id","Y",1,"hasLength","reName"]]

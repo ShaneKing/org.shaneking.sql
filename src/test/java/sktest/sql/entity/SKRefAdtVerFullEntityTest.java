@@ -19,7 +19,7 @@ public class SKRefAdtVerFullEntityTest extends SKUnit {
 
   @Test
   public void setter() {
-    Assert.assertEquals("{\"deleted\":\"N\",\"refId\":\"sktest1_id\",\"refType\":\"sktest1_ref_type\"}", OM3.writeValueAsString(new PrepareSKRefAdtVerFullEntity().setRefId(SKEntityTest.SKTEST1_ID).setRefType("sktest1_ref_type")));
+    Assert.assertEquals("{\"refId\":\"sktest1_id\",\"refType\":\"sktest1_ref_type\"}", OM3.writeValueAsString(new PrepareSKRefAdtVerFullEntity().setRefId(SKEntityTest.SKTEST1_ID).setRefType("sktest1_ref_type")));
   }
 
   @Test
@@ -33,6 +33,6 @@ public class SKRefAdtVerFullEntityTest extends SKUnit {
 
     prepareEntity.mapRow(resultSet);
 
-    Assert.assertEquals("{\"id\":\"sktest1_id\",\"deleted\":\"N\",\"ver\":1}", OM3.writeValueAsString(prepareEntity));
+    Assert.assertEquals("{\"id\":\"sktest1_id\",\"ver\":1}", OM3.writeValueAsString(prepareEntity));
   }
 }

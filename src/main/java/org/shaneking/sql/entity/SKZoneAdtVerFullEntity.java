@@ -24,10 +24,10 @@ public class SKZoneAdtVerFullEntity<J> extends SKIdAdtVerFullEntity<J> {
   /**
    * @see org.shaneking.skava.util.Date0#H_MI_S
    */
-  @Column(length = 10, columnDefinition = "COMMENT 'The deleted time zone of record'")
+  @Column(length = 10, columnDefinition = "COMMENT 'The freezed time zone of record'")
   @Getter
   @Setter
-  private String delZone;
+  private String frzZone;
 
   /**
    * @see org.shaneking.skava.util.Date0#H_MI_S

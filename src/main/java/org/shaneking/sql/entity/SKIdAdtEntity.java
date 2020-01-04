@@ -14,10 +14,10 @@ import javax.persistence.Column;
 @ToString
 public class SKIdAdtEntity<J> extends SKIdEntity<J> {
 
-  @Column(length = 1, columnDefinition = "COMMENT 'The logic deleted status of record {Y:logic deleted,N:logic exist(default)}'")
+  @Column(length = 1, columnDefinition = "COMMENT 'The freeze status of record {Y:freezed,N:actived}'")
   @Getter
   @Setter
-  private String deleted = String0.N;
+  private String freezed;
 
   /**
    * @see org.shaneking.skava.util.Date0#DATE_TIME
@@ -32,12 +32,12 @@ public class SKIdAdtEntity<J> extends SKIdEntity<J> {
   @Setter
   private String modUserId;
 
-  public SKIdAdtEntity<J> initDeleted() {
-    return this.setDeleted(String0.null2empty2(this.getDeleted(), String0.N));
+  public SKIdAdtEntity<J> initFreezed() {
+    return this.setFreezed(String0.null2empty2(this.getFreezed(), String0.N));
   }
 
   public SKIdAdtEntity<J> initWithUserId(@NonNull String userId) {
-    return this.initDeleted().setModDateTime(String0.null2empty2(this.getModDateTime(), Date0.on().dateTime())).setModUserId(String0.null2empty2(this.getModUserId(), userId));
+    return this.initFreezed().setModDateTime(String0.null2empty2(this.getModDateTime(), Date0.on().dateTime())).setModUserId(String0.null2empty2(this.getModUserId(), userId));
   }
 
   public SKIdAdtEntity<J> initWithUserIdAndId(@NonNull String userId, @NonNull String id) {

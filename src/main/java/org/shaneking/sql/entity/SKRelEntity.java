@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import org.shaneking.skava.lang.String0;
 
 import javax.persistence.Column;
 
@@ -15,21 +14,21 @@ import javax.persistence.Column;
 @ToString
 public class SKRelEntity<J> extends SKIdEntity<J> {
 
-  @Column(length = 1, columnDefinition = "COMMENT 'The logic removed status of record {Y:logic removed,N:logic exist(default)}'")
+  @Column(length = 1, columnDefinition = "COMMENT 'The freeze status of record {Y:freezed,N:actived}'")
   @Getter
   @Setter
-  private String removed = String0.N;
+  private String freezed;
 
   /**
    * @see org.shaneking.skava.util.Date0#DATE_TIME
    */
-  @Column(length = 20, columnDefinition = "COMMENT 'The removed time of record'")
+  @Column(length = 20, columnDefinition = "COMMENT 'The freezed time of record'")
   @Getter
   @Setter
-  private String rmvDateTime;
+  private String frzDateTime;
 
-  @Column(length = 40, columnDefinition = "COMMENT 'The removed operator of record'")
+  @Column(length = 40, columnDefinition = "COMMENT 'The freezed operator of record'")
   @Getter
   @Setter
-  private String rmvUserId;
+  private String frzUserId;
 }
