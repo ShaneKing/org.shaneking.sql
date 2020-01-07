@@ -1,7 +1,7 @@
 create table `sktest1_schema`.`sktest1_table` (
   `ver` int not null comment '',
   `id` varchar(40) not null comment '',
-  `freezed` varchar(1) comment 'The freeze status of record {Y:freezed,N:actived}',
+  `invalid` varchar(1) comment 'The invalid status of record {Y:invalid,N:valid(default)}',
   `mod_date_time` varchar(20) comment 'The last modification time of record',
   `mod_user_id` varchar(40) comment 'The last modified person of record',
   `has_length` varchar(10) comment '',

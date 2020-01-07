@@ -14,21 +14,21 @@ import javax.persistence.Column;
 @ToString
 public class SKRelEntity<J> extends SKIdEntity<J> {
 
-  @Column(length = 1, columnDefinition = "COMMENT 'The freeze status of record {Y:freezed,N:actived}'")
+  @Column(length = 1, columnDefinition = "COMMENT 'The invalid status of record {Y:invalid,N:valid(default)}'")
   @Getter
   @Setter
-  private String freezed;
+  private String invalid;
 
   /**
    * @see org.shaneking.skava.util.Date0#DATE_TIME
    */
-  @Column(length = 20, columnDefinition = "COMMENT 'The freezed time of record'")
+  @Column(length = 20, columnDefinition = "COMMENT 'The invalid time of record'")
   @Getter
   @Setter
-  private String frzDateTime;
+  private String ivdDateTime;
 
-  @Column(length = 40, columnDefinition = "COMMENT 'The freezed operator of record'")
+  @Column(length = 40, columnDefinition = "COMMENT 'The invalid operator of record'")
   @Getter
   @Setter
-  private String frzUserId;
+  private String ivdUserId;
 }

@@ -30,7 +30,7 @@ public class SKEntityTest extends SKUnit {
   //Parameterized step2:use step2 data to constructor object
   public SKEntityTest(String invalid, String id, Integer version, String hasLength, String noGetMethod, String withoutAnnotation, String reName) {
     super();
-    prepareEntity = new PrepareSKEntity().setFreezed(invalid).setId(id).setVer(version).setHasLength(hasLength).setNoGetMethod(noGetMethod).setWithoutAnnotation(withoutAnnotation).setReName(reName);
+    prepareEntity = new PrepareSKEntity().setInvalid(invalid).setId(id).setVer(version).setHasLength(hasLength).setNoGetMethod(noGetMethod).setWithoutAnnotation(withoutAnnotation).setReName(reName);
   }
 
   //Parameterized step2:static method return collection

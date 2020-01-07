@@ -11,7 +11,7 @@ public class SKEntitySetterTest extends SKUnit {
 
   @Test
   public void testSetterSKIdAdtVerFullEntity() {
-    skPrint(new PrepareSKIdAdtVerFullEntity().setCrtDateTime(Date0.on().dateTime()).setCrtUserId(SKIdAdtVerEntityTest.SKTEST1_USER_ID).setFrzDateTime(Date0.on().dateTime()).setFrzUserId(SKIdAdtVerEntityTest.SKTEST1_USER_ID));
+    skPrint(new PrepareSKIdAdtVerFullEntity().setCrtDateTime(Date0.on().dateTime()).setCrtUserId(SKIdAdtVerEntityTest.SKTEST1_USER_ID).setIvdDateTime(Date0.on().dateTime()).setIvdUserId(SKIdAdtVerEntityTest.SKTEST1_USER_ID));
   }
 
   @Test
@@ -26,7 +26,7 @@ public class SKEntitySetterTest extends SKUnit {
 
   @Test
   public void testSetterSKZoneAdtVerFullEntity() {
-    Assert.assertEquals("{\"crtZone\":\"+0800\",\"frzZone\":\"+0800\",\"modZone\":\"+0800\"}", OM3.writeValueAsString(new PrepareSKZoneAdtVerFullEntity().setCrtZone("+0800").setFrzZone("+0800").setModZone("+0800")));
+    Assert.assertEquals("{\"crtZone\":\"+0800\",\"ivdZone\":\"+0800\",\"modZone\":\"+0800\"}", OM3.writeValueAsString(new PrepareSKZoneAdtVerFullEntity().setCrtZone("+0800").setIvdZone("+0800").setModZone("+0800")));
   }
 
   @Test

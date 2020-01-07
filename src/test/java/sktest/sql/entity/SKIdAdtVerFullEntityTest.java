@@ -29,7 +29,7 @@ public class SKIdAdtVerFullEntityTest extends SKUnit {
   public SKIdAdtVerFullEntityTest(String invalid) {
     super();
     prepareEntity = new PrepareSKIdAdtVerFullEntity();
-    prepareEntity.setFreezed(invalid);
+    prepareEntity.setInvalid(invalid);
   }
 
   //Parameterized step2:static method return collection

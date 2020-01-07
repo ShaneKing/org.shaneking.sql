@@ -21,10 +21,10 @@ public class PrepareSKEntity extends SKEntity<Map<String, OperationContent>> {
   @Setter
   private String id;
 
-  @Column(length = 1, columnDefinition = "COMMENT 'The freeze status of record {Y:freezed,N:actived}'")
+  @Column(length = 1, columnDefinition = "COMMENT 'The invalid status of record {Y:invalid,N:valid(default)}'")
   @Getter
   @Setter
-  private String freezed;
+  private String invalid;
 
   /**
    * @see org.shaneking.skava.util.Date0#DATE_TIME
