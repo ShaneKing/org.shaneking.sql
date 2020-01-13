@@ -5,7 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 
-public class SKTreeIdEntity<J> extends SKIdEntity<J> {
+public abstract class SKTreeIdEntity<J> extends SKIdEntity<J> {
   public static final String NODE_TYPE__ROOT = "R";
   public static final String NODE_TYPE__BRANCH = "B";
   public static final String NODE_TYPE__LEAF = "L";

@@ -12,7 +12,7 @@ import javax.persistence.Id;
 
 @Accessors(chain = true)
 @ToString
-public class SKIdEntity<J> extends SKEntity<J> {
+public abstract class SKIdEntity<J> extends SKEntity<J> {
 
   //System.currentTimeMillis()-UUID0.l19()=13+1+19=33=UUID0.cMl33()
   //Date.now()-SK.l22()=13+1+22=36=SK.cMl40()

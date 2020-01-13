@@ -1,5 +1,6 @@
 package sktest.sql.entity.prepare;
 
+import com.google.common.collect.Lists;
 import lombok.NonNull;
 import lombok.ToString;
 import lombok.experimental.Accessors;
@@ -15,6 +16,17 @@ import java.util.Map;
 @Table
 @ToString
 public class PrepareSKIdAdtVerEntity extends SKIdAdtVerEntity<Map<String, OperationContent>> {
+  public List<OperationContent> findHavingOCs(@NonNull String fieldName) {
+    List<OperationContent> rtnList = Lists.newArrayList();
+    //implements by sub entity
+    return rtnList;
+  }
+
+  public List<OperationContent> findWhereOCs(@NonNull String fieldName) {
+    List<OperationContent> rtnList = Lists.newArrayList();
+    //implements by sub entity
+    return rtnList;
+  }
 
 
   @Override

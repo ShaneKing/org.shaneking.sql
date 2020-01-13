@@ -12,7 +12,7 @@ import javax.persistence.Column;
  */
 @Accessors(chain = true)
 @ToString
-public class SKZoneIdEntity<J> extends SKIdEntity<J> {
+public abstract class SKZoneIdEntity<J> extends SKIdEntity<J> {
 
   /**
    * @see org.shaneking.skava.util.Date0#H_MI_S

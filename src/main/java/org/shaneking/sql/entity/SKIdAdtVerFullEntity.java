@@ -12,7 +12,7 @@ import javax.persistence.Column;
 
 @Accessors(chain = true)
 @ToString
-public class SKIdAdtVerFullEntity<J> extends SKIdAdtVerEntity<J> {
+public abstract class SKIdAdtVerFullEntity<J> extends SKIdAdtVerEntity<J> {
 
   /**
    * @see org.shaneking.skava.util.Date0#DATE_TIME

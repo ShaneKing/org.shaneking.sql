@@ -12,7 +12,7 @@ import javax.persistence.Version;
 
 @Accessors(chain = true)
 @ToString
-public class SKIdAdtVerEntity<J> extends SKIdAdtEntity<J> {
+public abstract class SKIdAdtVerEntity<J> extends SKIdAdtEntity<J> {
 
   @Column(nullable = false, columnDefinition = "COMMENT 'Version for optimistic locking'")
   @Getter

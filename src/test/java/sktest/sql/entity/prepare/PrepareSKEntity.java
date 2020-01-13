@@ -1,6 +1,8 @@
 package sktest.sql.entity.prepare;
 
+import com.google.common.collect.Lists;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
@@ -8,12 +10,24 @@ import org.shaneking.sql.OperationContent;
 import org.shaneking.sql.entity.SKEntity;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Map;
 
 @Accessors(chain = true)
 @Table(schema = "sktest1_schema", name = "sktest1_table", uniqueConstraints = {@UniqueConstraint(columnNames = {"has_length", "not_null_col"})})
 @ToString
 public class PrepareSKEntity extends SKEntity<Map<String, OperationContent>> {
+  public List<OperationContent> findHavingOCs(@NonNull String fieldName) {
+    List<OperationContent> rtnList = Lists.newArrayList();
+    //implements by sub entity
+    return rtnList;
+  }
+
+  public List<OperationContent> findWhereOCs(@NonNull String fieldName) {
+    List<OperationContent> rtnList = Lists.newArrayList();
+    //implements by sub entity
+    return rtnList;
+  }
 
   @Column(length = 40)
   @Getter

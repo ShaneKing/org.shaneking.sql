@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 @Accessors(chain = true)
 @Slf4j
 @ToString
-public class SKEntity<J> {
+public abstract class SKEntity<J> {
   @Transient
   private static final String EMPTY_COMMENT_WITH_BLACK_PREFIX = " ''";
   @Transient
@@ -181,17 +181,9 @@ public class SKEntity<J> {
     return Joiner.on("\n").join(sqlList);
   }
 
-  public List<OperationContent> findHavingOCs(@NonNull String fieldName) {
-    List<OperationContent> rtnList = Lists.newArrayList();
-    //implements by sub entity
-    return rtnList;
-  }
+  public abstract List<OperationContent> findHavingOCs(@NonNull String fieldName);
 
-  public List<OperationContent> findWhereOCs(@NonNull String fieldName) {
-    List<OperationContent> rtnList = Lists.newArrayList();
-    //implements by sub entity
-    return rtnList;
-  }
+  public abstract List<OperationContent> findWhereOCs(@NonNull String fieldName);
 
   public void fillOc(@NonNull List<String> list, @NonNull List<Object> objectList, OperationContent oc, String leftExpr) {
     if (Keyword0.BETWEEN.equalsIgnoreCase(oc.getOp())) {

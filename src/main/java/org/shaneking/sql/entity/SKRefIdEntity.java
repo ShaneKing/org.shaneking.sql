@@ -12,7 +12,7 @@ import javax.persistence.Column;
  */
 @Accessors(chain = true)
 @ToString
-public class SKRefIdEntity<J> extends SKIdEntity<J> {
+public abstract class SKRefIdEntity<J> extends SKIdEntity<J> {
 
   @Column(length = 40, columnDefinition = "COMMENT 'Relation unique flag'")
   @Getter
