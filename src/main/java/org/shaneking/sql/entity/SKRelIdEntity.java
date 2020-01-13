@@ -12,7 +12,7 @@ import javax.persistence.Column;
  */
 @Accessors(chain = true)
 @ToString
-public class SKRelEntity<J> extends SKIdEntity<J> {
+public class SKRelIdEntity<J> extends SKIdEntity<J> {
 
   @Column(length = 1, columnDefinition = "COMMENT 'The invalid status of record {Y:invalid,N:valid(default)}'")
   @Getter

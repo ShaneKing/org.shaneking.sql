@@ -9,7 +9,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.shaneking.jackson.databind.OM3;
 import org.shaneking.skava.lang.String0;
-import org.shaneking.skava.persistence.Tuple;
 import sktest.sql.SKUnit;
 import sktest.sql.entity.prepare.PrepareSKEntity;
 
@@ -77,42 +76,6 @@ public class SKEntityTest extends SKUnit {
   }
 
   @Test
-  public void appendVersion2ByIdSql() throws Exception {
-    Tuple.Pair<List<String>, List<Object>> byIdSqlTuple = Tuple.of(Lists.newArrayList(), Lists.newArrayList());
-    Tuple.Pair<List<String>, List<Object>> appendVersion2ByIdSqlTuple = prepareEntity.appendVersion2ByIdSql(byIdSqlTuple);
-    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(appendVersion2ByIdSqlTuple));
-  }
-
-  @Test
-  public void appendWhereByFields2Sql() throws Exception {
-    Tuple.Pair<List<String>, List<Object>> appendWhereByFields2SqlTuple = prepareEntity.appendWhereByFields2Sql(Lists.newArrayList(), Lists.newArrayList(), prepareEntity.getFieldNameList());
-    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(appendWhereByFields2SqlTuple));
-  }
-
-  @Test
-  public void deleteByIdSql() throws Exception {
-    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareEntity.deleteByIdSql()));
-  }
-
-  @Test
-  public void deleteByIdSql_null() throws Exception {
-    prepareEntity.setId(null);
-    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareEntity.deleteByIdSql()));
-  }
-
-  @Test
-  public void deleteByIdAndVersionSql() throws Exception {
-    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareEntity.deleteByIdAndVersionSql()));
-  }
-
-  @Test
-  public void deleteByIdAndVersionSql_null() throws Exception {
-    prepareEntity.setId(null);
-    prepareEntity.setVer(null);
-    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareEntity.deleteByIdAndVersionSql()));
-  }
-
-  @Test
   public void deleteSql() throws Exception {
     Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareEntity.deleteSql()));
   }
@@ -151,25 +114,13 @@ public class SKEntityTest extends SKUnit {
   }
 
   @Test
-  public void updateByIdSql() throws Exception {
-    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareEntity.updateByIdSql()));
+  public void updateSql() throws Exception {
+    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareEntity.updateSql()));
   }
 
   @Test
-  public void updateByIdSql_null() throws Exception {
+  public void updateSql_null() throws Exception {
     prepareEntity.setId(null);
-    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareEntity.updateByIdSql()));
-  }
-
-  @Test
-  public void updateByIdAndVersionSql() throws Exception {
-    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareEntity.updateByIdAndVersionSql()));
-  }
-
-  @Test
-  public void updateByIdAndVersionSql_null() throws Exception {
-    prepareEntity.setId(null);
-    prepareEntity.setVer(null);
-    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareEntity.updateByIdAndVersionSql()));
+    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareEntity.updateSql()));
   }
 }
