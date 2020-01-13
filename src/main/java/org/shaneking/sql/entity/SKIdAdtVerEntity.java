@@ -13,6 +13,7 @@ import javax.persistence.Version;
 @Accessors(chain = true)
 @ToString
 public abstract class SKIdAdtVerEntity<J> extends SKIdAdtEntity<J> {
+  public static final String FIELD__VER = "ver";
 
   @Column(nullable = false, columnDefinition = "COMMENT 'Version for optimistic locking'")
   @Getter
