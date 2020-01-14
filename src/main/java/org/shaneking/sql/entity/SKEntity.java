@@ -118,32 +118,50 @@ public abstract class SKEntity<J> {
   @Transient
   private J whereOCs;
 
+  //init
   public SKEntity() {
     initTableInfo();
     initColumnInfo(this.getClass());
   }
 
-  private String createColumnStatement(String columnName, boolean idOrVersion) {
-    String rtn, columnDbTypeString;
-    Field columnField = this.getFieldMap().get(columnName);
-    String partNotNull = (idOrVersion || !this.getColumnMap().get(columnName).nullable()) ? Keyword0.NOT_NULL_WITH_BLACK_PREFIX : String0.EMPTY;
-    if (columnField.getAnnotation(Lob.class) != null) {
-      columnDbTypeString = Keyword0.TYPE_LONGTEXT;
-    } else if (Integer.class.getCanonicalName().equals(columnField.getType().getCanonicalName())) {
-      columnDbTypeString = Keyword0.TYPE_INT;
-    } else {
-      columnDbTypeString = Keyword0.TYPE_VARCHAR;
+  public void initTableInfo() {
+    if (this.getJavaTable() == null) {
+      this.setJavaTable(this.getClass().getAnnotation(Table.class));
     }
-    String[] comments = Strings.nullToEmpty(this.getColumnMap().get(columnName).columnDefinition()).split(Keyword0.COMMENT4ANNOTATION);
-    String commentWithBlackPrefix = comments.length > 1 ? comments[1] : EMPTY_COMMENT_WITH_BLACK_PREFIX;
-    if (Keyword0.TYPE_LONGTEXT.equals(columnDbTypeString) || Keyword0.TYPE_INT.equals(columnDbTypeString)) {
-      rtn = MessageFormat.format("  `{0}` {1}{2} {3}{4},", this.getDbColumnMap().get(columnName), columnDbTypeString, partNotNull, Keyword0.COMMENT, commentWithBlackPrefix);
+    if (Strings.isNullOrEmpty(this.getJavaTable().name())) {
+      String classTableName = String0.field2DbColumn(Lists.reverse(Lists.newArrayList(this.getClass().getName().split(String20.BACKSLASH_DOT))).get(0));
+      this.setDbTableName("t" + (classTableName.startsWith(String0.UNDERLINE) ? classTableName : String0.UNDERLINE + classTableName));
     } else {
-      rtn = MessageFormat.format("  `{0}` {1}({2}){3} {4}{5},", this.getDbColumnMap().get(columnName), columnDbTypeString, String.valueOf(this.getColumnMap().get(columnName).length()), partNotNull, Keyword0.COMMENT, commentWithBlackPrefix);
+      this.setDbTableName(this.getJavaTable().name());
     }
-    return rtn;
   }
 
+  public void initColumnInfo(Class<? extends Object> skEntityClass) {
+    if (SKEntity.class.isAssignableFrom(skEntityClass.getSuperclass())) {
+      initColumnInfo(skEntityClass.getSuperclass());
+    }
+    for (Field field : skEntityClass.getDeclaredFields()) {
+      if (field.getAnnotation(Transient.class) == null) {
+        Column column = field.getAnnotation(Column.class);
+        if (column != null) {
+          this.getColumnMap().put(field.getName(), column);
+          this.getFieldMap().put(field.getName(), field);
+          this.getDbColumnMap().put(field.getName(), Strings.isNullOrEmpty(column.name()) ? String0.field2DbColumn(field.getName()) : column.name());
+          if (this.getFieldNameList().indexOf(field.getName()) == -1) {
+            this.getFieldNameList().add(field.getName());
+          }
+        }
+        if (field.getAnnotation(Id.class) != null && this.getIdFieldNameList().indexOf(field.getName()) == -1) {
+          this.getIdFieldNameList().add(field.getName());
+        }
+        if (field.getAnnotation(Version.class) != null && this.getVerFieldNameList().indexOf(field.getName()) == -1) {
+          this.getVerFieldNameList().add(field.getName());
+        }
+      }
+    }
+  }
+
+  //create table
   public String createIndexSql() {
     Map<String, List<String>> idxPartNameColumnsMap = Maps.newHashMap();
     Lists.newArrayList(this.getJavaTable().uniqueConstraints()).stream().filter(uniqueConstraint -> uniqueConstraint.columnNames().length > 0).forEach(uniqueConstraint -> {
@@ -181,10 +199,35 @@ public abstract class SKEntity<J> {
     return Joiner.on("\n").join(sqlList);
   }
 
+  private String createColumnStatement(String columnName, boolean idOrVersion) {
+    String rtn, columnDbTypeString;
+    Field columnField = this.getFieldMap().get(columnName);
+    String partNotNull = (idOrVersion || !this.getColumnMap().get(columnName).nullable()) ? Keyword0.NOT_NULL_WITH_BLACK_PREFIX : String0.EMPTY;
+    if (columnField.getAnnotation(Lob.class) != null) {
+      columnDbTypeString = Keyword0.TYPE_LONGTEXT;
+    } else if (Integer.class.getCanonicalName().equals(columnField.getType().getCanonicalName())) {
+      columnDbTypeString = Keyword0.TYPE_INT;
+    } else {
+      columnDbTypeString = Keyword0.TYPE_VARCHAR;
+    }
+    String[] comments = Strings.nullToEmpty(this.getColumnMap().get(columnName).columnDefinition()).split(Keyword0.COMMENT4ANNOTATION);
+    String commentWithBlackPrefix = comments.length > 1 ? comments[1] : EMPTY_COMMENT_WITH_BLACK_PREFIX;
+    if (Keyword0.TYPE_LONGTEXT.equals(columnDbTypeString) || Keyword0.TYPE_INT.equals(columnDbTypeString)) {
+      rtn = MessageFormat.format("  `{0}` {1}{2} {3}{4},", this.getDbColumnMap().get(columnName), columnDbTypeString, partNotNull, Keyword0.COMMENT, commentWithBlackPrefix);
+    } else {
+      rtn = MessageFormat.format("  `{0}` {1}({2}){3} {4}{5},", this.getDbColumnMap().get(columnName), columnDbTypeString, String.valueOf(this.getColumnMap().get(columnName).length()), partNotNull, Keyword0.COMMENT, commentWithBlackPrefix);
+    }
+    return rtn;
+  }
+
+  //abstracts
+  @NonNull
   public abstract List<OperationContent> findHavingOCs(@NonNull String fieldName);
 
+  @NonNull
   public abstract List<OperationContent> findWhereOCs(@NonNull String fieldName);
 
+  //prepares
   public void fillOc(@NonNull List<String> list, @NonNull List<Object> objectList, OperationContent oc, String leftExpr) {
     if (Keyword0.BETWEEN.equalsIgnoreCase(oc.getOp())) {
       if (oc.getCl() != null && oc.getCl().size() == 2) {
@@ -204,43 +247,6 @@ public abstract class SKEntity<J> {
 
   public String fullTableName() {
     return String0.notNull2empty2(Strings.nullToEmpty(this.getJavaTable().schema()), this.getJavaTable().schema() + String0.DOT) + this.getDbTableName();
-  }
-
-  public void initColumnInfo(Class<? extends Object> skEntityClass) {
-    if (SKEntity.class.isAssignableFrom(skEntityClass.getSuperclass())) {
-      initColumnInfo(skEntityClass.getSuperclass());
-    }
-    for (Field field : skEntityClass.getDeclaredFields()) {
-      if (field.getAnnotation(Transient.class) == null) {
-        Column column = field.getAnnotation(Column.class);
-        if (column != null) {
-          this.getColumnMap().put(field.getName(), column);
-          this.getFieldMap().put(field.getName(), field);
-          this.getDbColumnMap().put(field.getName(), Strings.isNullOrEmpty(column.name()) ? String0.field2DbColumn(field.getName()) : column.name());
-          if (this.getFieldNameList().indexOf(field.getName()) == -1) {
-            this.getFieldNameList().add(field.getName());
-          }
-        }
-        if (field.getAnnotation(Id.class) != null && this.getIdFieldNameList().indexOf(field.getName()) == -1) {
-          this.getIdFieldNameList().add(field.getName());
-        }
-        if (field.getAnnotation(Version.class) != null && this.getVerFieldNameList().indexOf(field.getName()) == -1) {
-          this.getVerFieldNameList().add(field.getName());
-        }
-      }
-    }
-  }
-
-  public void initTableInfo() {
-    if (this.getJavaTable() == null) {
-      this.setJavaTable(this.getClass().getAnnotation(Table.class));
-    }
-    if (Strings.isNullOrEmpty(this.getJavaTable().name())) {
-      String classTableName = String0.field2DbColumn(Lists.reverse(Lists.newArrayList(this.getClass().getName().split(String20.BACKSLASH_DOT))).get(0));
-      this.setDbTableName("t" + (classTableName.startsWith(String0.UNDERLINE) ? classTableName : String0.UNDERLINE + classTableName));
-    } else {
-      this.setDbTableName(this.getJavaTable().name());
-    }
   }
 
   public List<String> lstSelectFiled() {
@@ -267,9 +273,7 @@ public abstract class SKEntity<J> {
     }
   }
 
-  /**
-   * Less attentions, maybe want more limit?
-   */
+  //crud
   public Tuple.Pair<String, List<Object>> deleteSql() {
     List<Object> rtnObjectList = Lists.newArrayList();
 
@@ -312,7 +316,7 @@ public abstract class SKEntity<J> {
         o = null;
         log.warn(e.toString());
       }
-      if (o != null && !Strings.isNullOrEmpty(o.toString())) {
+      if (!String0.isNullOrEmpty(String.valueOf(o))) {
         insertList.add(this.getDbColumnMap().get(fieldName));
         objectList.add(o);
       }
@@ -321,6 +325,11 @@ public abstract class SKEntity<J> {
 
   public Tuple.Pair<String, List<Object>> selectCountSql() {
     Tuple.Pair<List<String>, List<Object>> pair = this.selectSql(Lists.newArrayList(Keyword0.COUNT_1_), Lists.newArrayList());
+    return Tuple.of(Joiner.on(String0.BLANK).join(Tuple.getFirst(pair)), Tuple.getSecond(pair));
+  }
+
+  public Tuple.Pair<String, List<Object>> selectIdsSql() {
+    Tuple.Pair<List<String>, List<Object>> pair = this.selectSql(Lists.newArrayList(Keyword0.GROUP__CONCAT_ID_), Lists.newArrayList());
     return Tuple.of(Joiner.on(String0.BLANK).join(Tuple.getFirst(pair)), Tuple.getSecond(pair));
   }
 
@@ -439,7 +448,7 @@ public abstract class SKEntity<J> {
     }
   }
 
-  //others
+  //other statements
   public void fromStatement(@NonNull List<String> fromList, @NonNull List<Object> objectList) {
     fromList.add(this.fullTableName());
   }
@@ -488,7 +497,7 @@ public abstract class SKEntity<J> {
         log.warn(e.toString());
       }
       if (this.getColumnMap().get(fieldName) != null) {
-        if (o != null && !Strings.isNullOrEmpty(o.toString())) {//whereOCs support empty
+        if (!String0.isNullOrEmpty(String.valueOf(o))) {//whereOCs support empty
           whereList.add(this.getDbColumnMap().get(fieldName) + String20.EQUAL_QUESTION);
           objectList.add(o);
         }

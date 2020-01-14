@@ -17,6 +17,7 @@ public class Keyword0 {
   public static final String DELETE_FROM = "delete from";
   public static final String FROM = "from";
   public static final String GROUP_BY = "group by";
+  public static final String GROUP__CONCAT_ID_ = "group_concat(id)";
   public static final String HAVING = "having";
   public static final String IN = "in";
   public static final String INSERT_INFO = "insert into";
