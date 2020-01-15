@@ -33,19 +33,11 @@ public class OperationContent {
   @Setter
   private String ew;//endWith
 
-  public void appendId(@NonNull String id) {
-    this.setOp(Keyword0.IN);
-    List<String> idList = this.getCl();
-    if (idList == null) {
-      idList = Lists.newArrayList();
-      this.setCl(idList);
-    }
-    if (this.getCl().indexOf(id) == -1) {
-      this.getCl().add(id);
-    }
+  public OperationContent appendId(@NonNull String id) {
+    return appendIds(Lists.newArrayList(id));
   }
 
-  public void appendIds(@NonNull List<String> ids) {
+  public OperationContent appendIds(@NonNull List<String> ids) {
     this.setOp(Keyword0.IN);
     List<String> idList = this.getCl();
     if (idList == null) {
@@ -57,17 +49,18 @@ public class OperationContent {
         this.getCl().add(id);
       }
     }
+    return this;
   }
 
-  public void resetId(@NonNull String id) {
-    this.setOp(String0.EQUAL).setCs(id);
+  public OperationContent resetId(@NonNull String id) {
+    return this.setOp(String0.EQUAL).setCs(id);
   }
 
-  public void resetIds(@NonNull List<String> ids) {
-    this.setOp(Keyword0.IN).setCl(ids);
+  public OperationContent resetIds(@NonNull List<String> ids) {
+    return this.setOp(Keyword0.IN).setCl(ids);
   }
 
-  public void retainIds(@NonNull List<String> ids) {
+  public OperationContent retainIds(@NonNull List<String> ids) {
     this.setOp(Keyword0.IN);
     List<String> idList = this.getCl();
     if (idList == null) {
@@ -75,5 +68,6 @@ public class OperationContent {
     } else {
       idList.retainAll(ids);
     }
+    return this;
   }
 }
