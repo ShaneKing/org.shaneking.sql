@@ -2,9 +2,13 @@ package org.shaneking.sql.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
 
+@Accessors(chain = true)
+@ToString
 public abstract class SKTreeAdtVerFullEntity<J> extends SKIdAdtVerFullEntity<J> {
   @Column(columnDefinition = "COMMENT 'Node description'")
   @Getter
@@ -30,5 +34,4 @@ public abstract class SKTreeAdtVerFullEntity<J> extends SKIdAdtVerFullEntity<J> 
   @Getter
   @Setter
   private String parentId;
-
 }

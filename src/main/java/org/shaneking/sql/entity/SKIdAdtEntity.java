@@ -9,10 +9,17 @@ import org.shaneking.skava.lang.String0;
 import org.shaneking.skava.util.Date0;
 
 import javax.persistence.Column;
+import javax.persistence.Transient;
 
 @Accessors(chain = true)
 @ToString
 public abstract class SKIdAdtEntity<J> extends SKIdEntity<J> {
+  @Transient
+  public static final String FIELD__INVALID = "invalid";
+  @Transient
+  public static final String FIELD__MOD_DATE_TIME = "modDateTime";
+  @Transient
+  public static final String FIELD__MOD_USER_ID = "modUserId";
 
   @Column(length = 1, columnDefinition = "COMMENT 'The invalid status of record {Y:invalid,N:valid(default)}'")
   @Getter

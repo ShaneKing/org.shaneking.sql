@@ -1,21 +1,19 @@
 package sktest.sql.entity.prepare;
 
 import com.google.common.collect.Lists;
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.shaneking.sql.OperationContent;
 import org.shaneking.sql.entity.SKRefAdtVerFullEntity;
 
-import javax.persistence.Column;
 import javax.persistence.Table;
 import java.util.List;
 import java.util.Map;
 
 @Accessors(chain = true)
 @Table
-@ToString
+@ToString(callSuper = true)
 public class PrepareSKRefAdtVerFullEntity extends SKRefAdtVerFullEntity<Map<String, OperationContent>> {
   public List<OperationContent> findHavingOCs(@NonNull String fieldName) {
     List<OperationContent> rtnList = Lists.newArrayList();
@@ -28,8 +26,4 @@ public class PrepareSKRefAdtVerFullEntity extends SKRefAdtVerFullEntity<Map<Stri
     //implements by sub entity
     return rtnList;
   }
-
-  @Column(nullable = false)
-  @Getter
-  private Integer intForMapRowException;
 }

@@ -39,6 +39,7 @@ public abstract class SKEntity<J> {
   private static final String EMPTY_COMMENT_WITH_BLACK_PREFIX = " ''";
   @Transient
   private static final String UNIQUE_INDEX_NAME_PREFIX = "u_idx_";
+
   @Getter
   @JsonIgnore
   @Transient
@@ -287,7 +288,6 @@ public abstract class SKEntity<J> {
       sqlList.add(Keyword0.WHERE);
       sqlList.add(Joiner.on(Keyword0.AND_WITH_BLACK_PREFIX_WITH_BLACK_SUFFIX).join(whereList));
     }
-
     return Tuple.of(Joiner.on(String0.BLANK).join(sqlList), rtnObjectList);
   }
 
@@ -396,12 +396,12 @@ public abstract class SKEntity<J> {
     if (limitAndOffsetList.size() > 0) {
       sqlList.add(Joiner.on(String0.BLANK).join(limitAndOffsetList));
     }
-
     return Tuple.of(sqlList, rtnObjectList);
   }
 
   public void selectStatement(@NonNull List<String> selectList, @NonNull List<Object> objectList) {
-    selectList.addAll(this.lstSelectFiled().stream().map((String fieldName) -> this.getDbColumnMap().get(fieldName)).collect(Collectors.toList()));
+    //count(1)
+    selectList.addAll(this.lstSelectFiled().stream().map((String fieldName) -> String0.nullOrEmptyTo(this.getDbColumnMap().get(fieldName), fieldName)).collect(Collectors.toList()));
   }
 
   public Tuple.Pair<String, List<Object>> updateSql() {
@@ -424,7 +424,6 @@ public abstract class SKEntity<J> {
       sqlList.add(Keyword0.WHERE);
       sqlList.add(Joiner.on(Keyword0.AND_WITH_BLACK_PREFIX_WITH_BLACK_SUFFIX).join(whereList));
     }
-
     return Tuple.of(Joiner.on(String0.BLANK).join(sqlList), rtnObjectList);
   }
 

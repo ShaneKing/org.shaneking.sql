@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import org.shaneking.skava.lang.String0;
 
 import javax.persistence.Column;
 
@@ -13,7 +14,6 @@ import javax.persistence.Column;
 @Accessors(chain = true)
 @ToString
 public abstract class SKRelIdEntity<J> extends SKIdEntity<J> {
-
   @Column(length = 1, columnDefinition = "COMMENT 'The invalid status of record {Y:invalid,N:valid(default)}'")
   @Getter
   @Setter
@@ -31,4 +31,8 @@ public abstract class SKRelIdEntity<J> extends SKIdEntity<J> {
   @Getter
   @Setter
   private String ivdUserId;
+
+  public SKRelIdEntity<J> initInvalid() {
+    return this.setInvalid(String0.null2empty2(this.getInvalid(), String0.N));
+  }
 }

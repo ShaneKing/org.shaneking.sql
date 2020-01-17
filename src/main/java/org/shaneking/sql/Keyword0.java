@@ -21,6 +21,7 @@ public class Keyword0 {
   public static final String HAVING = "having";
   public static final String IN = "in";
   public static final String INSERT_INFO = "insert into";
+  public static final String LIKE = "like";
   public static final String LIMIT = "limit";
   public static final String NOT_NULL = "not null";
   public static final String NOT_NULL_WITH_BLACK_PREFIX = String0.BLANK + NOT_NULL;

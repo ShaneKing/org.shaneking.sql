@@ -1,1 +1,0 @@
-["select id,invalid,mod_date_time,mod_user_id,ver from t_prepare_s_k_id_adt_ver_entity where id=? and invalid=? and mod_date_time=? and mod_user_id=? and ver=? group by version having ver > ? order by version limit 30 offset 0",["sktest1_id","Y","2019-06-23 20:00:07","SKTEST1_USER_ID",1,1]]

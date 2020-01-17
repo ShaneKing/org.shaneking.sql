@@ -9,7 +9,7 @@ import org.shaneking.sql.OperationContent;
 public class OperationContentTest extends SKUnit {
   @Test
   public void setter() {
-    skPrint(new OperationContent().setLe("le").setOp("op").setBw("bw").setCl(Lists.newArrayList()).setCs("cs").setEw("ed"));
+    Assert.assertEquals("{\"le\":\"le\",\"op\":\"op\",\"cs\":\"cs\",\"bw\":\"bw\",\"ew\":\"ed\"}", OM3.writeValueAsString(new OperationContent().setLe("le").setOp("op").setBw("bw").setCl(Lists.newArrayList()).setCs("cs").setEw("ed")));
   }
 
   @Test
@@ -40,5 +40,10 @@ public class OperationContentTest extends SKUnit {
   @Test
   public void retainIdsEmpty() {
     Assert.assertEquals("{\"op\":\"in\",\"cl\":[\"id\"]}", OM3.writeValueAsString(new OperationContent().retainIds(Lists.newArrayList("id"))));
+  }
+
+  @Test
+  public void testToString() {
+    Assert.assertEquals("OperationContent(le=null, op=null, cl=null, cs=null, bw=null, ew=null)", new OperationContent().toString());
   }
 }

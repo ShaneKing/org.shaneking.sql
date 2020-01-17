@@ -5,7 +5,7 @@ import lombok.NonNull;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.shaneking.sql.OperationContent;
-import org.shaneking.sql.entity.SKZoneAdtEntity;
+import org.shaneking.sql.entity.SKTreeAdtVerEntity;
 
 import javax.persistence.Table;
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.Map;
 @Accessors(chain = true)
 @Table
 @ToString(callSuper = true)
-public class PrepareSKZoneAdtEntity extends SKZoneAdtEntity<Map<String, OperationContent>> {
+public class PrepareSKTreeAdtVerEntity extends SKTreeAdtVerEntity<Map<String, OperationContent>> {
   public List<OperationContent> findHavingOCs(@NonNull String fieldName) {
     List<OperationContent> rtnList = Lists.newArrayList();
     //implements by sub entity

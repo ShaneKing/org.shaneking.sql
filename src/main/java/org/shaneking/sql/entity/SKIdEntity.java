@@ -9,10 +9,12 @@ import org.shaneking.skava.lang.String0;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 @Accessors(chain = true)
 @ToString
 public abstract class SKIdEntity<J> extends SKEntity<J> {
+  @Transient
   public static final String FIELD__ID = "id";
 
   //System.currentTimeMillis()-UUID0.l19()=13+1+19=33=UUID0.cMl33()

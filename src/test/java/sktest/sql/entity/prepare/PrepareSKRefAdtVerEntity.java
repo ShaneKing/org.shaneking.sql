@@ -13,7 +13,7 @@ import java.util.Map;
 
 @Accessors(chain = true)
 @Table
-@ToString
+@ToString(callSuper = true)
 public class PrepareSKRefAdtVerEntity extends SKRefAdtVerEntity<Map<String, OperationContent>> {
   public List<OperationContent> findHavingOCs(@NonNull String fieldName) {
     List<OperationContent> rtnList = Lists.newArrayList();

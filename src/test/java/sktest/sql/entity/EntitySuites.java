@@ -4,6 +4,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({SKEntityInitTest.class, SKEntitySetterTest.class, SKEntityTest.class, SKIdAdtVerEntityTest.class, SKIdAdtVerFullEntityTest.class, SKRefAdtVerFullEntityTest.class})
+@Suite.SuiteClasses({PrepareInitTest.class, PrepareSetterToStringTest.class, PrepareSqlMockTest.class, PrepareSqlParameterizedTest.class, PrepareSqlTest.class, PrepareTest.class})
 public class EntitySuites {
 }
