@@ -314,7 +314,7 @@ public abstract class SKEntity<J> {
         o = this.getClass().getMethod("get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1)).invoke(this);
       } catch (Exception e) {
         o = null;
-        log.warn(e.toString());
+        log.error(e.toString());
       }
       if (!String0.isNullOrEmpty(String.valueOf(o))) {
         insertList.add(this.getDbColumnMap().get(fieldName));
@@ -434,7 +434,7 @@ public abstract class SKEntity<J> {
         o = this.getClass().getMethod("get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1)).invoke(this);
       } catch (Exception e) {
         o = null;
-        log.warn(e.toString());
+        log.error(e.toString());
       }
       if (o != null) {//can update to null
         updateList.add(this.getDbColumnMap().get(fieldName) + String20.EQUAL_QUESTION);
@@ -493,7 +493,7 @@ public abstract class SKEntity<J> {
         o = this.getClass().getMethod("get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1)).invoke(this);
       } catch (Exception e) {
         o = null;
-        log.warn(e.toString());
+        log.error(e.toString());
       }
       if (this.getColumnMap().get(fieldName) != null) {
         if (!String0.isNullOrEmpty(String.valueOf(o))) {//whereOCs support empty
