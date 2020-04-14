@@ -476,8 +476,8 @@ public abstract class SKEntity<J> {
 
   public void limitAndOffsetStatement(@NonNull List<String> limitAndOffsetList, @NonNull List<Object> objectList) {
     PageHelper pageHelper = this.getPageHelper() == null ? new PageHelper() : this.getPageHelper();
-    limitAndOffsetList.add(MessageFormat.format("{0} {1}", Keyword0.LIMIT, Integer0.gt2d(Integer0.null2Default(pageHelper.getLimit(), PageHelper.DEFAULT_LIMIT), PageHelper.MAX_LIMIT)));
-    limitAndOffsetList.add(MessageFormat.format("{0} {1}", Keyword0.OFFSET, Integer0.lt2d(Integer0.null2Zero(pageHelper.getOffset()), 0)));
+    limitAndOffsetList.add(MessageFormat.format("{0} {1}", Keyword0.LIMIT, String.valueOf(Integer0.gt2d(Integer0.null2Default(pageHelper.getLimit(), PageHelper.DEFAULT_LIMIT), PageHelper.MAX_LIMIT))));//add String.valueOf to fix 1000+ to 1,000+
+    limitAndOffsetList.add(MessageFormat.format("{0} {1}", Keyword0.OFFSET, String.valueOf(Integer0.lt2d(Integer0.null2Zero(pageHelper.getOffset()), 0))));
   }
 
   public void orderByStatement(@NonNull List<String> orderByList, @NonNull List<Object> objectList) {

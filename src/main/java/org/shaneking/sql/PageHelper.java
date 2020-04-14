@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 @ToString
 public class PageHelper {
   public static int DEFAULT_LIMIT = 30;
-  public static int MAX_LIMIT = 300;
+  public static int MAX_LIMIT = 1300;// table has 1013 column in some company
 
   @Getter
   @Setter
