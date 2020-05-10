@@ -5,30 +5,19 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.shaneking.jackson.databind.OM3;
+import org.shaneking.skava.io.FTN;
 import org.shaneking.skava.lang.Integer0;
 import org.shaneking.sql.PageHelper;
+import org.shaneking.test.SKUnit;
 import sktest.sql.prepare.PrepareSKEntityPageHelper;
 
-import java.io.File;
-import java.text.MessageFormat;
-
 public class PageHelperTest extends SKUnit {
-  public static final String FMT_FILE = "src/test/java/sktest/sql/prepare/PrepareSKEntityPageHelper_{0}.sql";
   private PrepareSKEntityPageHelper prepareSKEntityPageHelper;
-  private File sqlFile;
 
   @Before
   public void setUp() {
     super.setUp();
     prepareSKEntityPageHelper = new PrepareSKEntityPageHelper();
-    sqlFile = new File(MessageFormat.format(FMT_FILE, testName.getMethodName()));
-//    if (!sqlFile.exists()) {
-//      try {
-//        sqlFile.createNewFile();
-//      } catch (Exception e) {
-//        log.error(e.getMessage(), e);
-//      }
-//    }
   }
 
   @Test
@@ -45,18 +34,18 @@ public class PageHelperTest extends SKUnit {
   @Test
   public void selectSql() throws Exception {
     prepareSKEntityPageHelper.setPageHelper(new PageHelper().setLimit(22).setOffset(-1));
-    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareSKEntityPageHelper.selectSql()));
+    Assert.assertEquals(new String(Files.toByteArray(skTestIFiles(FTN.SQL))).trim(), OM3.writeValueAsString(prepareSKEntityPageHelper.selectSql()));
   }
 
   @Test
   public void selectSql2() throws Exception {
     prepareSKEntityPageHelper.setPageHelper(new PageHelper().setLimit(1111).setOffset(33));
-    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareSKEntityPageHelper.selectSql()));
+    Assert.assertEquals(new String(Files.toByteArray(skTestIFiles(FTN.SQL))).trim(), OM3.writeValueAsString(prepareSKEntityPageHelper.selectSql()));
   }
 
   @Test
   public void selectSql3() throws Exception {
     prepareSKEntityPageHelper.setPageHelper(new PageHelper().setLimit(1333).setOffset(33));
-    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareSKEntityPageHelper.selectSql()));
+    Assert.assertEquals(new String(Files.toByteArray(skTestIFiles(FTN.SQL))).trim(), OM3.writeValueAsString(prepareSKEntityPageHelper.selectSql()));
   }
 }

@@ -5,6 +5,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.shaneking.jackson.databind.OM3;
 import org.shaneking.sql.OperationContent;
+import org.shaneking.test.SKUnit;
 
 public class OperationContentTest extends SKUnit {
   @Test

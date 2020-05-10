@@ -9,22 +9,22 @@ import org.shaneking.skava.lang.String0;
 import org.shaneking.sql.Keyword0;
 import org.shaneking.sql.entity.SKIdAdtVerEntity;
 import org.shaneking.sql.entity.SKIdEntity;
-import sktest.sql.SKUnit;
+import org.shaneking.test.SKUnit;
 import sktest.sql.entity.prepare.PrepareSqlSKIdAdtVerEntity;
 
-import static sktest.sql.entity.PrepareSqlParameterizedTest.SKTEST1_ID;
+import static sktest.sql.entity.EntitySqlTest.SKTEST1_ID;
 
 @Slf4j
-public class PrepareSqlTest extends SKUnit {
-  public static final String SKTEST1_USER_ID = "SKTEST1_USER_ID";
-  private static final String SKTEST1_DATE_TIME = "2019-06-23 20:00:07";
-  private PrepareSqlSKIdAdtVerEntity prepareSqlSKIdAdtVerEntity;
+public class EntityFillOcTest extends SKUnit {
+    public static final String SKTEST1_USER_ID = "SKTEST1_USER_ID";
+    private static final String SKTEST1_DATE_TIME = "2019-06-23 20:00:07";
+    private PrepareSqlSKIdAdtVerEntity prepareSqlSKIdAdtVerEntity;
 
-  @Override
-  public void setUp() {
-    super.setUp();
-    prepareSqlSKIdAdtVerEntity = new PrepareSqlSKIdAdtVerEntity();
-  }
+    @Override
+    public void setUp() {
+        super.setUp();
+        prepareSqlSKIdAdtVerEntity = new PrepareSqlSKIdAdtVerEntity();
+    }
 
   @Test
   public void fillOc() {

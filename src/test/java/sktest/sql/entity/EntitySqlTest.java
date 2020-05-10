@@ -8,28 +8,25 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.shaneking.jackson.databind.OM3;
+import org.shaneking.skava.io.FTN;
 import org.shaneking.skava.lang.String0;
 import org.shaneking.sql.Keyword0;
 import org.shaneking.sql.entity.SKIdAdtVerEntity;
-import sktest.sql.SKUnit;
+import org.shaneking.test.SKUnit;
 import sktest.sql.entity.prepare.PrepareSqlSKIdAdtVerEntity;
 
-import java.io.File;
-import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;
 
 //Parameterized step1:add Parameterized.class to RunWith
 @RunWith(Parameterized.class)
 @Slf4j
-public class PrepareSqlParameterizedTest extends SKUnit {
+public class EntitySqlTest extends SKUnit {
   public static final String SKTEST1_ID = "sktest1_id";
-  private static final String FMT_FILE = "src/test/java/sktest/sql/entity/prepare/scripts/PrepareSqlSKIdAdtVerEntity_{0}.sql";
   private PrepareSqlSKIdAdtVerEntity prepareSqlSKIdAdtVerEntity;
-  private File sqlFile;
 
   //Parameterized step2:use step2 data to constructor object
-  public PrepareSqlParameterizedTest(String invalid, String id, Integer version, String hasLength, String noGetMethod, String withoutAnnotation, String reName, String longText) {
+  public EntitySqlTest(String invalid, String id, Integer version, String hasLength, String noGetMethod, String withoutAnnotation, String reName, String longText) {
     super();
     prepareSqlSKIdAdtVerEntity = new PrepareSqlSKIdAdtVerEntity().setHasLength(hasLength).setNoGetMethod(noGetMethod).setWithoutAnnotation(withoutAnnotation).setReName(reName).setLongText(longText);
     prepareSqlSKIdAdtVerEntity.setVer(version).setInvalid(invalid).setId(id);
@@ -42,32 +39,19 @@ public class PrepareSqlParameterizedTest extends SKUnit {
       , {String0.Y, SKTEST1_ID, 1, "hasLength", "noGetMethod", "withoutAnnotation", "reName", "longText"}});
   }
 
-  @Override
-  public void setUp() {
-    super.setUp();
-    sqlFile = new File(MessageFormat.format(FMT_FILE, testName.getMethodName()));
-    if (!sqlFile.exists()) {
-      try {
-        sqlFile.createNewFile();
-      } catch (Exception e) {
-        log.error(e.getMessage(), e);
-      }
-    }
-  }
-
   @Test
   public void createIndexSql() throws Exception {
-    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), prepareSqlSKIdAdtVerEntity.createIndexSql().trim());
+    Assert.assertEquals(new String(Files.toByteArray(skTestIFiles(FTN.SQL))).trim(), prepareSqlSKIdAdtVerEntity.createIndexSql().trim());
   }
 
   @Test
   public void createTableSql() throws Exception {
-    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), prepareSqlSKIdAdtVerEntity.createTableSql().trim());
+    Assert.assertEquals(new String(Files.toByteArray(skTestIFiles(FTN.SQL))).trim(), prepareSqlSKIdAdtVerEntity.createTableSql().trim());
   }
 
   @Test
   public void deleteSql() throws Exception {
-    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareSqlSKIdAdtVerEntity.deleteSql()));
+    Assert.assertEquals(new String(Files.toByteArray(skTestIFiles(FTN.SQL))).trim(), OM3.writeValueAsString(prepareSqlSKIdAdtVerEntity.deleteSql()));
   }
 
   @Test
@@ -77,7 +61,7 @@ public class PrepareSqlParameterizedTest extends SKUnit {
     } else if (testName.getMethodName().endsWith("[1]")) {
       prepareSqlSKIdAdtVerEntity.forceHavingOc(SKIdAdtVerEntity.FIELD__MOD_DATE_TIME).setOp(Keyword0.LIKE).setCs("2020-01-17").setEw("%");
     }
-    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareSqlSKIdAdtVerEntity.findHavingOCs(SKIdAdtVerEntity.FIELD__MOD_DATE_TIME)));
+    Assert.assertEquals(new String(Files.toByteArray(skTestIFiles(FTN.SQL))).trim(), OM3.writeValueAsString(prepareSqlSKIdAdtVerEntity.findHavingOCs(SKIdAdtVerEntity.FIELD__MOD_DATE_TIME)));
   }
 
   @Test
@@ -87,7 +71,7 @@ public class PrepareSqlParameterizedTest extends SKUnit {
     } else if (testName.getMethodName().endsWith("[1]")) {
       prepareSqlSKIdAdtVerEntity.forceWhereOc(SKIdAdtVerEntity.FIELD__ID).setOp(String0.MORE).setCs("1579263862");
     }
-    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareSqlSKIdAdtVerEntity.findWhereOCs("id")));
+    Assert.assertEquals(new String(Files.toByteArray(skTestIFiles(FTN.SQL))).trim(), OM3.writeValueAsString(prepareSqlSKIdAdtVerEntity.findWhereOCs("id")));
   }
 
   @Test
@@ -98,54 +82,54 @@ public class PrepareSqlParameterizedTest extends SKUnit {
   @Test
   public void insertSql() throws Exception {
     if (!"{}".equals(OM3.writeValueAsString(prepareSqlSKIdAdtVerEntity))) {
-      Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareSqlSKIdAdtVerEntity.insertSql()));
+      Assert.assertEquals(new String(Files.toByteArray(skTestIFiles(FTN.SQL))).trim(), OM3.writeValueAsString(prepareSqlSKIdAdtVerEntity.insertSql()));
     }
   }
 
   @Test(expected = StringIndexOutOfBoundsException.class)
-  public void insertSql_null() throws Exception {
+  public void insertSqlNull() throws Exception {
     prepareSqlSKIdAdtVerEntity = new PrepareSqlSKIdAdtVerEntity();
-    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareSqlSKIdAdtVerEntity.insertSql()));
+    Assert.assertEquals(new String(Files.toByteArray(skTestIFiles(FTN.SQL))).trim(), OM3.writeValueAsString(prepareSqlSKIdAdtVerEntity.insertSql()));
   }
 
   @Test
   public void lstSelectFiled() throws Exception {
-    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareSqlSKIdAdtVerEntity.lstSelectFiled()));
+    Assert.assertEquals(new String(Files.toByteArray(skTestIFiles(FTN.SQL))).trim(), OM3.writeValueAsString(prepareSqlSKIdAdtVerEntity.lstSelectFiled()));
   }
 
   @Test
   public void selectCountSql() throws Exception {
-    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareSqlSKIdAdtVerEntity.selectCountSql()));
+    Assert.assertEquals(new String(Files.toByteArray(skTestIFiles(FTN.SQL))).trim(), OM3.writeValueAsString(prepareSqlSKIdAdtVerEntity.selectCountSql()));
   }
 
   @Test
   public void selectIdsSql() throws Exception {
-    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareSqlSKIdAdtVerEntity.selectIdsSql()));
+    Assert.assertEquals(new String(Files.toByteArray(skTestIFiles(FTN.SQL))).trim(), OM3.writeValueAsString(prepareSqlSKIdAdtVerEntity.selectIdsSql()));
   }
 
   @Test
   public void selectSql() throws Exception {
-    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareSqlSKIdAdtVerEntity.selectSql()));
+    Assert.assertEquals(new String(Files.toByteArray(skTestIFiles(FTN.SQL))).trim(), OM3.writeValueAsString(prepareSqlSKIdAdtVerEntity.selectSql()));
   }
 
   @Test
-  public void selectSql_a2() throws Exception {
-    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareSqlSKIdAdtVerEntity.selectSql(Lists.newArrayList(), Lists.newArrayList())));
+  public void selectSqlA2() throws Exception {
+    Assert.assertEquals(new String(Files.toByteArray(skTestIFiles(FTN.SQL))).trim(), OM3.writeValueAsString(prepareSqlSKIdAdtVerEntity.selectSql(Lists.newArrayList(), Lists.newArrayList())));
   }
 
   @Test
-  public void selectSql_a7() throws Exception {
-    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareSqlSKIdAdtVerEntity.selectSql(Lists.newArrayList(), Lists.newArrayList(), Lists.newArrayList(), Lists.newArrayList(), Lists.newArrayList(), Lists.newArrayList(), Lists.newArrayList())));
+  public void selectSqlA7() throws Exception {
+    Assert.assertEquals(new String(Files.toByteArray(skTestIFiles(FTN.SQL))).trim(), OM3.writeValueAsString(prepareSqlSKIdAdtVerEntity.selectSql(Lists.newArrayList(), Lists.newArrayList(), Lists.newArrayList(), Lists.newArrayList(), Lists.newArrayList(), Lists.newArrayList(), Lists.newArrayList())));
   }
 
   @Test
   public void updateSql() throws Exception {
-    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareSqlSKIdAdtVerEntity.updateSql()));
+    Assert.assertEquals(new String(Files.toByteArray(skTestIFiles(FTN.SQL))).trim(), OM3.writeValueAsString(prepareSqlSKIdAdtVerEntity.updateSql()));
   }
 
   @Test
-  public void updateSql_null() throws Exception {
+  public void updateSqlNull() throws Exception {
     prepareSqlSKIdAdtVerEntity.setId(null);
-    Assert.assertEquals(new String(Files.toByteArray(sqlFile)).trim(), OM3.writeValueAsString(prepareSqlSKIdAdtVerEntity.updateSql()));
+    Assert.assertEquals(new String(Files.toByteArray(skTestIFiles(FTN.SQL))).trim(), OM3.writeValueAsString(prepareSqlSKIdAdtVerEntity.updateSql()));
   }
 }

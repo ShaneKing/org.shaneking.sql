@@ -3,6 +3,7 @@ package sktest.sql;
 import org.junit.Assert;
 import org.junit.Test;
 import org.shaneking.sql.Keyword0;
+import org.shaneking.test.SKUnit;
 
 public class Keyword0Test extends SKUnit {
   @Test
