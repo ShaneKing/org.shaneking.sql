@@ -34,18 +34,18 @@ public class PageHelperTest extends SKUnit {
   @Test
   public void selectSql() throws Exception {
     prepareSKEntityPageHelper.setPageHelper(new PageHelper().setLimit(22).setOffset(-1));
-    Assert.assertEquals(new String(Files.toByteArray(skTestIFiles(FTN.SQL))).trim(), OM3.writeValueAsString(prepareSKEntityPageHelper.selectSql()));
+    Assert.assertEquals(new String(Files.toByteArray(tstIFiles(FTN.SQL))).trim(), OM3.writeValueAsString(prepareSKEntityPageHelper.selectSql()));
   }
 
   @Test
   public void selectSql2() throws Exception {
     prepareSKEntityPageHelper.setPageHelper(new PageHelper().setLimit(1111).setOffset(33));
-    Assert.assertEquals(new String(Files.toByteArray(skTestIFiles(FTN.SQL))).trim(), OM3.writeValueAsString(prepareSKEntityPageHelper.selectSql()));
+    Assert.assertEquals(new String(Files.toByteArray(tstIFiles(FTN.SQL))).trim(), OM3.writeValueAsString(prepareSKEntityPageHelper.selectSql()));
   }
 
   @Test
   public void selectSql3() throws Exception {
     prepareSKEntityPageHelper.setPageHelper(new PageHelper().setLimit(1333).setOffset(33));
-    Assert.assertEquals(new String(Files.toByteArray(skTestIFiles(FTN.SQL))).trim(), OM3.writeValueAsString(prepareSKEntityPageHelper.selectSql()));
+    Assert.assertEquals(new String(Files.toByteArray(tstIFiles(FTN.SQL))).trim(), OM3.writeValueAsString(prepareSKEntityPageHelper.selectSql()));
   }
 }
