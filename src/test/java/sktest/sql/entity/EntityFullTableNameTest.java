@@ -11,9 +11,8 @@ public class EntityFullTableNameTest extends SKUnit {
     private PrepareSKIdAdtVerEntity prepareSKIdAdtVerEntity;
 
     @Override
-    public void setUp() {
-        super.setUp();
-        prepareSKIdAdtVerEntity = new PrepareSKIdAdtVerEntity();
+    public void tstSetUp() {
+      prepareSKIdAdtVerEntity = new PrepareSKIdAdtVerEntity();
     }
 
     @Test

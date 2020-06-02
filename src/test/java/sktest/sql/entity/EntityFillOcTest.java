@@ -21,9 +21,8 @@ public class EntityFillOcTest extends SKUnit {
     private PrepareSqlSKIdAdtVerEntity prepareSqlSKIdAdtVerEntity;
 
     @Override
-    public void setUp() {
-        super.setUp();
-        prepareSqlSKIdAdtVerEntity = new PrepareSqlSKIdAdtVerEntity();
+    public void tstSetUp() {
+      prepareSqlSKIdAdtVerEntity = new PrepareSqlSKIdAdtVerEntity();
     }
 
   @Test
