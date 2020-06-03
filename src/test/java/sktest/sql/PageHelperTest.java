@@ -15,7 +15,7 @@ public class PageHelperTest extends SKUnit {
   private PrepareSKEntityPageHelper prepareSKEntityPageHelper;
 
   @Before
-  public void tstSetUp() {
+  public void setUp() {
     prepareSKEntityPageHelper = new PrepareSKEntityPageHelper();
   }
 

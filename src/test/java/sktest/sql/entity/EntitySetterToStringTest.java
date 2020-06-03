@@ -12,16 +12,16 @@ import org.shaneking.test.SKUnit;
 import sktest.sql.entity.prepare.*;
 
 public class EntitySetterToStringTest extends SKUnit {
-    @Test
-    public void testSKEntity() {
-        //not equals in travis-ci, maybe it openjdk
+  @Test
+  public void testSKEntity() {
+    //not equals in travis-ci, maybe it openjdk
 //    Assert.assertEquals("PrepareSKEntity(super=SKEntity(columnMap={}, dbColumnMap={}, fieldMap={}, fieldNameList=[], idFieldNameList=[], verFieldNameList=[], dbTableName=t_prepare_s_k_entity, javaTable=@javax.persistence.Table(name=, schema=, uniqueConstraints=[], catalog=), groupByList=[ver], havingOCs=null, orderByList=[mod_date_time], pageHelper=null, selectList=[modUserId], whereOCs=null))", new PrepareSKEntity().setGroupByList(Lists.newArrayList(SKIdAdtVerEntity.FIELD__VER)).setOrderByList(Lists.newArrayList(String0.field2DbColumn(SKIdAdtVerEntity.FIELD__MOD_DATE_TIME))).setSelectList(Lists.newArrayList(SKIdAdtVerEntity.FIELD__MOD_USER_ID)).toString());
-        Assert.assertTrue(new PrepareSKEntity().setGroupByList(Lists.newArrayList(SKIdAdtVerEntity.FIELD__VER)).setOrderByList(Lists.newArrayList(String0.field2DbColumn(SKIdAdtVerEntity.FIELD__MOD_DATE_TIME))).setSelectList(Lists.newArrayList(SKIdAdtVerEntity.FIELD__MOD_USER_ID)).toString().startsWith("PrepareSKEntity(super=SKEntity(columnMap={}, dbColumnMap={}, fieldMap={}, fieldNameList=[], idFieldNameList=[], verFieldNameList=[], dbTableName=t_prepare_s_k_entity, javaTable=@javax.persistence.Table("));
-    }
+    Assert.assertTrue(new PrepareSKEntity().setGroupByList(Lists.newArrayList(SKIdAdtVerEntity.FIELD__VER)).setOrderByList(Lists.newArrayList(String0.field2DbColumn(SKIdAdtVerEntity.FIELD__MOD_DATE_TIME))).setSelectList(Lists.newArrayList(SKIdAdtVerEntity.FIELD__MOD_USER_ID)).toString().startsWith("PrepareSKEntity(super=SKEntity(columnMap={}, dbColumnMap={}, fieldMap={}, fieldNameList=[], idFieldNameList=[], verFieldNameList=[], dbTableName=t_prepare_s_k_entity, javaTable=@javax.persistence.Table("));
+  }
 
-    @Test
-    public void testSKIdAdtEntity() {
-        Assert.assertEquals("PrepareSKIdAdtEntity(super=SKIdAdtEntity(invalid=Y, modDateTime=2020-01-17 19:45:00, modUserId=id))", new PrepareSKIdAdtEntity().setInvalid(String0.Y).setModDateTime("2020-01-17 19:45:00").setModUserId(SKIdEntity.FIELD__ID).toString());
+  @Test
+  public void testSKIdAdtEntity() {
+    Assert.assertEquals("PrepareSKIdAdtEntity(super=SKIdAdtEntity(invalid=Y, modDateTime=2020-01-17 19:45:00, modUserId=id))", new PrepareSKIdAdtEntity().setInvalid(String0.Y).setModDateTime("2020-01-17 19:45:00").setModUserId(SKIdEntity.FIELD__ID).toString());
   }
 
   @Test

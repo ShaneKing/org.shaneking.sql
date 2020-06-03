@@ -8,15 +8,15 @@ import org.shaneking.test.SKUnit;
 import sktest.sql.entity.prepare.*;
 
 public class EntityInitTest extends SKUnit {
-    @Test
-    public void testSKIdAdtEntity() {
-        Assert.assertTrue(new PrepareSKIdAdtEntity().initWithUserIdAndId(SKIdAdtEntity.FIELD__MOD_USER_ID, SKIdEntity.FIELD__ID).toString().contains("PrepareSKIdAdtEntity(super=SKIdAdtEntity(invalid=N, modDateTime="));
-    }
+  @Test
+  public void testSKIdAdtEntity() {
+    Assert.assertTrue(new PrepareSKIdAdtEntity().initWithUserIdAndId(SKIdAdtEntity.FIELD__MOD_USER_ID, SKIdEntity.FIELD__ID).toString().contains("PrepareSKIdAdtEntity(super=SKIdAdtEntity(invalid=N, modDateTime="));
+  }
 
-    @Test
-    public void testSKIdAdtVerEntity() {
-        Assert.assertEquals("PrepareSKIdAdtVerEntity(super=SKIdAdtVerEntity(ver=0))", new PrepareSKIdAdtVerEntity().initWithUserIdAndId(SKIdAdtEntity.FIELD__MOD_USER_ID, SKIdEntity.FIELD__ID).toString());
-    }
+  @Test
+  public void testSKIdAdtVerEntity() {
+    Assert.assertEquals("PrepareSKIdAdtVerEntity(super=SKIdAdtVerEntity(ver=0))", new PrepareSKIdAdtVerEntity().initWithUserIdAndId(SKIdAdtEntity.FIELD__MOD_USER_ID, SKIdEntity.FIELD__ID).toString());
+  }
 
   @Test
   public void testSKIdAdtVerFullEntity() {

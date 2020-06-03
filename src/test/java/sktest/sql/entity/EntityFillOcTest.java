@@ -3,6 +3,7 @@ package sktest.sql.entity;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.shaneking.jackson.databind.OM3;
 import org.shaneking.skava.lang.String0;
@@ -16,14 +17,14 @@ import static sktest.sql.entity.EntitySqlTest.SKTEST1_ID;
 
 @Slf4j
 public class EntityFillOcTest extends SKUnit {
-    public static final String SKTEST1_USER_ID = "SKTEST1_USER_ID";
-    private static final String SKTEST1_DATE_TIME = "2019-06-23 20:00:07";
-    private PrepareSqlSKIdAdtVerEntity prepareSqlSKIdAdtVerEntity;
+  public static final String SKTEST1_USER_ID = "SKTEST1_USER_ID";
+  private static final String SKTEST1_DATE_TIME = "2019-06-23 20:00:07";
+  private PrepareSqlSKIdAdtVerEntity prepareSqlSKIdAdtVerEntity;
 
-    @Override
-    public void tstSetUp() {
-      prepareSqlSKIdAdtVerEntity = new PrepareSqlSKIdAdtVerEntity();
-    }
+  @Before
+  public void setUp() {
+    prepareSqlSKIdAdtVerEntity = new PrepareSqlSKIdAdtVerEntity();
+  }
 
   @Test
   public void fillOc() {
