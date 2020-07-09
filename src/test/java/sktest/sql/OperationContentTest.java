@@ -10,7 +10,7 @@ import org.shaneking.test.SKUnit;
 public class OperationContentTest extends SKUnit {
   @Test
   public void setter() {
-    Assert.assertEquals("{\"le\":\"le\",\"op\":\"op\",\"cs\":\"cs\",\"bw\":\"bw\",\"ew\":\"ed\"}", OM3.writeValueAsString(new OperationContent().setLe("le").setOp("op").setBw("bw").setCl(Lists.newArrayList()).setCs("cs").setEw("ed")));
+    Assert.assertEquals("{\"le\":\"le\",\"op\":\"op\",\"cl\":[],\"cs\":\"cs\",\"bw\":\"bw\",\"ew\":\"ed\"}", OM3.writeValueAsString(new OperationContent().setLe("le").setOp("op").setBw("bw").setCl(Lists.newArrayList()).setCs("cs").setEw("ed")));
   }
 
   @Test
