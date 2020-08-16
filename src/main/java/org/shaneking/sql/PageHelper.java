@@ -13,21 +13,9 @@ public class PageHelper {
 
   @Getter
   @Setter
-  private Integer count;//ui pages, calc, for response
-
-  @Getter
-  @Setter
   private Integer limit;//db limit (ui records of page), for request
 
   @Getter
   @Setter
   private Integer offset;//db offset, calc
-
-  @Getter
-  @Setter
-  private Integer page;//ui current page, for request
-
-  @Getter
-  @Setter
-  private Integer total;//db records, for response
 }

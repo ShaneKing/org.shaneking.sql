@@ -40,13 +40,18 @@ public class EntitySqlTest extends SKUnit {
   }
 
   @Test
-  public void createIndexSql() throws Exception {
-    Assert.assertEquals(new String(Files.toByteArray(tstIFiles(FTN.SQL))).trim(), prepareSqlSKIdAdtVerEntity.createIndexSql().trim());
+  public void createTableIfNotExistSql() throws Exception {
+    Assert.assertEquals(new String(Files.toByteArray(tstIFiles(FTN.SQL))).trim(), prepareSqlSKIdAdtVerEntity.createTableIfNotExistSql().trim());
   }
 
   @Test
   public void createTableSql() throws Exception {
     Assert.assertEquals(new String(Files.toByteArray(tstIFiles(FTN.SQL))).trim(), prepareSqlSKIdAdtVerEntity.createTableSql().trim());
+  }
+
+  @Test
+  public void createTableIndexSql() throws Exception {
+    Assert.assertEquals(new String(Files.toByteArray(tstIFiles(FTN.SQL))).trim(), prepareSqlSKIdAdtVerEntity.createTableIndexSql().trim());
   }
 
   @Test

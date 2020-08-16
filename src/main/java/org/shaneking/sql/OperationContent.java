@@ -63,7 +63,7 @@ public class OperationContent {
   public OperationContent retainIds(@NonNull List<String> ids) {
     this.setOp(Keyword0.IN);
     List<String> idList = this.getCl();
-    if (idList == null) {
+    if (idList == null || idList.size() < 1) {
       this.setCl(ids);
     } else {
       idList.retainAll(ids);

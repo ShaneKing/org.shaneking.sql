@@ -163,21 +163,22 @@ public abstract class SKEntity<J> {
   }
 
   //create table
-  public String createIndexSql() {
-    Map<String, List<String>> idxPartNameColumnsMap = Maps.newHashMap();
-    Lists.newArrayList(this.getJavaTable().uniqueConstraints()).stream().filter(uniqueConstraint -> uniqueConstraint.columnNames().length > 0).forEach(uniqueConstraint -> {
-      idxPartNameColumnsMap.put(Joiner.on(String0.UNDERLINE).join(uniqueConstraint.columnNames()), Lists.newArrayList(uniqueConstraint.columnNames()));
-    });
-    this.getFieldNameList().stream().filter(fieldName -> this.getColumnMap().get(fieldName).unique()).forEach(fieldName -> {
-      idxPartNameColumnsMap.put(this.getDbColumnMap().get(fieldName), Lists.newArrayList(this.getDbColumnMap().get(fieldName)));
-    });
-    List<String> createIndexStatementList = Lists.newArrayList();
-    String idxSchemaPart = String0.notNull2empty2(Strings.nullToEmpty(this.getJavaTable().schema()), MessageFormat.format("`{0}`.", this.getJavaTable().schema()));
-    idxPartNameColumnsMap.forEach((idxPartName, columnList) -> {
-      String indexColumns = "`" + (columnList.size() > 1 ? Joiner.on("` asc, `").join(columnList) : columnList.get(0)) + "` asc";
-      createIndexStatementList.add(MessageFormat.format("{0} {1}`{2}` {3} `{4}` ({5});", Keyword0.ALTER_TABLE, idxSchemaPart, this.getDbTableName(), Keyword0.ADD_UNIQUE_INDEX, UNIQUE_INDEX_NAME_PREFIX + idxPartName, indexColumns));
-    });
-    return Joiner.on(String0.BR).join(createIndexStatementList);
+  public String createTableIfNotExistSql() {
+    String idxSql = createTableIndexSql();
+    idxSql = String0.isNull2Empty(idxSql) ? String0.EMPTY : (idxSql + String0.BR_LINUX + String0.BR_LINUX);
+    return "drop procedure if exists p_" + this.getDbTableName() + "_create;" + String0.BR_LINUX +
+      "delimiter $$" + String0.BR_LINUX +
+      "create procedure p_" + this.getDbTableName() + "_create() begin" + String0.BR_LINUX +
+      "if not exists (select * from information_schema.tables where table_schema ='" + this.getJavaTable().schema() + "' and table_name = '" + this.getDbTableName() + "')" + String0.BR_LINUX +
+      "then" + String0.BR_LINUX + String0.BR_LINUX +
+      createTableSql() + String0.BR_LINUX + String0.BR_LINUX +
+      idxSql +
+      "end if;" + String0.BR_LINUX +
+      "end;" + String0.BR_LINUX +
+      "$$" + String0.BR_LINUX +
+      "delimiter ;" + String0.BR_LINUX +
+      "call p_" + this.getDbTableName() + "_create();" + String0.BR_LINUX +
+      "drop procedure if exists p_" + this.getDbTableName() + "_create;" + String0.BR_LINUX;
   }
 
   public String createTableSql() {
@@ -198,6 +199,23 @@ public abstract class SKEntity<J> {
     sqlList.add(MessageFormat.format("  {0} (`{1}`)", Keyword0.PRIMARY_KEY, Joiner.on("`,`").join(this.getIdFieldNameList().stream().map(idFieldName -> this.getDbColumnMap().get(idFieldName)).collect(Collectors.toList()))));
     sqlList.add(String0.CLOSE_PARENTHESIS + String0.SEMICOLON);
     return Joiner.on("\n").join(sqlList);
+  }
+
+  public String createTableIndexSql() {
+    Map<String, List<String>> idxPartNameColumnsMap = Maps.newHashMap();
+    Lists.newArrayList(this.getJavaTable().uniqueConstraints()).stream().filter(uniqueConstraint -> uniqueConstraint.columnNames().length > 0).forEach(uniqueConstraint -> {
+      idxPartNameColumnsMap.put(Joiner.on(String0.UNDERLINE).join(uniqueConstraint.columnNames()), Lists.newArrayList(uniqueConstraint.columnNames()));
+    });
+    this.getFieldNameList().stream().filter(fieldName -> this.getColumnMap().get(fieldName).unique()).forEach(fieldName -> {
+      idxPartNameColumnsMap.put(this.getDbColumnMap().get(fieldName), Lists.newArrayList(this.getDbColumnMap().get(fieldName)));
+    });
+    List<String> createIndexStatementList = Lists.newArrayList();
+    String idxSchemaPart = String0.notNull2empty2(Strings.nullToEmpty(this.getJavaTable().schema()), MessageFormat.format("`{0}`.", this.getJavaTable().schema()));
+    idxPartNameColumnsMap.forEach((idxPartName, columnList) -> {
+      String indexColumns = "`" + (columnList.size() > 1 ? Joiner.on("` asc, `").join(columnList) : columnList.get(0)) + "` asc";
+      createIndexStatementList.add(MessageFormat.format("{0} {1}`{2}` {3} `{4}` ({5});", Keyword0.ALTER_TABLE, idxSchemaPart, this.getDbTableName(), Keyword0.ADD_UNIQUE_INDEX, UNIQUE_INDEX_NAME_PREFIX + idxPartName, indexColumns));
+    });
+    return Joiner.on(String0.BR).join(createIndexStatementList);
   }
 
   private String createColumnStatement(String columnName, boolean idOrVersion) {
