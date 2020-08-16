@@ -169,7 +169,7 @@ public abstract class SKEntity<J> {
     return "drop procedure if exists p_" + this.getDbTableName() + "_create;" + String0.BR_LINUX +
       "delimiter $$" + String0.BR_LINUX +
       "create procedure p_" + this.getDbTableName() + "_create() begin" + String0.BR_LINUX +
-      "if not exists (select * from information_schema.tables where table_schema ='" + this.getJavaTable().schema() + "' and table_name = '" + this.getDbTableName() + "')" + String0.BR_LINUX +
+      "if not exists (select * from information_schema.tables where table_schema = '" + this.getJavaTable().schema() + "' and table_name = '" + this.getDbTableName() + "')" + String0.BR_LINUX +
       "then" + String0.BR_LINUX + String0.BR_LINUX +
       createTableSql() + String0.BR_LINUX + String0.BR_LINUX +
       idxSql +

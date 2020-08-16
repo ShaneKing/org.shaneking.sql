@@ -1,7 +1,7 @@
 drop procedure if exists p_sktest1_table_create;
 delimiter $$
 create procedure p_sktest1_table_create() begin
-if not exists (select * from information_schema.tables where table_schema ='sktest1_schema' and table_name = 'sktest1_table')
+if not exists (select * from information_schema.tables where table_schema = 'sktest1_schema' and table_name = 'sktest1_table')
 then
 
 create table `sktest1_schema`.`sktest1_table` (
